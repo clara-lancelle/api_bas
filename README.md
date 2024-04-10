@@ -15,3 +15,29 @@
     ```bash 
         DATABASE_URL="mysql://user:password@127.0.0.1:3306/database_name?serverVersion=8.0.32&charset=utf8mb4"
     ```
+* Installation des dépendances
+
+    ```bash 
+        composer install
+    ```
+
+* Création de la base de donnée
+    
+    ```bash 
+        php bin/console doctrine:database:create
+
+        php bin/console doctrine:schema:update
+    ```
+
+* Chargement des fixtures
+
+    ```bash 
+        php bin/console doctrine:fixtures:load
+    ```
+
+* Lancer l'application sur 127.0.0.1:8000
+  
+    ```bash 
+        symfony serve
+    ```
+
