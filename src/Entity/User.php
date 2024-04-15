@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -47,6 +48,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $deleted_at = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $gender = null;
 
     public function getId(): ?int
     {
@@ -189,10 +193,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->deleted_at;
     }
 
-    public function setDeletedAt(\DateTimeImmutable $deleted_at): static
+    public function setDeletedAt(?\DateTimeImmutable $deleted_at): static
     {
         $this->deleted_at = $deleted_at;
 
         return $this;
+    }
+
+    public function getGender(): ?string
+    {
+        return $this->gender;
+    }
+
+    public function setGender(string $gender): static
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->deleted_at === null ? 'Actif' : 'Inactif';
+    }
+
+    public function softDelete(): void
+    {
+        $this->deleted_at = new DateTimeImmutable();
     }
 }
