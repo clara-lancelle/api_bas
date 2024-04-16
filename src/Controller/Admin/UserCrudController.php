@@ -87,6 +87,7 @@ class UserCrudController extends AbstractCrudController
         return $actions
             ->add(Crud::PAGE_INDEX, $displayDelete)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
+            ->remove(Crud::PAGE_INDEX, Action::NEW )
             ->update(Crud::PAGE_INDEX, Action::DETAIL, fn(Action $action) => $action->setLabel('Afficher'))
             ->update(Crud::PAGE_INDEX, Action::EDIT, fn(Action $action) => $action->setLabel('Editer'))
             ->update(
