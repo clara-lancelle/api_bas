@@ -52,9 +52,9 @@ class UserCrudController extends AbstractCrudController
             NumberField::new('cellphone', 'Téléphone portable'),
             NumberField::new('zipCode', 'Code Postal'),
             TextField::new('city', 'Ville'),
-            DateTimeField::new('created_at', 'Créé le')->hideOnForm(),
-            DateTimeField::new('updated_at', 'Mis à jour le')->hideOnForm(),
-            DateTimeField::new('deleted_at', 'Supprimé le')->hideOnIndex()->hideOnForm(),
+            DateTimeField::new('created_at', 'Créé le')->onlyOnDetail(),
+            DateTimeField::new('updated_at', 'Mis à jour le')->onlyOnDetail(),
+            DateTimeField::new('deleted_at', 'Supprimé le')->onlyOnDetail(),
             Field::new('status', 'Statut')->hideOnForm()->setSortable(true)
         ];
     }
