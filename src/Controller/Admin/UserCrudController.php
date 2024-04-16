@@ -13,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,6 +49,9 @@ class UserCrudController extends AbstractCrudController
                 'Femme' => 'female',
                 'Autre' => 'other',
             ]),
+            NumberField::new('cellphone', 'Téléphone portable'),
+            NumberField::new('zipCode', 'Code Postal'),
+            TextField::new('city', 'Ville'),
             DateTimeField::new('created_at', 'Créé le')->hideOnForm(),
             DateTimeField::new('updated_at', 'Mis à jour le')->hideOnForm(),
             DateTimeField::new('deleted_at', 'Supprimé le')->hideOnIndex()->hideOnForm(),
