@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Enum\UserType;
+use App\Enum\Gender;
 use App\Repository\UserRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\DiscriminatorColumn;
 use Doctrine\ORM\Mapping\DiscriminatorMap;
@@ -63,6 +64,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $deleted_at = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $gender = null;
 
     public function getId(): ?int
     {
@@ -224,16 +228,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     #[ORM\PrePersist]
-    public function setCreatedAtValue(): void
+    public function setCreatedAtValue(): static
     {
         $this->created_at = new \DateTimeImmutable();
         $this->setUpdatedAtValue();
+        return $this;
     }
 
     #[ORM\PreUpdate]
-    public function setUpdatedAtValue(): void
+    public function setUpdatedAtValue(): static
     {
         $this->updated_at = new \DateTimeImmutable();
+        return $this;
     }
 
     public function getDeletedAt(): ?\DateTimeImmutable
@@ -241,10 +247,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->deleted_at;
     }
 
-    public function setDeletedAt(\DateTimeImmutable $deleted_at): static
+    public function setDeletedAt(?\DateTimeImmutable $deleted_at): static
     {
         $this->deleted_at = $deleted_at;
 
         return $this;
     }
+
+    public function getGender(): ?string
+    {
+        return $this->gender;
+    }
+
+    public function setGender(string $gender): void
+    {
+        if (!in_array($gender, [Gender::MALE, Gender::FEMALE, Gender::OTHER])) {
+            throw new \InvalidArgumentException('Genre invalide.');
+        }
+
+        $this->gender = $gender;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->deleted_at === null ? 'Actif' : 'Inactif';
+    }
+
 }

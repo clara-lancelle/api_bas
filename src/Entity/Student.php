@@ -12,7 +12,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Student extends User
 {
 
-    #[Assert\Date]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $birthdate = null;
 
@@ -24,7 +23,7 @@ class Student extends User
     public function setBirthdate(?\DateTime $birthdate): static
     {
         $this->birthdate = $birthdate;
-
         return $this;
     }
+
 }
