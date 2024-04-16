@@ -25,8 +25,12 @@
     
     ```bash 
         php bin/console doctrine:database:create
+    ```
 
-        php bin/console doctrine:schema:update
+* Création de la base de donnée
+    
+    ```bash 
+        php bin/console doctrine:schema:update -f --complete
     ```
 
 * Chargement des fixtures

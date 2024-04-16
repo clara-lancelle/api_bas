@@ -49,7 +49,7 @@ class UserFixtures extends Fixture
         $manager->persist($user);
         $manager->flush();
 
-        //Student
+        //CompanyUser
         $user = new CompanyUser();
         $user->setName('companyUser');
         $user->setFirstname('test');
