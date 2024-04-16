@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\Gender;
 use App\Enum\UserType;
 use App\Repository\UserRepository;
 use DateTimeImmutable;
@@ -257,11 +258,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->gender;
     }
 
-    public function setGender(string $gender): static
+    public function setGender(string $gender): void
     {
-        $this->gender = $gender;
+        if (!in_array($gender, [Gender::MALE, Gender::FEMALE, Gender::OTHER])) {
+            throw new \InvalidArgumentException('Genre invalide.');
+        }
 
-        return $this;
+        $this->gender = $gender;
     }
 
     public function getStatus(): string

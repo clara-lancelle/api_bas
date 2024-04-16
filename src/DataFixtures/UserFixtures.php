@@ -6,6 +6,7 @@ use App\Entity\Administrator;
 use App\Entity\CompanyUser;
 use App\Entity\Student;
 use App\Entity\User;
+use App\Enum\Gender;
 use App\Enum\UserType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -31,6 +32,7 @@ class UserFixtures extends Fixture
         $user->setCity('paris');
         $user->setZipCode(75002);
         $user->setRoles(['ROLE_USER', 'ROLE_ADMIN']);
+        $user->setGender(Gender::MALE);
         $manager->persist($user);
         $manager->flush();
 
@@ -46,6 +48,7 @@ class UserFixtures extends Fixture
         $user->setZipCode(75002);
         $user->setBirthdate(new \DateTime('2000-04-03'));
         $user->setRoles(['ROLE_USER']);
+        $user->setGender(Gender::MALE);
         $manager->persist($user);
         $manager->flush();
 
@@ -61,6 +64,7 @@ class UserFixtures extends Fixture
         $user->setZipCode(75002);
         $user->setPosition('CTO');
         $user->setRoles(['ROLE_USER']);
+        $user->setGender(Gender::MALE);
         $manager->persist($user);
         $manager->flush();
     }
