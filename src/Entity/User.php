@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Enum\Gender;
-use App\Enum\UserType;
 use App\Repository\UserRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -229,16 +228,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     #[ORM\PrePersist]
-    public function setCreatedAtValue(): void
+    public function setCreatedAtValue(): static
     {
         $this->created_at = new \DateTimeImmutable();
         $this->setUpdatedAtValue();
+        return $this;
     }
 
     #[ORM\PreUpdate]
-    public function setUpdatedAtValue(): void
+    public function setUpdatedAtValue(): static
     {
         $this->updated_at = new \DateTimeImmutable();
+        return $this;
     }
 
     public function getDeletedAt(): ?\DateTimeImmutable
@@ -272,8 +273,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->deleted_at === null ? 'Actif' : 'Inactif';
     }
 
-    public function softDelete(): void
-    {
-        $this->deleted_at = new DateTimeImmutable();
-    }
 }

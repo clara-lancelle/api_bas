@@ -7,7 +7,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\BatchActionDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
@@ -28,7 +30,7 @@ class UserCrudController extends AbstractCrudController
     {
         $this->requestStack = $requestStack;
     }
-    
+
     public static function getEntityFqcn(): string
     {
         return User::class;
@@ -36,8 +38,6 @@ class UserCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        $statusField = Field::new('status', 'Statut')->hideOnForm()->setSortable(true);
-
         return [
             IdField::new('id')->onlyOnDetail(),
             TextField::new('firstname', 'Prénom'),
@@ -55,45 +55,48 @@ class UserCrudController extends AbstractCrudController
             DateTimeField::new('created_at', 'Créé le')->hideOnForm(),
             DateTimeField::new('updated_at', 'Mis à jour le')->hideOnForm(),
             DateTimeField::new('deleted_at', 'Supprimé le')->hideOnIndex()->hideOnForm(),
-            $statusField,
+            Field::new('status', 'Statut')->hideOnForm()->setSortable(true)
         ];
     }
 
-    public function configureActions(Actions $actions): Actions
+    public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
-        $softDeleteAction = Action::new('softDelete', 'Supprimer')
-            ->linkToCrudAction('softDelete') ;
-
-        return $actions
-            ->remove(Crud::PAGE_INDEX, Action::DELETE)
-            ->update(Crud::PAGE_INDEX, Action::EDIT, function (Action $action) {
-                return $action->setLabel('Editer');
-            })
-            ->add(Crud::PAGE_INDEX, $softDeleteAction);
-    }
-
-    public function softDelete(EntityManagerInterface $entityManager, Request $request): Response
-    {
-        $id = $request->query->get('entityId');
-        $user = $entityManager->getRepository(User::class)->find($id);
-
-        if (!$user) {
-            throw $this->createNotFoundException(sprintf('L\'utilisateur avec l\'ID "%s" n\'existe pas.', $id));
-        }
-
-        $user->softDelete();
+        $entityInstance->setDeletedAt(new \DateTimeImmutable());
         $entityManager->flush();
-
         $this->addFlash('success', 'Utilisateur supprimé en douceur.');
-
-        return $this->redirectBack();
     }
 
-    private function redirectBack(): RedirectResponse
+    public function restoreEntity(EntityManagerInterface $entityManager, AdminContext $context): RedirectResponse
     {
+        $entityInstance = $context->getEntity()->getInstance();
+        $entityInstance->setDeletedAt(null);
+        $entityManager->flush();
+        $this->addFlash('success', 'Utilisateur restauré.');
         $request = $this->requestStack->getCurrentRequest();
         $referer = $request->headers->get('referer');
 
         return new RedirectResponse($referer);
+    }
+    public function configureActions(Actions $actions): Actions
+    {
+        $displayDelete = Action::new('restaurer', 'Restaurer', 'fas fa-file-invoice')->linkToCrudAction('restoreEntity')
+            ->displayIf(static function ($entity) {
+                return $entity->getDeletedAt();
+            });
+
+        return $actions
+            ->add(Crud::PAGE_INDEX, $displayDelete)
+            ->add(Crud::PAGE_INDEX, Action::DETAIL)
+            ->update(Crud::PAGE_INDEX, Action::DETAIL, fn(Action $action) => $action->setLabel('Afficher'))
+            ->update(Crud::PAGE_INDEX, Action::EDIT, fn(Action $action) => $action->setLabel('Editer'))
+            ->update(
+                Crud::PAGE_INDEX,
+                Action::DELETE,
+                fn(Action $action) => $action
+                    ->setLabel('Supprimer')
+                    ->displayIf(static function ($entity) {
+                        return !$entity->getDeletedAt();
+                    })
+            );
     }
 }

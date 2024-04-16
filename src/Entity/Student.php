@@ -23,7 +23,7 @@ class Student extends User
     public function setBirthdate(?\DateTime $birthdate): static
     {
         $this->birthdate = $birthdate;
-
         return $this;
     }
+
 }
