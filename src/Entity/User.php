@@ -273,12 +273,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->deleted_at === null ? 'Actif' : 'Inactif';
     }
 
-    public function getPlainPassword(): string
+    public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
     }
 
-    public function setPlainPassword(string $plainPassword): static
+    public function setPlainPassword(?string $plainPassword): static
     {
         $this->plainPassword = $plainPassword;
         return $this;

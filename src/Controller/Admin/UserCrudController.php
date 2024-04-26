@@ -18,17 +18,13 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
 
 class UserCrudController extends AbstractCrudController
 {
-    private $requestStack;
 
-    public function __construct(RequestStack $requestStack)
+    public function __construct(private RequestStack $requestStack)
     {
-        $this->requestStack = $requestStack;
     }
 
     public static function getEntityFqcn(): string
@@ -79,18 +75,28 @@ class UserCrudController extends AbstractCrudController
     }
     public function configureActions(Actions $actions): Actions
     {
-        $displayDelete = Action::new('restaurer', 'Restaurer', 'fas fa-file-invoice')->linkToCrudAction('restoreEntity')
+        $displayRestoreAction = Action::new('restaurer', 'Restaurer', 'fas fa-file-invoice')->linkToCrudAction('restoreEntity')
             ->displayIf(static function ($entity) {
                 return $entity->getDeletedAt();
             });
 
         return $actions
-            ->add(Crud::PAGE_INDEX, $displayDelete)
+            ->add(Crud::PAGE_INDEX, $displayRestoreAction)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
             ->update(Crud::PAGE_INDEX, Action::DETAIL, fn(Action $action) => $action->setLabel('Afficher'))
-            ->update(Crud::PAGE_INDEX, Action::EDIT, fn(Action $action) => $action->setLabel('Editer'))
+            ->remove(Crud::PAGE_INDEX, Action::EDIT)
+            ->remove(Crud::PAGE_DETAIL, Action::EDIT)
             ->update(
                 Crud::PAGE_INDEX,
+                Action::DELETE,
+                fn(Action $action) => $action
+                    ->setLabel('Supprimer')
+                    ->displayIf(static function ($entity) {
+                        return !$entity->getDeletedAt();
+                    })
+            )
+            ->update(
+                Crud::PAGE_DETAIL,
                 Action::DELETE,
                 fn(Action $action) => $action
                     ->setLabel('Supprimer')
