@@ -21,11 +21,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class UserCrudController extends AbstractCrudController
 {
-    private $requestStack;
 
-    public function __construct(RequestStack $requestStack)
+    public function __construct(private RequestStack $requestStack)
     {
-        $this->requestStack = $requestStack;
     }
 
     public static function getEntityFqcn(): string
@@ -40,7 +38,7 @@ class UserCrudController extends AbstractCrudController
             TextField::new('firstname', 'Prénom'),
             TextField::new('name', 'Nom'),
             EmailField::new('email', 'Email'),
-            TextField::new('password', 'Mot de passe')->hideOnIndex(),
+            TextField::new('plainPassword', 'Mot de passe')->hideOnIndex(),
             ChoiceField::new('gender', 'Genre')->setChoices([
                 'Homme' => 'male',
                 'Femme' => 'female',
@@ -55,6 +53,8 @@ class UserCrudController extends AbstractCrudController
             Field::new('status', 'Statut')->hideOnForm()->setSortable(true)
         ];
     }
+
+    // -- START logic to  smooth delete entity
 
     public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
@@ -74,20 +74,34 @@ class UserCrudController extends AbstractCrudController
 
         return new RedirectResponse($referer);
     }
+
+    // -- END smooth delete
+
+
     public function configureActions(Actions $actions): Actions
     {
-        $displayDelete = Action::new('restaurer', 'Restaurer', 'fas fa-file-invoice')->linkToCrudAction('restoreEntity')
+        $displayRestoreAction = Action::new('restaurer', 'Restaurer', 'fas fa-file-invoice')->linkToCrudAction('restoreEntity')
             ->displayIf(static function ($entity) {
                 return $entity->getDeletedAt();
             });
 
         return $actions
-            ->add(Crud::PAGE_INDEX, $displayDelete)
+            ->add(Crud::PAGE_INDEX, $displayRestoreAction)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
             ->update(Crud::PAGE_INDEX, Action::DETAIL, fn(Action $action) => $action->setLabel('Afficher'))
-            ->update(Crud::PAGE_INDEX, Action::EDIT, fn(Action $action) => $action->setLabel('Editer'))
+            ->remove(Crud::PAGE_INDEX, Action::EDIT)
+            ->remove(Crud::PAGE_DETAIL, Action::EDIT)
             ->update(
                 Crud::PAGE_INDEX,
+                Action::DELETE,
+                fn(Action $action) => $action
+                    ->setLabel('Supprimer')
+                    ->displayIf(static function ($entity) {
+                        return !$entity->getDeletedAt();
+                    })
+            )
+            ->update(
+                Crud::PAGE_DETAIL,
                 Action::DELETE,
                 fn(Action $action) => $action
                     ->setLabel('Supprimer')
