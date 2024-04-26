@@ -4,14 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use App\Entity\Administrator;
-<<<<<<< HEAD
-use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-=======
+
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -27,7 +20,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
->>>>>>> feature/encrypt
 
 class AdministratorCrudController extends AbstractCrudController
 {
@@ -70,7 +62,6 @@ class AdministratorCrudController extends AbstractCrudController
 
     // -- END hash password logic
 
-<<<<<<< HEAD
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
@@ -80,47 +71,16 @@ class AdministratorCrudController extends AbstractCrudController
         ;
     }
 
-=======
->>>>>>> feature/encrypt
     public function configureFields(string $pageName): iterable
     {
         return [
             'email',
-<<<<<<< HEAD
-            TextField::new('password')->onlyOnForms(),
-=======
-            TextField::new('plainPassword', 'Mot de passe')->hideOnIndex(),
->>>>>>> feature/encrypt
+            TextField::new('plainPassword', 'Mot de passe')->onlyOnForms(),
             'name',
             'firstname',
             'cellphone',
             'city',
             'zipCode',
-<<<<<<< HEAD
-            DateTimeField::new('created_at', 'Créé le')->hideOnForm(),
-            DateTimeField::new('updated_at', 'Mis à jour le')->hideOnForm(),
-            DateTimeField::new('deleted_at', 'Supprimé le')->hideOnIndex()->hideOnForm(),
-        ];
-    }
-
-    public function configureActions(Actions $actions): Actions
-    {
-        // Update actions so the admin can't delete himself
-        return $actions
-            ->update(
-                Crud::PAGE_DETAIL,
-                Action::DELETE,
-                fn(Action $action) =>
-                $action
-                    ->setLabel('Supprimer')
-                    ->displayIf(function ($entity) {
-                        return $entity != $this->getUser();
-                    })
-            )
-            ->remove(
-                Crud::PAGE_INDEX,
-                Action::DELETE
-=======
             ChoiceField::new('gender', 'Genre')->setChoices([
                 'Homme' => 'male',
                 'Femme' => 'female',
@@ -185,7 +145,6 @@ class AdministratorCrudController extends AbstractCrudController
                     ->displayIf(static function ($entity) {
                         return !$entity->getDeletedAt();
                     })
->>>>>>> feature/encrypt
             );
     }
 }
