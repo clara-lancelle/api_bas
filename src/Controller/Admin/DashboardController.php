@@ -15,12 +15,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+
 class DashboardController extends AbstractDashboardController
 {
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
-
         return $this->render('admin/dashboard.html.twig');
     }
 
@@ -31,24 +31,17 @@ class DashboardController extends AbstractDashboardController
     }
     public function configureUserMenu(UserInterface $user): UserMenu
     {
-        $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-
         return parent::configureUserMenu($user)
-
             ->displayUserName()
-
             // you can return an URL with the avatar image
             // ->setAvatarUrl('https://...')
             // ->setAvatarUrl($user->getProfileImageUrl())
             // use this method if you don't want to display the user image
             ->displayUserAvatar()
-
             ->addMenuItems([
                 MenuItem::linkToCrud('Mon profil', 'fa fa-id-card', Administrator::class)
                     ->setAction('detail')
                     ->setEntityId($user->getId()),
-                MenuItem::section(),
-                MenuItem::linkToLogout('déconnection', 'fa fa-sign-out'),
             ]);
     }
     public function configureMenuItems(): iterable

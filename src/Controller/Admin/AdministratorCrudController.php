@@ -133,8 +133,8 @@ class AdministratorCrudController extends AbstractCrudController
                 Action::DELETE,
                 fn(Action $action) => $action
                     ->setLabel('Supprimer')
-                    ->displayIf(static function ($entity) {
-                        return !$entity->getDeletedAt();
+                    ->displayIf(function ($entity) {
+                        return !$entity->getDeletedAt() && $entity != $this->getUser();
                     })
             )
             ->update(
@@ -142,8 +142,8 @@ class AdministratorCrudController extends AbstractCrudController
                 Action::DELETE,
                 fn(Action $action) => $action
                     ->setLabel('Supprimer')
-                    ->displayIf(static function ($entity) {
-                        return !$entity->getDeletedAt();
+                    ->displayIf(function ($entity) {
+                        return !$entity->getDeletedAt() && $entity != $this->getUser();
                     })
             );
     }
