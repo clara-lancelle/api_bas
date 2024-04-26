@@ -55,6 +55,8 @@ class UserCrudController extends AbstractCrudController
         ];
     }
 
+    // -- START logic to  smooth delete entity
+
     public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         $entityInstance->setDeletedAt(new \DateTimeImmutable());
@@ -73,6 +75,10 @@ class UserCrudController extends AbstractCrudController
 
         return new RedirectResponse($referer);
     }
+
+    // -- END smooth delete
+
+
     public function configureActions(Actions $actions): Actions
     {
         $displayRestoreAction = Action::new('restaurer', 'Restaurer', 'fas fa-file-invoice')->linkToCrudAction('restoreEntity')

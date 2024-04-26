@@ -31,12 +31,23 @@ class StudentCrudController extends AbstractCrudController
         return Student::class;
     }
 
+
+    // --START  logic to hash password when creating or updating entity
+
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         $entityInstance->getPlainPassword() && $this->upgradePassword($entityInstance, $entityInstance->getPlainPassword());
         $entityManager->persist($entityInstance);
         $entityManager->flush();
     }
+
+    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        $entityInstance->getPlainPassword() && $this->upgradePassword($entityInstance, $entityInstance->getPlainPassword());
+        $entityManager->persist($entityInstance);
+        $entityManager->flush();
+    }
+
     public function upgradePassword(User $user, string $plainPassword): void
     {
         if (!$user instanceof User) {
@@ -48,6 +59,8 @@ class StudentCrudController extends AbstractCrudController
         );
         $user->setPassword($hashedPassword);
     }
+
+    // -- END hash password logic
 
     public function configureFields(string $pageName): iterable
     {
@@ -72,6 +85,8 @@ class StudentCrudController extends AbstractCrudController
         ];
     }
 
+    // -- START logic to  smooth delete entity
+
     public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         $entityInstance->setDeletedAt(new \DateTimeImmutable());
@@ -90,6 +105,8 @@ class StudentCrudController extends AbstractCrudController
 
         return new RedirectResponse($referer);
     }
+
+    // -- END smooth delete
 
     public function configureActions(Actions $actions): Actions
     {
