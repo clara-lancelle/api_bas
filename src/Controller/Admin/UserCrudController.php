@@ -43,7 +43,7 @@ class UserCrudController extends AbstractCrudController
             TextField::new('firstname', 'Prénom'),
             TextField::new('name', 'Nom'),
             EmailField::new('email', 'Email'),
-            TextField::new('password', 'Mot de passe')->hideOnIndex(),
+            TextField::new('plainPassword', 'Mot de passe')->hideOnIndex(),
             ChoiceField::new('gender', 'Genre')->setChoices([
                 'Homme' => 'male',
                 'Femme' => 'female',

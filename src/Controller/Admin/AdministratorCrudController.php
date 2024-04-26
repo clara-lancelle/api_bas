@@ -2,11 +2,12 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\User;
 use App\Entity\Administrator;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
 class AdministratorCrudController extends AbstractCrudController
 {
@@ -14,15 +15,24 @@ class AdministratorCrudController extends AbstractCrudController
     {
         return Administrator::class;
     }
-
-    /*
-    public function configureFields(string $pageName): iterable
+    public function __construct(private UserPasswordHasherInterface $hasher)
     {
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
     }
-    */
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        $this->upgradePassword($entityInstance, $entityInstance->getPlainPassword());
+        $entityManager->persist($entityInstance);
+        $entityManager->flush();
+    }
+    public function upgradePassword(User $user, string $plainPassword): void
+    {
+        if (!$user instanceof User) {
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
+        }
+        $hashedPassword = $this->hasher->hashPassword(
+            $user,
+            $plainPassword
+        );
+        $user->setPassword($hashedPassword);
+    }
 }
