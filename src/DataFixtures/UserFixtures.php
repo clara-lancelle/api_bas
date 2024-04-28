@@ -16,11 +16,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
 {
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(private UserPasswordHasherInterface $hasher, EntityManagerInterface $entityManager)
+    public function __construct(private UserPasswordHasherInterface $hasher, private EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
     }
 
     public function load(ObjectManager $manager)
