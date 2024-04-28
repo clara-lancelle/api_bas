@@ -30,7 +30,18 @@ class OfferCrudController extends AbstractCrudController
     {
         return Offer::class;
     }
-    
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setEntityLabelInSingular(
+                fn(?Offer $offer, ?string $pageName) => $offer ? $offer->getName() : 'Offre'
+            )
+            ->setEntityLabelInPlural('Offres');
+
+        ;
+    }
+
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -41,7 +52,7 @@ class OfferCrudController extends AbstractCrudController
             DateField::new('end_date', 'Date de fin'),
             ChoiceField::new('type', 'Type')->setChoices([
                 'Alternance' => 'alternance',
-                'Stage' => 'stage',
+                'Stage'      => 'stage',
             ]),
             TextEditorField::new('description', 'Description')->hideOnIndex(),
             TextField::new('promote_status', 'Niveau d\'études')->hideOnIndex(),
@@ -54,7 +65,7 @@ class OfferCrudController extends AbstractCrudController
             Field::new('status', 'Statut')->hideOnForm()->setSortable(true)
         ];
     }
-    
+
 
     public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
@@ -78,9 +89,9 @@ class OfferCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         $displayRestoreAction = Action::new('restaurer', 'Restaurer', 'fas fa-file-invoice')->linkToCrudAction('restoreEntity')
-        ->displayIf(static function ($entity) {
-            return $entity->getDeletedAt();
-        });
+            ->displayIf(static function ($entity) {
+                return $entity->getDeletedAt();
+            });
 
         return $actions
             ->add(Crud::PAGE_INDEX, $displayRestoreAction)
