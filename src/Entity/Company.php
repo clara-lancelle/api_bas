@@ -48,7 +48,9 @@ class Company
     private ?string $city = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+
     private ?\DateTime $creation_date = null;
+
 
     #[ORM\Column(length: 255)]
     private ?string $phone_num = null;
@@ -62,6 +64,7 @@ class Company
     #[ORM\OneToMany(targetEntity: CompanyUser::class, mappedBy: 'company', orphanRemoval: true)]
     private Collection $companyAdministratorss;
 
+
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
@@ -71,11 +74,15 @@ class Company
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $deleted_at = null;
 
+    #[ORM\OneToMany(targetEntity: Offer::class, mappedBy: 'company', orphanRemoval: true)]
+    private Collection $offers;
+
     public function __construct()
     {
         $this->administrators = new ArrayCollection();
         $this->created_at     = new DateTimeImmutable();
         $this->updated_at     = new DateTimeImmutable();
+
     }
 
     public function getId(): ?int
@@ -335,5 +342,37 @@ class Company
     public function getStatus(): string
     {
         return $this->deleted_at === null ? 'Actif' : 'Inactif';
+    }
+
+    public function getOffers(): Collection
+    {
+        return $this->offers;
+    }
+
+    public function addOffer(Offer $offer): static
+    {
+        if (!$this->offers->contains($offer)) {
+            $this->offers->add($offer);
+            $offer->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOffer(Offer $offer): static
+    {
+        if ($this->offers->removeElement($offer)) {
+            // set the owning side to null (unless already changed)
+            if ($offer->getCompany() === $this) {
+                $offer->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getName();
     }
 }
