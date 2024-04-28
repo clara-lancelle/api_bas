@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Company;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -28,7 +29,7 @@ class CompanyCrudController extends AbstractCrudController
         return Company::class;
     }
 
-    
+
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -50,10 +51,21 @@ class CompanyCrudController extends AbstractCrudController
             Field::new('status', 'Statut')->hideOnForm()->setSortable(true)
         ];
     }
-    
+
 
     public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
+        // Récupérer les offres associées à l'entreprise
+        $entityInstance->getOffers()->initialize();
+        $offers = $entityInstance->getOffers();
+        // Marquer les offres comme supprimées avec la même date que l'entreprise
+        foreach ($offers as $offer) {
+            $offer->setDeletedAt(new \DateTimeImmutable());
+        }
+
+        // Enregistrer les modifications dans le gestionnaire d'entités Doctrine
+        $entityManager->flush();
+
         $entityInstance->setDeletedAt(new \DateTimeImmutable());
         $entityManager->flush();
         $this->addFlash('success', 'Entreprise désactivée.');
@@ -74,18 +86,18 @@ class CompanyCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         $displayRestoreAction = Action::new('restaurer', 'Restaurer', 'fas fa-file-invoice')->linkToCrudAction('restoreEntity')
-        ->displayIf(static function ($entity) {
-            return $entity->getDeletedAt();
-        });
+            ->displayIf(static function ($entity) {
+                return $entity->getDeletedAt();
+            });
 
         return $actions
             ->add(Crud::PAGE_INDEX, $displayRestoreAction)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            ->update(Crud::PAGE_INDEX, Action::DETAIL, fn(Action $action) => $action->setLabel('Afficher'))
+            ->update(Crud::PAGE_INDEX, Action::DETAIL, fn (Action $action) => $action->setLabel('Afficher'))
             ->update(
                 Crud::PAGE_INDEX,
                 Action::DELETE,
-                fn(Action $action) => $action
+                fn (Action $action) => $action
                     ->setLabel('Supprimer')
                     ->displayIf(static function ($entity) {
                         return !$entity->getDeletedAt();
@@ -94,7 +106,7 @@ class CompanyCrudController extends AbstractCrudController
             ->update(
                 Crud::PAGE_DETAIL,
                 Action::DELETE,
-                fn(Action $action) => $action
+                fn (Action $action) => $action
                     ->setLabel('Supprimer')
                     ->displayIf(static function ($entity) {
                         return !$entity->getDeletedAt();
