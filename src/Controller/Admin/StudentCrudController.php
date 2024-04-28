@@ -31,6 +31,39 @@ class StudentCrudController extends AbstractCrudController
         return Student::class;
     }
 
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setEntityLabelInSingular(
+                fn(?Student $student, ?string $pageName) => $student ? $student->__toString() : 'Etudiant'
+            )
+            ->setEntityLabelInPlural('Etudiants');
+
+        ;
+    }
+
+    public function configureFields(string $pageName): iterable
+    {
+        return [
+            'email',
+            TextField::new('plainPassword', 'Mot de passe')->hideOnIndex(),
+            'name',
+            'firstname',
+            'cellphone',
+            'city',
+            'zipCode',
+            ChoiceField::new('gender', 'Genre')->setChoices([
+                'Homme' => 'male',
+                'Femme' => 'female',
+                'Autre' => 'other',
+            ]),
+            DateField::new('birthdate', 'Anniversaire'),
+            DateTimeField::new('created_at', 'Créé le')->hideOnForm(),
+            DateTimeField::new('updated_at', 'Mis à jour le')->hideOnForm(),
+            DateTimeField::new('deleted_at', 'Supprimé le')->hideOnIndex()->hideOnForm(),
+            Field::new('status', 'Statut')->hideOnForm()->setSortable(true)
+        ];
+    }
 
     // --START  logic to hash password when creating or updating entity
 
@@ -61,29 +94,6 @@ class StudentCrudController extends AbstractCrudController
     }
 
     // -- END hash password logic
-
-    public function configureFields(string $pageName): iterable
-    {
-        return [
-            'email',
-            TextField::new('plainPassword', 'Mot de passe')->hideOnIndex(),
-            'name',
-            'firstname',
-            'cellphone',
-            'city',
-            'zipCode',
-            ChoiceField::new('gender', 'Genre')->setChoices([
-                'Homme' => 'male',
-                'Femme' => 'female',
-                'Autre' => 'other',
-            ]),
-            DateField::new('birthdate', 'Anniversaire'),
-            DateTimeField::new('created_at', 'Créé le')->hideOnForm(),
-            DateTimeField::new('updated_at', 'Mis à jour le')->hideOnForm(),
-            DateTimeField::new('deleted_at', 'Supprimé le')->hideOnIndex()->hideOnForm(),
-            Field::new('status', 'Statut')->hideOnForm()->setSortable(true)
-        ];
-    }
 
     // -- START logic to  smooth delete entity
 
