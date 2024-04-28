@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
@@ -26,9 +27,46 @@ class CompanyUserCrudController extends AbstractCrudController
     public function __construct(private UserPasswordHasherInterface $hasher, private RequestStack $requestStack)
     {
     }
+
     public static function getEntityFqcn(): string
     {
         return CompanyUser::class;
+    }
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setEntityLabelInSingular(
+                fn(?CompanyUser $companyUser, ?string $pageName) => $companyUser ? $companyUser->__toString() : 'Administrateur d\'entreprise'
+            )
+            ->setEntityLabelInPlural('Administrateurs d\'entreprise');
+
+        ;
+    }
+
+    public function configureFields(string $pageName): iterable
+    {
+        return [
+            'email',
+            TextField::new('plainPassword', 'Mot de passe')->hideOnIndex(),
+            'name',
+            'firstname',
+            'cellphone',
+            'city',
+            'zipCode',
+            ChoiceField::new('gender', 'Genre')->setChoices([
+                'Homme' => 'male',
+                'Femme' => 'female',
+                'Autre' => 'other',
+            ]),
+            AssociationField::new('company', 'Entreprise')->setFormTypeOption('choice_label', 'name'),
+            TextField::new('position', 'Poste'),
+            NumberField::new('officePhone', 'Téléphone de bureau'),
+            DateTimeField::new('created_at', 'Créé le')->hideOnForm(),
+            DateTimeField::new('updated_at', 'Mis à jour le')->hideOnForm(),
+            DateTimeField::new('deleted_at', 'Supprimé le')->hideOnIndex()->hideOnForm(),
+            Field::new('status', 'Statut')->hideOnForm()->setSortable(true)
+        ];
     }
 
     // --START  logic to hash password when creating or updating entity
@@ -60,31 +98,6 @@ class CompanyUserCrudController extends AbstractCrudController
     }
 
     // -- END hash password logic
-
-
-    public function configureFields(string $pageName): iterable
-    {
-        return [
-            'email',
-            TextField::new('plainPassword', 'Mot de passe')->hideOnIndex(),
-            'name',
-            'firstname',
-            'cellphone',
-            'city',
-            'zipCode',
-            ChoiceField::new('gender', 'Genre')->setChoices([
-                'Homme' => 'male',
-                'Femme' => 'female',
-                'Autre' => 'other',
-            ]),
-            TextField::new('position', 'Poste'),
-            NumberField::new('officePhone', 'Téléphone de bureau'),
-            DateTimeField::new('created_at', 'Créé le')->hideOnForm(),
-            DateTimeField::new('updated_at', 'Mis à jour le')->hideOnForm(),
-            DateTimeField::new('deleted_at', 'Supprimé le')->hideOnIndex()->hideOnForm(),
-            Field::new('status', 'Statut')->hideOnForm()->setSortable(true)
-        ];
-    }
 
     // -- START logic to  smooth delete entity
 

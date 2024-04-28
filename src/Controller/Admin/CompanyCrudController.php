@@ -29,6 +29,16 @@ class CompanyCrudController extends AbstractCrudController
         return Company::class;
     }
 
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setEntityLabelInSingular(
+                fn(?Company $company, ?string $pageName) => $company ? $company->getName() : 'Entreprise'
+            )
+            ->setEntityLabelInPlural('Entreprises');
+        ;
+    }
+
 
     public function configureFields(string $pageName): iterable
     {

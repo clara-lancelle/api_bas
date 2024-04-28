@@ -70,6 +70,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     private ?string $plainPassword = null;
 
+    public function __toString(): string
+    {
+        return $this->getFirstname() . ' ' . $this->getName();
+    }
 
     public function eraseCredentials(): void
     {
