@@ -41,14 +41,8 @@ class Company
     #[ORM\Column(length: 255)]
     private ?string $address = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $zip_code = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $city = null;
-
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTime $creation_date = null;
+    private ?\DateTimeInterface $creation_date = null;
 
     #[ORM\Column(length: 255)]
     private ?string $phone_num = null;
@@ -59,8 +53,11 @@ class Company
     #[ORM\Column(length: 255)]
     private ?string $activity = null;
 
+    /**
+     * @var Collection<int, CompanyUser>
+     */
     #[ORM\OneToMany(targetEntity: CompanyUser::class, mappedBy: 'company', orphanRemoval: true)]
-    private Collection $companyAdministratorss;
+    private Collection $administrators;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
@@ -80,8 +77,8 @@ class Company
     public function __construct()
     {
         $this->administrators = new ArrayCollection();
-        $this->created_at     = new DateTimeImmutable();
-        $this->updated_at     = new DateTimeImmutable();
+        $this->created_at = new DateTimeImmutable();
+        $this->updated_at = new DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -185,36 +182,12 @@ class Company
         return $this;
     }
 
-    public function getZipCode(): ?string
-    {
-        return $this->zip_code;
-    }
-
-    public function setZipCode(string $zip_code): static
-    {
-        $this->zip_code = $zip_code;
-
-        return $this;
-    }
-
-    public function getCity(): ?string
-    {
-        return $this->city;
-    }
-
-    public function setCity(string $city): static
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
-    public function getCreationDate(): ?\DateTime
+    public function getCreationDate(): ?\DateTimeInterface
     {
         return $this->creation_date;
     }
 
-    public function setCreationDate(?\DateTime $creation_date): static
+    public function setCreationDate(?\DateTimeInterface $creation_date): static
     {
         $this->creation_date = $creation_date;
 
@@ -233,7 +206,7 @@ class Company
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getDescription(): ?\DateTimeInterface
     {
         return $this->description;
     }
@@ -265,22 +238,22 @@ class Company
         return $this->administrators;
     }
 
-    public function addAdministrator(CompanyUser $companyAdministrators): static
+    public function addAdministrator(CompanyUser $administrator): static
     {
-        if (!$this->administrators->contains($companyAdministrators)) {
-            $this->administrators->add($companyAdministrators);
-            $companyAdministrators->setCompany($this);
+        if (!$this->administrators->contains($administrator)) {
+            $this->administrators->add($administrator);
+            $administrator->setCompany($this);
         }
 
         return $this;
     }
 
-    public function removeAdministrator(CompanyUser $companyAdministrators): static
+    public function removeAdministrator(CompanyUser $administrator): static
     {
-        if ($this->administrators->removeElement($companyAdministrators)) {
+        if ($this->administrators->removeElement($administrator)) {
             // set the owning side to null (unless already changed)
-            if ($companyAdministrators->getCompany() === $this) {
-                $companyAdministrators->setCompany(null);
+            if ($administrator->getCompany() === $this) {
+                $administrator->setCompany(null);
             }
         }
 
@@ -336,10 +309,5 @@ class Company
         $this->deleted_at = $deleted_at;
 
         return $this;
-    }
-
-    public function getStatus(): string
-    {
-        return $this->deleted_at === null ? 'Actif' : 'Inactif';
     }
 }
