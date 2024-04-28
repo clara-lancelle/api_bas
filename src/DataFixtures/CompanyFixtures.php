@@ -17,9 +17,11 @@ class CompanyFixtures extends Fixture
         $company = new Company();
         $company->setName('MentalWorks');
         $company->setWebsiteUrl('https://mentalworks.fr/');
-        $company->setSocialReason('MENTAL WORKS');
+        $company->setSocialReason('SARL');
         $company->setSiret('39242018800048');
-        $company->setAddress('41 Rue Irene Joliot Curie bât Millenium 2, 60610 La Croix-Saint-Ouen');
+        $company->setAddress('41 Rue Irene Joliot Curie bât Millenium 2');
+        $company->setZipCode('60610');
+        $company->setCity('La Croix-Saint-Ouen');
         $company->setPhoneNum('0344862255');
         $company->setDescription('Mentalworks est une agence web spécialisée dans la création de sites de sites web, d\'applis mobiles et le développement d\'applications métiers sur-mesure.');
         $company->setActivity('Concepteur de sites web');
