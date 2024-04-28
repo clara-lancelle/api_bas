@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Company;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -54,6 +55,13 @@ class CompanyCrudController extends AbstractCrudController
 
     public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
+        $entityInstance->getOffers()->initialize();
+        $offers = $entityInstance->getOffers();
+        foreach ($offers as $offer) {
+            $offer->setDeletedAt(new \DateTimeImmutable());
+        }
+        $entityManager->flush();
+
         $entityInstance->setDeletedAt(new \DateTimeImmutable());
         $entityManager->flush();
         $this->addFlash('success', 'Entreprise désactivée.');
