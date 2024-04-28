@@ -40,7 +40,7 @@ class Company
 
     #[ORM\Column(length: 255)]
     private ?string $address = null;
-    
+
     #[ORM\Column(length: 255)]
     private ?string $zip_code = null;
 
@@ -59,11 +59,8 @@ class Company
     #[ORM\Column(length: 255)]
     private ?string $activity = null;
 
-    /**
-     * @var Collection<int, CompanyUser>
-     */
     #[ORM\OneToMany(targetEntity: CompanyUser::class, mappedBy: 'company', orphanRemoval: true)]
-    private Collection $administrators;
+    private Collection $companyAdministratorss;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
@@ -83,9 +80,8 @@ class Company
     public function __construct()
     {
         $this->administrators = new ArrayCollection();
-        $this->created_at = new DateTimeImmutable();
-        $this->updated_at = new DateTimeImmutable();
-        $this->offers = new ArrayCollection();
+        $this->created_at     = new DateTimeImmutable();
+        $this->updated_at     = new DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -269,22 +265,22 @@ class Company
         return $this->administrators;
     }
 
-    public function addAdministrator(CompanyUser $administrator): static
+    public function addAdministrator(CompanyUser $companyAdministrators): static
     {
-        if (!$this->administrators->contains($administrator)) {
-            $this->administrators->add($administrator);
-            $administrator->setCompany($this);
+        if (!$this->administrators->contains($companyAdministrators)) {
+            $this->administrators->add($companyAdministrators);
+            $companyAdministrators->setCompany($this);
         }
 
         return $this;
     }
 
-    public function removeAdministrator(CompanyUser $administrator): static
+    public function removeAdministrator(CompanyUser $companyAdministrators): static
     {
-        if ($this->administrators->removeElement($administrator)) {
+        if ($this->administrators->removeElement($companyAdministrators)) {
             // set the owning side to null (unless already changed)
-            if ($administrator->getCompany() === $this) {
-                $administrator->setCompany(null);
+            if ($companyAdministrators->getCompany() === $this) {
+                $companyAdministrators->setCompany(null);
             }
         }
 

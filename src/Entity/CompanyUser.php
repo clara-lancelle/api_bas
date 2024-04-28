@@ -15,8 +15,7 @@ class CompanyUser extends User
     #[ORM\Column(nullable: true)]
     private ?int $officePhone = null;
 
-    #[ORM\ManyToOne(inversedBy: 'administrators')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'companyAdministrators')]
     private ?Company $company = null;
 
     public function getPosition(): ?string
