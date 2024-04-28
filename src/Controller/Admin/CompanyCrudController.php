@@ -55,15 +55,11 @@ class CompanyCrudController extends AbstractCrudController
 
     public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
-        // Récupérer les offres associées à l'entreprise
         $entityInstance->getOffers()->initialize();
         $offers = $entityInstance->getOffers();
-        // Marquer les offres comme supprimées avec la même date que l'entreprise
         foreach ($offers as $offer) {
             $offer->setDeletedAt(new \DateTimeImmutable());
         }
-
-        // Enregistrer les modifications dans le gestionnaire d'entités Doctrine
         $entityManager->flush();
 
         $entityInstance->setDeletedAt(new \DateTimeImmutable());
