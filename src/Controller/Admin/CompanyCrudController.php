@@ -14,8 +14,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -50,11 +52,12 @@ class CompanyCrudController extends AbstractCrudController
             TextField::new('social_reason', 'Statut juridique'),
             TextField::new('siret', 'Siret')->hideOnIndex(),
             TextField::new('address', 'Adresse')->hideOnIndex(),
+            NumberField::new('numberOfOffers', 'Nombre d\'offres')->hideOnForm(),
             TextField::new('zip_code', 'Code postal'),
             TextField::new('city', 'Ville'),
             DateField::new('creation_date', 'Date de création')->hideOnIndex(),
             TextField::new('phone_num', 'Téléphone')->hideOnIndex(),
-            TextField::new('description', 'Description')->hideOnIndex(),
+            TextEditorField::new('description', 'Description')->hideOnIndex(),
             TextField::new('activity', 'Activité')->hideOnIndex(),
             DateTimeField::new('created_at', 'Crée le')->hideOnIndex()->hideOnForm(),
             DateTimeField::new('updated_at', 'Mis à jour le')->hideOnIndex()->hideOnForm(),
@@ -70,6 +73,13 @@ class CompanyCrudController extends AbstractCrudController
         $offers = $entityInstance->getOffers();
         foreach ($offers as $offer) {
             $offer->setDeletedAt(new \DateTimeImmutable());
+        }
+        $entityManager->flush();
+
+        $entityInstance->getAdministrators()->initialize();
+        $administrators = $entityInstance->getAdministrators();
+        foreach ($administrators as $administrator) {
+            $administrator->setDeletedAt(new \DateTimeImmutable());
         }
         $entityManager->flush();
 

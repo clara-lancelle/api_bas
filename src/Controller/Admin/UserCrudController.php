@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Administrator;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -66,9 +67,26 @@ class UserCrudController extends AbstractCrudController
     }
 
     // -- START logic to  smooth delete entity
+    private function countActiveAdmins(EntityManagerInterface $entityManager): int
+    {
+        return $entityManager->createQueryBuilder()
+        ->select('COUNT(admin.id)')
+        ->from(Administrator::class, 'admin')
+        ->where('admin.deleted_at IS NULL')
+        ->getQuery()
+        ->getSingleScalarResult();    
+    }
 
     public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
+        if ($entityInstance instanceof Administrator) {
+            $totalAdmins = $this->countActiveAdmins($entityManager);
+
+            if ($totalAdmins == 1) {
+                $this->addFlash('danger', 'Impossible de supprimer le dernier administrateur.');
+                return;
+            }
+        }
         $entityInstance->setDeletedAt(new \DateTimeImmutable());
         $entityManager->flush();
         $this->addFlash('success', 'Utilisateur supprimé en douceur.');

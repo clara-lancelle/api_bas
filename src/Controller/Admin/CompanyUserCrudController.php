@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Company;
 use App\Entity\CompanyUser;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,8 +16,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -100,12 +101,32 @@ class CompanyUserCrudController extends AbstractCrudController
     // -- END hash password logic
 
     // -- START logic to  smooth delete entity
-
+    private function countActiveAdminsOfCompany(EntityManagerInterface $entityManager, Company $company): int
+    {
+        return $entityManager->createQueryBuilder()
+            ->select('COUNT(admin.id)')
+            ->from(CompanyUser::class, 'admin')
+            ->where('admin.deleted_at IS NULL')
+            ->andWhere('admin.company = :company')
+            ->setParameter('company', $company)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    
     public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
+        if ($entityInstance instanceof CompanyUser) {
+            $totalAdmins = $this->countActiveAdminsOfCompany($entityManager, $entityInstance->getCompany());
+
+            if ($totalAdmins == 1) {
+                $this->addFlash('danger', 'Impossible de supprimer le dernier administrateur actif de cette entreprise.');
+                return;
+            }
+        }
+
         $entityInstance->setDeletedAt(new \DateTimeImmutable());
         $entityManager->flush();
-        $this->addFlash('success', 'Utilisateur supprimé en douceur.');
+        $this->addFlash('success', 'Entité supprimée en douceur.');
     }
 
     public function restoreEntity(EntityManagerInterface $entityManager, AdminContext $context): RedirectResponse

@@ -62,7 +62,7 @@ class Company
     private ?string $activity = null;
 
     #[ORM\OneToMany(targetEntity: CompanyUser::class, mappedBy: 'company', orphanRemoval: true)]
-    private Collection $companyAdministratorss;
+    private Collection $companyAdministrators;
 
 
     #[ORM\Column]
@@ -79,9 +79,11 @@ class Company
 
     public function __construct()
     {
-        $this->administrators = new ArrayCollection();
+        $this->companyAdministrators = new ArrayCollection();
         $this->created_at     = new DateTimeImmutable();
         $this->updated_at     = new DateTimeImmutable();
+        $this->offers         = new ArrayCollection();
+
 
     }
 
@@ -263,13 +265,13 @@ class Company
      */
     public function getAdministrators(): Collection
     {
-        return $this->administrators;
+        return $this->companyAdministrators;
     }
 
     public function addAdministrator(CompanyUser $companyAdministrators): static
     {
-        if (!$this->administrators->contains($companyAdministrators)) {
-            $this->administrators->add($companyAdministrators);
+        if (!$this->companyAdministrators->contains($companyAdministrators)) {
+            $this->companyAdministrators->add($companyAdministrators);
             $companyAdministrators->setCompany($this);
         }
 
@@ -278,7 +280,7 @@ class Company
 
     public function removeAdministrator(CompanyUser $companyAdministrators): static
     {
-        if ($this->administrators->removeElement($companyAdministrators)) {
+        if ($this->companyAdministrators->removeElement($companyAdministrators)) {
             // set the owning side to null (unless already changed)
             if ($companyAdministrators->getCompany() === $this) {
                 $companyAdministrators->setCompany(null);
@@ -369,6 +371,11 @@ class Company
         }
 
         return $this;
+    }
+
+    public function getNumberOfOffers(): int
+    {
+        return count($this->offers);
     }
 
     public function __toString(): string

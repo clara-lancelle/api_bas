@@ -30,7 +30,6 @@ class OfferCrudController extends AbstractCrudController
     {
         return Offer::class;
     }
-
     
     public function configureFields(string $pageName): iterable
     {
@@ -38,20 +37,20 @@ class OfferCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             AssociationField::new('company', 'Entreprise'),
             TextField::new('name', 'Intitulé'),
-            DateField::new('start_date'),
-            DateField::new('end_date'),
+            DateField::new('start_date', 'Date de début'),
+            DateField::new('end_date', 'Date de fin'),
             ChoiceField::new('type', 'Type')->setChoices([
                 'Alternance' => 'alternance',
                 'Stage' => 'stage',
             ]),
-            TextEditorField::new('description')->hideOnIndex(),
-            TextField::new('promote_status')->hideOnIndex(),
-            TextField::new('revenue')->hideOnIndex(),
-            TextField::new('remote')->hideOnIndex(),
-            IntegerField::new('available_place')->hideOnIndex(),
-            DateField::new('created_at')->hideOnIndex()->hideOnForm(),
-            DateField::new('updated_at')->hideOnIndex()->hideOnForm(),
-            DateField::new('deleted_at')->hideOnIndex()->hideOnForm(),
+            TextEditorField::new('description', 'Description')->hideOnIndex(),
+            TextField::new('promote_status', 'Niveau d\'études')->hideOnIndex(),
+            TextField::new('revenue', 'Salaire')->hideOnIndex(),
+            TextField::new('remote', 'Télétravail')->hideOnIndex(),
+            IntegerField::new('available_place', 'Places disponibles')->hideOnIndex(),
+            DateField::new('created_at', 'Crée le')->hideOnIndex()->hideOnForm(),
+            DateField::new('updated_at', 'Mis à jour le')->hideOnIndex()->hideOnForm(),
+            DateField::new('deleted_at', 'Supprimé le')->hideOnIndex()->hideOnForm(),
             Field::new('status', 'Statut')->hideOnForm()->setSortable(true)
         ];
     }
