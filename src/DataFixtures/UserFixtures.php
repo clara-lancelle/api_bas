@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Administrator;
+use App\Entity\Company;
 use App\Entity\CompanyUser;
 use App\Entity\Student;
 use App\Entity\User;
@@ -10,12 +11,16 @@ use App\Enum\Gender;
 use App\Enum\UserType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
 {
-    public function __construct(private UserPasswordHasherInterface $hasher)
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(private UserPasswordHasherInterface $hasher, EntityManagerInterface $entityManager)
     {
+        $this->entityManager = $entityManager;
     }
 
     public function load(ObjectManager $manager)
@@ -52,6 +57,8 @@ class UserFixtures extends Fixture
         $manager->persist($user);
         $manager->flush();
 
+        $firstCompany = $this->entityManager->getRepository(Company::class)->findOneBy([], ['id' => 'ASC']);
+
         //CompanyUser
         $user = new CompanyUser();
         $user->setName('companyUser');
@@ -65,6 +72,7 @@ class UserFixtures extends Fixture
         $user->setPosition('CTO');
         $user->setRoles(['ROLE_USER']);
         $user->setGender(Gender::MALE);
+        $user->setCompany($firstCompany);
         $manager->persist($user);
         $manager->flush();
     }
