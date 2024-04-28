@@ -4,7 +4,6 @@ namespace App\DataFixtures;
 
 use App\Entity\Administrator;
 use App\Entity\Company;
-use App\Entity\Company;
 use App\Entity\CompanyUser;
 use App\Entity\Student;
 use App\Entity\User;
@@ -12,7 +11,6 @@ use App\Enum\Gender;
 use App\Enum\UserType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -60,9 +58,7 @@ class UserFixtures extends Fixture
         $manager->flush();
 
         $firstCompany = $this->entityManager->getRepository(Company::class)->findOneBy([], ['id' => 'ASC']);
-
-        $firstCompany = $this->entityManager->getRepository(Company::class)->findOneBy([], ['id' => 'ASC']);
-
+        
         //CompanyUser
         $user = new CompanyUser();
         $user->setName('companyUser');
