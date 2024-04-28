@@ -186,6 +186,11 @@ class Offer
         return $this;
     }
 
+    public function getStatus(): string
+    {
+        return $this->deleted_at === null ? 'Actif' : 'Inactif';
+    }
+
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->created_at;
