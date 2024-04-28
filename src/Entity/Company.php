@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 class Company
@@ -17,12 +18,15 @@ class Company
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3)]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $logo = null;
 
+    #[Assert\Url]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $website_url = null;
 
@@ -38,17 +42,21 @@ class Company
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $turnover = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3)]
     #[ORM\Column(length: 255)]
     private ?string $address = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $zip_code = null;
-
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3)]
     #[ORM\Column(length: 255)]
     private ?string $city = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Assert\Regex('/^[0-9]{5}$/')]
+    #[ORM\Column(length: 255)]
+    private ?string $zip_code = null;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $creation_date = null;
 
 
@@ -80,9 +88,9 @@ class Company
     public function __construct()
     {
         $this->companyAdministrators = new ArrayCollection();
-        $this->created_at     = new DateTimeImmutable();
-        $this->updated_at     = new DateTimeImmutable();
-        $this->offers         = new ArrayCollection();
+        $this->created_at            = new DateTimeImmutable();
+        $this->updated_at            = new DateTimeImmutable();
+        $this->offers                = new ArrayCollection();
 
 
     }

@@ -14,7 +14,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -76,13 +78,13 @@ class AdministratorCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            'email',
+            TextField::new('firstname', 'Prénom'),
+            TextField::new('name', 'Nom'),
+            EmailField::new('email', 'Email'),
+            TextField::new('cellphone', 'Téléphone portable'),
+            NumberField::new('zipCode', 'Code Postal'),
+            TextField::new('city', 'Ville'),
             TextField::new('plainPassword', 'Mot de passe')->onlyOnForms(),
-            'name',
-            'firstname',
-            'cellphone',
-            'city',
-            'zipCode',
             ChoiceField::new('gender', 'Genre')->setChoices([
                 'Homme' => 'male',
                 'Femme' => 'female',
@@ -100,15 +102,15 @@ class AdministratorCrudController extends AbstractCrudController
     private function countActiveAdmins(EntityManagerInterface $entityManager): int
     {
         return $entityManager->createQueryBuilder()
-        ->select('COUNT(admin.id)')
-        ->from(Administrator::class, 'admin')
-        ->where('admin.deleted_at IS NULL')
-        ->getQuery()
-        ->getSingleScalarResult();    
+            ->select('COUNT(admin.id)')
+            ->from(Administrator::class, 'admin')
+            ->where('admin.deleted_at IS NULL')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
-    {        
+    {
         if ($entityInstance instanceof Administrator) {
             $totalAdmins = $this->countActiveAdmins($entityManager);
 

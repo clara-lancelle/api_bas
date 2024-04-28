@@ -4,16 +4,19 @@ namespace App\Entity;
 
 use App\Repository\CompanyUserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CompanyUserRepository::class)]
 class CompanyUser extends User
 {
 
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3)]
     #[ORM\Column(length: 255)]
     private ?string $position = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $officePhone = null;
+    private ?string $officePhone = null;
 
     #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'companyAdministrators')]
     private ?Company $company = null;
@@ -30,12 +33,12 @@ class CompanyUser extends User
         return $this;
     }
 
-    public function getOfficePhone(): ?int
+    public function getOfficePhone(): ?string
     {
         return $this->officePhone;
     }
 
-    public function setOfficePhone(?int $officePhone): static
+    public function setOfficePhone(?string $officePhone): static
     {
         $this->officePhone = $officePhone;
 

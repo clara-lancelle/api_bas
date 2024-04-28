@@ -56,7 +56,7 @@ class UserCrudController extends AbstractCrudController
                 'Femme' => 'female',
                 'Autre' => 'other',
             ]),
-            NumberField::new('cellphone', 'Téléphone portable'),
+            TextField::new('cellphone', 'Téléphone portable'),
             NumberField::new('zipCode', 'Code Postal'),
             TextField::new('city', 'Ville'),
             DateTimeField::new('created_at', 'Créé le')->hideOnForm(),
@@ -70,11 +70,11 @@ class UserCrudController extends AbstractCrudController
     private function countActiveAdmins(EntityManagerInterface $entityManager): int
     {
         return $entityManager->createQueryBuilder()
-        ->select('COUNT(admin.id)')
-        ->from(Administrator::class, 'admin')
-        ->where('admin.deleted_at IS NULL')
-        ->getQuery()
-        ->getSingleScalarResult();    
+            ->select('COUNT(admin.id)')
+            ->from(Administrator::class, 'admin')
+            ->where('admin.deleted_at IS NULL')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
@@ -118,7 +118,7 @@ class UserCrudController extends AbstractCrudController
             ->add(Crud::PAGE_INDEX, $displayRestoreAction)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
             ->update(Crud::PAGE_INDEX, Action::DETAIL, fn(Action $action) => $action->setLabel('Afficher'))
-            // ->remove(Crud::PAGE_INDEX, Action::EDIT)
+            ->remove(Crud::PAGE_INDEX, Action::NEW )
             // ->remove(Crud::PAGE_DETAIL, Action::EDIT)
             ->update(
                 Crud::PAGE_INDEX,

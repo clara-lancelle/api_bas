@@ -14,6 +14,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 
@@ -48,13 +49,13 @@ class CompanyUserCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            'email',
+            TextField::new('firstname', 'Prénom'),
+            TextField::new('name', 'Nom'),
+            EmailField::new('email', 'Email'),
+            TextField::new('cellphone', 'Téléphone portable'),
+            NumberField::new('zipCode', 'Code Postal'),
+            TextField::new('city', 'Ville'),
             TextField::new('plainPassword', 'Mot de passe')->hideOnIndex(),
-            'name',
-            'firstname',
-            'cellphone',
-            'city',
-            'zipCode',
             ChoiceField::new('gender', 'Genre')->setChoices([
                 'Homme' => 'male',
                 'Femme' => 'female',
@@ -62,7 +63,7 @@ class CompanyUserCrudController extends AbstractCrudController
             ]),
             AssociationField::new('company', 'Entreprise')->setFormTypeOption('choice_label', 'name'),
             TextField::new('position', 'Poste'),
-            NumberField::new('officePhone', 'Téléphone de bureau'),
+            TextField::new('officePhone', 'Téléphone de bureau'),
             DateTimeField::new('created_at', 'Créé le')->hideOnForm(),
             DateTimeField::new('updated_at', 'Mis à jour le')->hideOnForm(),
             DateTimeField::new('deleted_at', 'Supprimé le')->hideOnIndex()->hideOnForm(),
@@ -112,7 +113,7 @@ class CompanyUserCrudController extends AbstractCrudController
             ->getQuery()
             ->getSingleScalarResult();
     }
-    
+
     public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if ($entityInstance instanceof CompanyUser) {

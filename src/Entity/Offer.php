@@ -6,6 +6,7 @@ use App\Repository\OfferRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OfferRepository::class)]
 class Offer
@@ -19,6 +20,8 @@ class Offer
     #[ORM\JoinColumn(nullable: false)]
     private ?Company $company = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3)]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
@@ -31,6 +34,8 @@ class Offer
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3)]
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 

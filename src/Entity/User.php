@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\InheritanceType;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -26,6 +27,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\Email]
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
@@ -38,21 +40,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
+    #[Assert\PasswordStrength]
     #[ORM\Column]
     private ?string $password = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3)]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3)]
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
 
+    #[Assert\Regex('/^((0|(\+33))[1-79]){1}([\-|\.| |\][0-9]{2}){4}$/')]
     #[ORM\Column(length: 15)]
-    private ?int $cellphone = null;
+    private ?string $cellphone = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3)]
     #[ORM\Column(length: 255)]
     private ?string $city = null;
 
+    #[Assert\Regex('/^[0-9]{5}$/')]
     #[ORM\Column(length: 255)]
     private ?string $zipCode = null;
 
@@ -171,12 +182,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCellphone(): ?int
+    public function getCellphone(): ?string
     {
         return $this->cellphone;
     }
 
-    public function setCellphone(int $cellphone): static
+    public function setCellphone(string $cellphone): static
     {
         $this->cellphone = $cellphone;
 

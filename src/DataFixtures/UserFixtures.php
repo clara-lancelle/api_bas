@@ -31,7 +31,7 @@ class UserFixtures extends Fixture
         $user->setEmail('admin@test.com');
         $password = $this->hasher->hashPassword($user, 'pass_1234');
         $user->setPassword($password);
-        $user->setCellphone(0164025663);
+        $user->setCellphone("0164025663");
         $user->setCity('paris');
         $user->setZipCode(75002);
         $user->setRoles(['ROLE_USER', 'ROLE_ADMIN']);
@@ -46,7 +46,7 @@ class UserFixtures extends Fixture
         $user->setEmail('student@test.com');
         $password = $this->hasher->hashPassword($user, 'pass_student_1234');
         $user->setPassword($password);
-        $user->setCellphone(0164025663);
+        $user->setCellphone("0164025663");
         $user->setCity('paris');
         $user->setZipCode(75002);
         $user->setBirthdate(new \DateTime('2000-04-03'));
@@ -64,7 +64,7 @@ class UserFixtures extends Fixture
         $user->setEmail('companyUser@test.com');
         $password = $this->hasher->hashPassword($user, 'pass_companyUser_1234');
         $user->setPassword($password);
-        $user->setCellphone(0164025663);
+        $user->setCellphone("0164025663");
         $user->setCity('paris');
         $user->setZipCode(75002);
         $user->setPosition('CTO');
