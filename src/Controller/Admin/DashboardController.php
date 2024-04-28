@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Administrator;
+use App\Entity\Company;
 use App\Entity\CompanyUser;
 use App\Entity\Student;
 use App\Entity\User;
@@ -43,7 +44,7 @@ class DashboardController extends AbstractDashboardController
                     ->setAction('detail')
                     ->setEntityId($user->getId()),
                 MenuItem::section(),
-                MenuItem::linkToLogout('déconnection', 'fa fa-sign-out'),
+                MenuItem::linkToLogout('déconnexion', 'fa fa-sign-out'),
             ]);
     }
     public function configureMenuItems(): iterable
@@ -53,5 +54,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Etudiants', 'fas fa-users', Student::class);
         yield MenuItem::linkToCrud('Utilisateurs Entreprises', 'fas fa-users', CompanyUser::class);
         yield MenuItem::linkToCrud('Administrateurs', 'fas fa-users', Administrator::class);
+        yield MenuItem::linkToCrud('Entreprises', 'fas fa-building', Company::class);
     }
 }

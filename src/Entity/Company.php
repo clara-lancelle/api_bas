@@ -40,6 +40,12 @@ class Company
 
     #[ORM\Column(length: 255)]
     private ?string $address = null;
+    
+    #[ORM\Column(length: 255)]
+    private ?string $zip_code = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $city = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $creation_date = null;
@@ -176,6 +182,30 @@ class Company
         return $this;
     }
 
+    public function getZipCode(): ?string
+    {
+        return $this->zip_code;
+    }
+
+    public function setZipCode(string $zip_code): static
+    {
+        $this->zip_code = $zip_code;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): static
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
     public function getCreationDate(): ?\DateTimeInterface
     {
         return $this->creation_date;
@@ -200,7 +230,7 @@ class Company
         return $this;
     }
 
-    public function getDescription(): ?\DateTimeInterface
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -303,5 +333,10 @@ class Company
         $this->deleted_at = $deleted_at;
 
         return $this;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->deleted_at === null ? 'Actif' : 'Inactif';
     }
 }
