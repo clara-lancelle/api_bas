@@ -48,7 +48,7 @@ class Company
     private ?string $city = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $creation_date = null;
+    private ?\DateTime $creation_date = null;
 
     #[ORM\Column(length: 255)]
     private ?string $phone_num = null;
@@ -203,12 +203,12 @@ class Company
         return $this;
     }
 
-    public function getCreationDate(): ?\DateTimeInterface
+    public function getCreationDate(): ?\DateTime
     {
         return $this->creation_date;
     }
 
-    public function setCreationDate(?\DateTimeInterface $creation_date): static
+    public function setCreationDate(?\DateTime $creation_date): static
     {
         $this->creation_date = $creation_date;
 

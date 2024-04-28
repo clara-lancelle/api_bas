@@ -9,6 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -28,7 +29,7 @@ class CompanyCrudController extends AbstractCrudController
         return Company::class;
     }
 
-    
+
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -40,7 +41,7 @@ class CompanyCrudController extends AbstractCrudController
             TextField::new('address', 'Adresse')->hideOnIndex(),
             TextField::new('zip_code', 'Code postal'),
             TextField::new('city', 'Ville'),
-            TextField::new('creation_date', 'Date de création')->hideOnIndex(),
+            DateField::new('creation_date', 'Date de création')->hideOnIndex(),
             TextField::new('phone_num', 'Téléphone')->hideOnIndex(),
             TextField::new('description', 'Description')->hideOnIndex(),
             TextField::new('activity', 'Activité')->hideOnIndex(),
@@ -50,7 +51,7 @@ class CompanyCrudController extends AbstractCrudController
             Field::new('status', 'Statut')->hideOnForm()->setSortable(true)
         ];
     }
-    
+
 
     public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
@@ -74,9 +75,9 @@ class CompanyCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         $displayRestoreAction = Action::new('restaurer', 'Restaurer', 'fas fa-file-invoice')->linkToCrudAction('restoreEntity')
-        ->displayIf(static function ($entity) {
-            return $entity->getDeletedAt();
-        });
+            ->displayIf(static function ($entity) {
+                return $entity->getDeletedAt();
+            });
 
         return $actions
             ->add(Crud::PAGE_INDEX, $displayRestoreAction)
