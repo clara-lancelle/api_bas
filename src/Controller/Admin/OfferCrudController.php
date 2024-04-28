@@ -76,13 +76,26 @@ class OfferCrudController extends AbstractCrudController
 
     public function restoreEntity(EntityManagerInterface $entityManager, AdminContext $context): RedirectResponse
     {
-        $entityInstance = $context->getEntity()->getInstance();
-        $entityInstance->setDeletedAt(null);
-        $entityManager->flush();
-        $this->addFlash('success', 'Offre restaurée.');
+
+        // Récupérer l'instance de l'offre à restaurer
+        $offer = $context->getEntity()->getInstance();
+
+        // Vérifier si l'entreprise associée à l'offre est activée
+        $company = $offer->getCompany();
+        if ($company && !$company->getDeletedAt()) {
+            // Réactiver l'offre
+            $offer->setDeletedAt(null);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Offre restaurée avec succès.');
+        } else {
+            // L'entreprise n'est pas activée, afficher un message d'erreur
+            $this->addFlash('danger', 'Impossible de restaurer l\'offre car l\'entreprise associée n\'est pas activée.');
+        }
+
+        // Rediriger vers la page précédente
         $request = $this->requestStack->getCurrentRequest();
         $referer = $request->headers->get('referer');
-
         return new RedirectResponse($referer);
     }
 
