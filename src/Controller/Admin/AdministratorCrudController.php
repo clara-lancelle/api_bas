@@ -70,9 +70,8 @@ class AdministratorCrudController extends AbstractCrudController
             ->setEntityLabelInSingular(
                 fn(?Administrator $administrator, ?string $pageName) => $administrator ? $administrator->__toString() : 'Super Administrateur'
             )
-            ->setEntityLabelInPlural('Super Administrateurs');
-
-        ;
+            ->setEntityLabelInPlural('Super Administrateurs')
+            ->setSearchFields(['firstname', 'name', 'email', 'city']);
     }
 
     public function configureFields(string $pageName): iterable

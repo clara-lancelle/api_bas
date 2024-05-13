@@ -38,8 +38,6 @@ class OfferCrudController extends AbstractCrudController
                 fn(?Offer $offer, ?string $pageName) => $offer ? $offer->getName() : 'Offre'
             )
             ->setEntityLabelInPlural('Offres');
-
-        ;
     }
 
     public function configureFields(string $pageName): iterable

@@ -39,8 +39,6 @@ class UserCrudController extends AbstractCrudController
                 fn(?User $user, ?string $pageName) => $user ? $user->__toString() : 'Utilisateur'
             )
             ->setEntityLabelInPlural('Utilisateurs');
-
-        ;
     }
 
     public function configureFields(string $pageName): iterable
