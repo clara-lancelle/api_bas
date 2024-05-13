@@ -81,6 +81,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     private ?string $plainPassword = null;
 
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): static
+    {
+        $this->created_at = new \DateTimeImmutable();
+        $this->setUpdatedAtValue();
+        return $this;
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): static
+    {
+        $this->updated_at = new \DateTimeImmutable();
+        return $this;
+    }
+
     public function __toString(): string
     {
         return $this->getFirstname() . ' ' . $this->getName();
@@ -239,21 +254,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->updated_at = $updated_at;
 
-        return $this;
-    }
-
-    #[ORM\PrePersist]
-    public function setCreatedAtValue(): static
-    {
-        $this->created_at = new \DateTimeImmutable();
-        $this->setUpdatedAtValue();
-        return $this;
-    }
-
-    #[ORM\PreUpdate]
-    public function setUpdatedAtValue(): static
-    {
-        $this->updated_at = new \DateTimeImmutable();
         return $this;
     }
 

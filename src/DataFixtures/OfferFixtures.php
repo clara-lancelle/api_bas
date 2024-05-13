@@ -20,8 +20,7 @@ class OfferFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $firstCompany = $this->entityManager->getRepository(Company::class)->findOneBy([], ['id' => 'ASC']);
-
-        $offer = new Offer();
+        $offer        = new Offer();
         $offer->setCompany($firstCompany);
         $offer->setName('Développeur Web Junior');
         $offer->setStartDate(new \DateTime('2024-09-01'));
