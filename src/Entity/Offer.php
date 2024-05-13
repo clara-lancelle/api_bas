@@ -6,8 +6,10 @@ use App\Repository\OfferRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: OfferRepository::class)]
 class Offer
 {
@@ -60,10 +62,22 @@ class Offer
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $deleted_at = null;
 
-    public function __construct()
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $application_limit_date = null;
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): static
     {
-        $this->created_at = new DateTimeImmutable();
-        $this->updated_at = new DateTimeImmutable();
+        $this->created_at = new \DateTimeImmutable();
+        $this->setUpdatedAtValue();
+        return $this;
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): static
+    {
+        $this->updated_at = new \DateTimeImmutable();
+        return $this;
     }
 
     public function getId(): ?int
@@ -220,21 +234,6 @@ class Offer
         return $this;
     }
 
-    #[ORM\PrePersist]
-    public function setCreatedAtValue(): static
-    {
-        $this->created_at = new \DateTimeImmutable();
-        $this->setUpdatedAtValue();
-        return $this;
-    }
-
-    #[ORM\PreUpdate]
-    public function setUpdatedAtValue(): static
-    {
-        $this->updated_at = new \DateTimeImmutable();
-        return $this;
-    }
-
     public function getDeletedAt(): ?\DateTimeImmutable
     {
         return $this->deleted_at;
@@ -243,6 +242,18 @@ class Offer
     public function setDeletedAt(?\DateTimeImmutable $deleted_at): static
     {
         $this->deleted_at = $deleted_at;
+
+        return $this;
+    }
+
+    public function getApplicationLimitDate(): ?\DateTimeInterface
+    {
+        return $this->application_limit_date;
+    }
+
+    public function setApplicationLimitDate(\DateTimeInterface $application_limit_date): static
+    {
+        $this->application_limit_date = $application_limit_date;
 
         return $this;
     }

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\DataFixtures;
+
 use App\Entity\Offer;
 use App\Entity\Company;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -23,14 +24,15 @@ class OfferFixtures extends Fixture
         $offer = new Offer();
         $offer->setCompany($firstCompany);
         $offer->setName('Développeur Web Junior');
-        $offer->setStartDate(new \DateTime('2024-09-01')); 
-        $offer->setEndDate(new \DateTime('2025-08-31'));   
-        $offer->setType('alternance');                
-        $offer->setDescription('Alternance de plusieurs mois a sein de l\'équipe de développement.'); 
-        $offer->setPromoteStatus('Bac+2');                    
-        $offer->setRevenue('Entre 1.000€ et 1.300€');                          
-        $offer->setRemote('Télétravail 1 jour par semaine');                           
+        $offer->setStartDate(new \DateTime('2024-09-01'));
+        $offer->setEndDate(new \DateTime('2025-08-31'));
+        $offer->setType('alternance');
+        $offer->setDescription('Alternance de plusieurs mois a sein de l\'équipe de développement.');
+        $offer->setPromoteStatus('Bac+2');
+        $offer->setRevenue('Entre 1.000€ et 1.300€');
+        $offer->setRemote('Télétravail 1 jour par semaine');
         $offer->setAvailablePlace(3);
+        $offer->setApplicationLimitDate(new \DateTime('2024-01-01'));
         $manager->persist($offer);
         $manager->flush();
     }

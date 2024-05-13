@@ -48,6 +48,7 @@ class OfferCrudController extends AbstractCrudController
             TextField::new('name', 'Intitulé'),
             DateField::new('start_date', 'Date de début'),
             DateField::new('end_date', 'Date de fin'),
+            DateField::new('application_limit_date', 'Date limite de dépôt des candidatures'),
             ChoiceField::new('type', 'Type')->setChoices([
                 'Alternance' => 'alternance',
                 'Stage'      => 'stage',
