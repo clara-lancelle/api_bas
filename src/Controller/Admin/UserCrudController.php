@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Administrator;
+use App\Entity\Gender;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -17,6 +18,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -49,11 +51,16 @@ class UserCrudController extends AbstractCrudController
             TextField::new('name', 'Nom'),
             EmailField::new('email', 'Email'),
             TextField::new('plainPassword', 'Mot de passe')->hideOnIndex(),
-            ChoiceField::new('gender', 'Genre')->setChoices([
-                'Homme' => 'male',
-                'Femme' => 'female',
-                'Autre' => 'other',
-            ]),
+            ChoiceField::new('gender', 'Genre')->setFormType(EnumType::class)
+                ->setFormTypeOptions([
+                    'class'        => Gender::class,
+                    'choice_label' => static function (Gender $choice): string {
+                        return $choice->value;
+                    }
+                ])
+                ->formatValue(function (Gender $choice): string {
+                    return $choice->value;
+                }),
             TextField::new('cellphone', 'Téléphone portable'),
             NumberField::new('zipCode', 'Code Postal'),
             TextField::new('city', 'Ville'),

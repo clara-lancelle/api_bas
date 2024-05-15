@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Gender;
 use App\Entity\User;
 use App\Entity\Administrator;
 
@@ -18,6 +19,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -84,11 +86,16 @@ class AdministratorCrudController extends AbstractCrudController
             NumberField::new('zipCode', 'Code Postal'),
             TextField::new('city', 'Ville'),
             TextField::new('plainPassword', 'Mot de passe')->onlyOnForms(),
-            ChoiceField::new('gender', 'Genre')->setChoices([
-                'Homme' => 'male',
-                'Femme' => 'female',
-                'Autre' => 'other',
-            ]),
+            ChoiceField::new('gender', 'Genre')->setFormType(EnumType::class)
+                ->setFormTypeOptions([
+                    'class'        => Gender::class,
+                    'choice_label' => static function (Gender $choice): string {
+                        return $choice->value;
+                    }
+                ])
+                ->formatValue(function (Gender $choice): string {
+                    return $choice->value;
+                }),
             DateTimeField::new('created_at', 'Créé le')->hideOnForm(),
             DateTimeField::new('updated_at', 'Mis à jour le')->hideOnForm(),
             DateTimeField::new('deleted_at', 'Supprimé le')->hideOnIndex()->hideOnForm(),

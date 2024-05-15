@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Enum;
+namespace App\Entity;
 
-final class Gender
+enum Gender: string
 {
-    public const MALE = 'male';
-    public const FEMALE = 'female';
-    public const OTHER = 'other';
+    case MALE   = 'Homme';
+    case FEMALE = 'Femme';
+    case OTHER  = 'Autre';
 }
-
-?>

@@ -3,12 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Administrator;
-use App\Entity\Company;
-use App\Entity\CompanyUser;
-use App\Entity\Student;
-use App\Entity\User;
-use App\Enum\Gender;
-use App\Enum\UserType;
+use App\Entity\Gender;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;

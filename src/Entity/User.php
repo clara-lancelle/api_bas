@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Enum\Gender;
 use App\Repository\UserRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -76,8 +75,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $deleted_at = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $gender = null;
+    #[ORM\Column(length: 255, enumType: Gender::class)]
+    private Gender $gender = Gender::MALE;
 
     private ?string $plainPassword = null;
 
@@ -269,18 +268,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getGender(): ?string
+    public function getGender(): Gender
     {
         return $this->gender;
     }
 
-    public function setGender(string $gender): void
+    public function setGender(Gender $gender): static
     {
-        if (!in_array($gender, [Gender::MALE, Gender::FEMALE, Gender::OTHER])) {
-            throw new \InvalidArgumentException('Genre invalide.');
-        }
-
         $this->gender = $gender;
+        return $this;
     }
 
     public function getStatus(): string

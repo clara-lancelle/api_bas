@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Company;
 use App\Entity\CompanyUser;
+use App\Entity\Gender;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -19,6 +20,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -55,11 +57,16 @@ class CompanyUserCrudController extends AbstractCrudController
             NumberField::new('zipCode', 'Code Postal'),
             TextField::new('city', 'Ville'),
             TextField::new('plainPassword', 'Mot de passe')->hideOnIndex(),
-            ChoiceField::new('gender', 'Genre')->setChoices([
-                'Homme' => 'male',
-                'Femme' => 'female',
-                'Autre' => 'other',
-            ]),
+            ChoiceField::new('gender', 'Genre')->setFormType(EnumType::class)
+                ->setFormTypeOptions([
+                    'class'        => Gender::class,
+                    'choice_label' => static function (Gender $choice): string {
+                        return $choice->value;
+                    }
+                ])
+                ->formatValue(function (Gender $choice): string {
+                    return $choice->value;
+                }),
             AssociationField::new('company', 'Entreprise')->setFormTypeOption('choice_label', 'name'),
             TextField::new('position', 'Poste'),
             TextField::new('officePhone', 'Téléphone de bureau'),
