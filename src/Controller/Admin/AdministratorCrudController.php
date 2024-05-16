@@ -2,7 +2,7 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Gender;
+use App\Enum\Gender;
 use App\Entity\User;
 use App\Entity\Administrator;
 

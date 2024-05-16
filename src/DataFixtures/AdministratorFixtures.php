@@ -3,7 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Administrator;
-use App\Entity\Gender;
+use App\Enum\Gender;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;

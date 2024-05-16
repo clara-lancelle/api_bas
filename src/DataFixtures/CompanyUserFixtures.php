@@ -4,7 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Company;
 use App\Entity\CompanyUser;
-use App\Entity\Gender;
+use App\Enum\Gender;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;

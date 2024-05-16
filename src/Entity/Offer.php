@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\OfferType;
 use App\Repository\OfferRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;

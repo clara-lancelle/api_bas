@@ -5,15 +5,14 @@ namespace App\Controller\Admin;
 use App\Entity\Administrator;
 use App\Entity\Company;
 use App\Entity\CompanyUser;
+use App\Entity\JobProfile;
 use App\Entity\Offer;
 use App\Entity\Student;
 use App\Entity\User;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
-use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -59,6 +58,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Entreprises', 'fas fa-building', Company::class);
         yield MenuItem::linkToCrud('Administateurs d\'entreprise', 'fas fa-users', CompanyUser::class);
         yield MenuItem::linkToCrud('Offres', 'fas fa-briefcase', Offer::class);
+        yield MenuItem::linkToCrud('Profils metiers', 'fas fa-briefcase', JobProfile::class);
 
         yield MenuItem::section('Etudiants');
         yield MenuItem::linkToCrud('Etudiants', 'fas fa-users', Student::class);

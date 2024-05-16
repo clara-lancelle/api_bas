@@ -4,7 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Offer;
 use App\Entity\Company;
-use App\Entity\OfferType;
+use App\Enum\OfferType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
