@@ -4,7 +4,7 @@ namespace App\Entity;
 
 enum Gender: string
 {
-    case MALE   = 'Homme';
-    case FEMALE = 'Femme';
-    case OTHER  = 'Autre';
+    case Male   = 'Homme';
+    case Female = 'Femme';
+    case Other  = 'Autre';
 }

@@ -76,7 +76,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeImmutable $deleted_at = null;
 
     #[ORM\Column(length: 255, enumType: Gender::class)]
-    private Gender $gender = Gender::MALE;
+    private Gender $gender = Gender::Male;
 
     private ?string $plainPassword = null;
 

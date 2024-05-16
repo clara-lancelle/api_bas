@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Offer;
 use App\Entity\Company;
+use App\Entity\OfferType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -25,7 +26,7 @@ class OfferFixtures extends Fixture
         $offer->setName('Développeur Web Junior');
         $offer->setStartDate(new \DateTime('2024-09-01'));
         $offer->setEndDate(new \DateTime('2025-08-31'));
-        $offer->setType('alternance');
+        $offer->setType(OfferType::Apprenticeship);
         $offer->setDescription('Alternance de plusieurs mois a sein de l\'équipe de développement.');
         $offer->setPromoteStatus('Bac+2');
         $offer->setRevenue('Entre 1.000€ et 1.300€');

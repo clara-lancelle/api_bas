@@ -29,7 +29,7 @@ class AdministratorFixtures extends Fixture
         $user->setCity('paris');
         $user->setZipCode(75002);
         $user->setRoles(['ROLE_USER', 'ROLE_ADMIN']);
-        $user->setGender(Gender::MALE);
+        $user->setGender(Gender::Male);
         $manager->persist($user);
         $manager->flush();
     }

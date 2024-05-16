@@ -34,7 +34,7 @@ class StudentFixtures extends Fixture
         $user->setZipCode(75002);
         $user->setBirthdate(new \DateTime('2000-04-03'));
         $user->setRoles(['ROLE_USER']);
-        $user->setGender(Gender::MALE);
+        $user->setGender(Gender::Male);
         $manager->persist($user);
         $manager->flush();
 

@@ -33,8 +33,8 @@ class Offer
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $end_date = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $type = null;
+    #[ORM\Column(length: 255, enumType: OfferType::class)]
+    private OfferType $type = OfferType::Internship;
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 3)]
@@ -133,12 +133,12 @@ class Offer
         return $this;
     }
 
-    public function getType(): ?string
+    public function getType(): OfferType
     {
         return $this->type;
     }
 
-    public function setType(string $type): static
+    public function setType(OfferType $type): static
     {
         $this->type = $type;
 

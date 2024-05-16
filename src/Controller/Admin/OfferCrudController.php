@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Offer;
+use App\Entity\OfferType;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -17,6 +18,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -49,10 +51,16 @@ class OfferCrudController extends AbstractCrudController
             DateField::new('start_date', 'Date de début'),
             DateField::new('end_date', 'Date de fin'),
             DateField::new('application_limit_date', 'Date limite de dépôt des candidatures'),
-            ChoiceField::new('type', 'Type')->setChoices([
-                'Alternance' => 'alternance',
-                'Stage'      => 'stage',
-            ]),
+            ChoiceField::new('type', 'Type')->setFormType(EnumType::class)
+                ->setFormTypeOptions([
+                    'class'        => OfferType::class,
+                    'choice_label' => static function (OfferType $choice): string {
+                        return $choice->value;
+                    }
+                ])
+                ->formatValue(function (OfferType $choice): string {
+                    return $choice->value;
+                }),
             TextEditorField::new('description', 'Description')->hideOnIndex(),
             TextField::new('promote_status', 'Niveau d\'études')->hideOnIndex(),
             TextField::new('revenue', 'Salaire')->hideOnIndex(),

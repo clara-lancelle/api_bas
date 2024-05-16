@@ -33,7 +33,7 @@ class CompanyUserFixtures extends Fixture
         $user->setZipCode(75002);
         $user->setPosition('CTO');
         $user->setRoles(['ROLE_USER']);
-        $user->setGender(Gender::MALE);
+        $user->setGender(Gender::Male);
         $user->setCompany($firstCompany);
         $manager->persist($user);
         $manager->flush();
