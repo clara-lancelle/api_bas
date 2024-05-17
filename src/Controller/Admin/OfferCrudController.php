@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
@@ -48,10 +49,7 @@ class OfferCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             AssociationField::new('company', 'Entreprise'),
             TextField::new('name', 'Intitulé'),
-            DateField::new('start_date', 'Date de début'),
-            DateField::new('end_date', 'Date de fin'),
-            DateField::new('application_limit_date', 'Date limite de dépôt des candidatures'),
-            ChoiceField::new('type', 'Type')->setFormType(EnumType::class)
+            ChoiceField::new('type', 'Type de\'offre')->setFormType(EnumType::class)
                 ->setFormTypeOptions([
                     'class'        => OfferType::class,
                     'choice_label' => static function (OfferType $choice): string {
@@ -61,6 +59,10 @@ class OfferCrudController extends AbstractCrudController
                 ->formatValue(function (OfferType $choice): string {
                     return $choice->value;
                 }),
+            AssociationField::new('job_profile', 'Profil metier')->setFormTypeOption('choice_label', 'name'),
+            DateField::new('start_date', 'Date de début'),
+            DateField::new('end_date', 'Date de fin'),
+            DateField::new('application_limit_date', 'Date limite de dépôt des candidatures'),
             TextEditorField::new('description', 'Description')->hideOnIndex(),
             TextField::new('promote_status', 'Niveau d\'études')->hideOnIndex(),
             TextField::new('revenue', 'Salaire')->hideOnIndex(),
