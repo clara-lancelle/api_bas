@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Enum\OfferType;
+use App\Enum\StudyLevel;
+use App\Repository\JobProfileRepository;
 use App\Repository\OfferRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
@@ -35,7 +37,10 @@ class Offer
     private ?\DateTimeInterface $end_date = null;
 
     #[ORM\Column(length: 255, enumType: OfferType::class)]
-    private OfferType $type = OfferType::Internship;
+    private ?OfferType $type = null;
+
+    #[ORM\Column(length: 255, enumType: StudyLevel::class)]
+    private ?StudyLevel $study_level = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 3)]
@@ -68,8 +73,14 @@ class Offer
 
     #[ORM\ManyToOne(inversedBy: 'offers')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Assert\Choice(callback: [JobProfile::class, 'getJobProfiles'])]
+    //#[Assert\Choice(callback: 'getJobProfiles')]
     private ?JobProfile $job_profile = null;
+
+    public function __construct()
+    {
+        $this->study_level = StudyLevel::Level1;
+        $this->type        = OfferType::Internship;
+    }
 
     #[ORM\PrePersist]
     public function setCreatedAtValue(): static
@@ -274,5 +285,22 @@ class Offer
         $this->job_profile = $job_profile;
 
         return $this;
+    }
+
+    public function getStudylevel(): StudyLevel
+    {
+        return $this->study_level;
+    }
+
+    public function setStudylevel(StudyLevel $study_level): static
+    {
+        $this->study_level = $study_level;
+
+        return $this;
+    }
+
+    public static function getJobProfiles(JobProfileRepository $jobProfileRepository): array
+    {
+        return $jobProfileRepository->findAll();
     }
 }

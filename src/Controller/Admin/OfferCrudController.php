@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Offer;
 use App\Enum\OfferType;
+use App\Enum\StudyLevel;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -57,6 +58,16 @@ class OfferCrudController extends AbstractCrudController
                     }
                 ])
                 ->formatValue(function (OfferType $choice): string {
+                    return $choice->value;
+                }),
+            ChoiceField::new('study_level', 'Niveau recherché')->setFormType(EnumType::class)
+                ->setFormTypeOptions([
+                    'class'        => StudyLevel::class,
+                    'choice_label' => static function (StudyLevel $choice): string {
+                        return $choice->value;
+                    }
+                ])
+                ->formatValue(function (StudyLevel $choice): string {
                     return $choice->value;
                 }),
             AssociationField::new('job_profile', 'Profil metier')->setFormTypeOption('choice_label', 'name'),

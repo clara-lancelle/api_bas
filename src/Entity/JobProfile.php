@@ -55,11 +55,6 @@ class JobProfile
         return $this;
     }
 
-    public static function getJobProfiles(JobProfilRepository $repository): array
-    {
-        return $repository->findAll();
-    }
-
     /**
      * @return Collection<int, Offer>
      */

@@ -6,6 +6,7 @@ use App\Entity\JobProfile;
 use App\Entity\Offer;
 use App\Entity\Company;
 use App\Enum\OfferType;
+use App\Enum\StudyLevel;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -28,6 +29,7 @@ class OfferFixtures extends Fixture
         $offer->setStartDate(new \DateTime('2024-09-01'));
         $offer->setEndDate(new \DateTime('2025-08-31'));
         $offer->setType(OfferType::Apprenticeship);
+        $offer->setStudylevel(StudyLevel::Level3);
         $offer->setDescription('Alternance de plusieurs mois a sein de l\'équipe de développement.');
         $offer->setPromoteStatus('Bac+2');
         $offer->setRevenue('Entre 1.000€ et 1.300€');
