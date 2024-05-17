@@ -3,7 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Administrator;
-use App\Entity\Gender;
+use App\Enum\Gender;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;

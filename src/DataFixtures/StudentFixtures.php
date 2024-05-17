@@ -4,7 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Experience;
 use App\Entity\Formation;
-use App\Entity\Gender;
+use App\Enum\Gender;
 use App\Entity\Hobbie;
 use App\Entity\Skill;
 use App\Entity\Student;

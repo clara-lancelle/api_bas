@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\OfferType;
 use App\Repository\OfferRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
@@ -64,6 +65,11 @@ class Offer
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $application_limit_date = null;
+
+    #[ORM\ManyToOne(inversedBy: 'offers')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Assert\Choice(callback: [JobProfile::class, 'getJobProfiles'])]
+    private ?JobProfile $job_profile = null;
 
     #[ORM\PrePersist]
     public function setCreatedAtValue(): static
@@ -254,6 +260,18 @@ class Offer
     public function setApplicationLimitDate(\DateTimeInterface $application_limit_date): static
     {
         $this->application_limit_date = $application_limit_date;
+
+        return $this;
+    }
+
+    public function getJobprofile(): ?JobProfile
+    {
+        return $this->job_profile;
+    }
+
+    public function setJobprofile(?JobProfile $job_profile): static
+    {
+        $this->job_profile = $job_profile;
 
         return $this;
     }

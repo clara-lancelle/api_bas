@@ -2,9 +2,10 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\JobProfile;
 use App\Entity\Offer;
 use App\Entity\Company;
-use App\Entity\OfferType;
+use App\Enum\OfferType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -33,6 +34,7 @@ class OfferFixtures extends Fixture
         $offer->setRemote('Télétravail 1 jour par semaine');
         $offer->setAvailablePlace(3);
         $offer->setApplicationLimitDate(new \DateTime('2024-01-01'));
+        $offer->setJobProfile($this->entityManager->getRepository(JobProfile::class)->findOneBy([], ['id' => 'ASC']));
         $manager->persist($offer);
         $manager->flush();
     }
