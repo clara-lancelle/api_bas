@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\Duration;
 use App\Enum\OfferType;
 use App\Enum\StudyLevel;
 use App\Repository\JobProfileRepository;
@@ -35,12 +36,6 @@ class Offer
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $end_date = null;
-
-    #[ORM\Column(length: 255, enumType: OfferType::class)]
-    private ?OfferType $type = null;
-
-    #[ORM\Column(length: 255, enumType: StudyLevel::class)]
-    private ?StudyLevel $study_level = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 3)]
@@ -76,10 +71,24 @@ class Offer
     //#[Assert\Choice(callback: 'getJobProfiles')]
     private ?JobProfile $job_profile = null;
 
+    // -- ENUM
+
+    #[ORM\Column(length: 255, enumType: OfferType::class)]
+    private ?OfferType $type = null;
+
+    #[ORM\Column(length: 255, enumType: StudyLevel::class)]
+    private ?StudyLevel $study_level = null;
+
+    #[ORM\Column(length: 255, enumType: Duration::class)]
+    private ?Duration $duration = null;
+
+    // END ENUM --
+
     public function __construct()
     {
         $this->study_level = StudyLevel::Level1;
         $this->type        = OfferType::Internship;
+        $this->duration    = Duration::between2and6months;
     }
 
     #[ORM\PrePersist]
@@ -146,18 +155,6 @@ class Offer
     public function setEndDate(\DateTimeInterface $end_date): static
     {
         $this->end_date = $end_date;
-
-        return $this;
-    }
-
-    public function getType(): OfferType
-    {
-        return $this->type;
-    }
-
-    public function setType(OfferType $type): static
-    {
-        $this->type = $type;
 
         return $this;
     }
@@ -287,6 +284,20 @@ class Offer
         return $this;
     }
 
+    // -- ENUM getters & setters
+
+    public function getType(): OfferType
+    {
+        return $this->type;
+    }
+
+    public function setType(OfferType $type): static
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
     public function getStudylevel(): StudyLevel
     {
         return $this->study_level;
@@ -298,6 +309,21 @@ class Offer
 
         return $this;
     }
+
+    public function getDuration(): Duration
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(Duration $duration): static
+    {
+        $this->duration = $duration;
+
+        return $this;
+    }
+
+    // -- END ENUM getters & setters
+
 
     public static function getJobProfiles(JobProfileRepository $jobProfileRepository): array
     {

@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Offer;
+use App\Enum\Duration;
 use App\Enum\OfferType;
 use App\Enum\StudyLevel;
 use Doctrine\ORM\EntityManagerInterface;
@@ -68,6 +69,16 @@ class OfferCrudController extends AbstractCrudController
                     }
                 ])
                 ->formatValue(function (StudyLevel $choice): string {
+                    return $choice->value;
+                }),
+            ChoiceField::new('duration', 'Durée')->setFormType(EnumType::class)
+                ->setFormTypeOptions([
+                    'class'        => Duration::class,
+                    'choice_label' => static function (Duration $choice): string {
+                        return $choice->value;
+                    }
+                ])
+                ->formatValue(function (Duration $choice): string {
                     return $choice->value;
                 }),
             AssociationField::new('job_profile', 'Profil metier')->setFormTypeOption('choice_label', 'name'),
