@@ -5,6 +5,8 @@ namespace App\Controller\Admin;
 use App\Entity\JobProfile;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ColorField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class JobProfileCrudController extends AbstractCrudController
 {
@@ -21,14 +23,12 @@ class JobProfileCrudController extends AbstractCrudController
             ->setSearchFields(['name']);
     }
 
-    /*
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
+            TextField::new('name', 'Intitulé'),
+            ColorField::new('color', 'Couleur')
         ];
     }
-    */
+
 }

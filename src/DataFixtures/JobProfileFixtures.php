@@ -15,30 +15,33 @@ class JobProfileFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $jobProfiles = [
-            'Design',
-            'Commercial',
-            'Marketing',
-            'Business',
-            'Management',
-            'Finance',
-            'Industrie',
-            'Informatique',
-            'Ressources humaines',
-            'Juridique',
-            'Communication',
-            'Recherche et développement',
-            'Logistique',
-            'Santé',
-            'Éducation',
-            'Environnement',
-            'Artisanat',
-            'Services à la personne'
+            ['Design', '#56CDAD'],
+            ['Commercial', '#FFA500'],
+            ['Marketing', '#EB8533'],
+            ['Business', '#8B4513'],
+            ['Management', '#4682B4'],
+            ['Finance', '#4640DE'],
+            ['Industrie', '#A52A2A'],
+            ['Informatique', '#FF6550'],
+            ['Ressources humaines', '#32CD32'],
+            ['Juridique', '#000080'],
+            ['Communication', '#FFD700'],
+            ['Recherche et développement', '#ADFF2F'],
+            ['Logistique', '#D2691E'],
+            ['Santé', '#FF1493'],
+            ['Éducation', '#9370DB'],
+            ['Environnement', '#228B22'],
+            ['Artisanat', '#DAA520'],
+            ['Services à la personne', '#FF69B4']
         ];
-        foreach ($jobProfiles as $profileName) {
+
+        foreach ($jobProfiles as $profile) {
             $jobProfile = new JobProfile();
-            $jobProfile->setName($profileName);
+            $jobProfile->setName($profile[0]);
+            $jobProfile->setColor($profile[1]);
             $manager->persist($jobProfile);
         }
+
         $manager->flush();
     }
 }
