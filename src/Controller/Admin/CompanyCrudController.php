@@ -54,14 +54,16 @@ class CompanyCrudController extends AbstractCrudController
                 ->setUploadedFileNamePattern(
                     fn(UploadedFile $file): string => sprintf('upload_%d_%s.%s', random_int(1, 999), $file->getFilename(), $file->guessExtension())
                 )
-                ->setUploadDir('public/assets/images/companies/')
-                ->setBasePath('assets/images/companies/'),
+                ->setUploadDir('public/assets/images/companies')
+                ->setBasePath('assets/images/companies')
+                ->setRequired($pageName != 'edit'),
             ImageField::new('large_image', 'Image large')
                 ->setUploadedFileNamePattern(
                     fn(UploadedFile $file): string => sprintf('upload_%d_%s.%s', random_int(1, 999), $file->getFilename(), $file->guessExtension())
                 )
-                ->setUploadDir('public/assets/images/companies/')
-                ->setBasePath('assets/images/companies/'),
+                ->setUploadDir('public/assets/images/companies')
+                ->setBasePath('assets/images/companies')
+                ->setRequired($pageName != 'edit'),
             TextField::new('social_reason', 'Statut juridique'),
             TextField::new('siret', 'Siret')->hideOnIndex(),
             TextField::new('address', 'Adresse')->hideOnIndex(),

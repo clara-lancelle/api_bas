@@ -88,11 +88,17 @@ class Company
     private Collection $offers;
 
     #[ORM\Column(length: 255)]
-    //#[Assert\Image]
+    #[Assert\Regex(
+        pattern: '/\.(jpeg|jpg|png|gif|webp)$/i',
+        message: 'Veuillez télécharger un fichier image valide avec l\'une des extensions suivantes : jpeg, jpg, png, gif, webp.'
+    )]
     private ?string $large_image = null;
 
     #[ORM\Column(length: 255)]
-    //#[Assert\Image]
+    #[Assert\Regex(
+        pattern: '/\.(jpeg|jpg|png|gif|webp)$/i',
+        message: 'Veuillez télécharger un fichier image valide avec l\'une des extensions suivantes : jpeg, jpg, png, gif, webp.'
+    )]
     private ?string $picto_image = null;
 
     public function __construct()
