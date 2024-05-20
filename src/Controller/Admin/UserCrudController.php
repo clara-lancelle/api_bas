@@ -67,7 +67,7 @@ class UserCrudController extends AbstractCrudController
             DateTimeField::new('created_at', 'Créé le')->hideOnForm(),
             DateTimeField::new('updated_at', 'Mis à jour le')->hideOnForm(),
             DateTimeField::new('deleted_at', 'Supprimé le')->hideOnIndex()->hideOnForm(),
-            Field::new('status', 'Statut')->hideOnForm()->setSortable(true)
+            Field::new('status', 'Statut')->hideOnForm()
         ];
     }
 

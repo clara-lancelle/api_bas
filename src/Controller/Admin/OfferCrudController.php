@@ -93,7 +93,7 @@ class OfferCrudController extends AbstractCrudController
             DateField::new('created_at', 'Crée le')->hideOnIndex()->hideOnForm(),
             DateField::new('updated_at', 'Mis à jour le')->hideOnIndex()->hideOnForm(),
             DateField::new('deleted_at', 'Supprimé le')->hideOnIndex()->hideOnForm(),
-            Field::new('status', 'Statut')->hideOnForm()->setSortable(true)
+            Field::new('status', 'Statut')->hideOnForm()
         ];
     }
 
