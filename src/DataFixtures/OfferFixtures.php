@@ -8,6 +8,7 @@ use App\Entity\Company;
 use App\Enum\Duration;
 use App\Enum\OfferType;
 use App\Enum\StudyLevel;
+use App\Factory\OfferFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -59,7 +60,6 @@ class OfferFixtures extends Fixture
         $offer->setApplicationLimitDate(new \DateTime('2024-01-01'));
         $offer->setJobProfile($this->entityManager->getRepository(JobProfile::class)->findOneBy([], ['id' => 'DESC']));
         $manager->persist($offer);
-        $manager->flush();
 
         $lastCompany = $this->entityManager->getRepository(Company::class)->findOneBy([], ['id' => 'DESC']);
         $offer       = new Offer();
@@ -78,6 +78,9 @@ class OfferFixtures extends Fixture
         $offer->setApplicationLimitDate(new \DateTime('2024-08-01'));
         $offer->setJobProfile($this->entityManager->getRepository(JobProfile::class)->findOneBy([], ['id' => 'DESC']));
         $manager->persist($offer);
+
         $manager->flush();
+
+        OfferFactory::createMany(10);
     }
 }
