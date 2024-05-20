@@ -41,5 +41,43 @@ class OfferFixtures extends Fixture
         $offer->setJobProfile($this->entityManager->getRepository(JobProfile::class)->findOneBy([], ['id' => 'ASC']));
         $manager->persist($offer);
         $manager->flush();
+
+        $firstCompany = $this->entityManager->getRepository(Company::class)->findOneBy([], ['id' => 'ASC']);
+        $offer        = new Offer();
+        $offer->setCompany($firstCompany);
+        $offer->setName('Développeur Web');
+        $offer->setStartDate(new \DateTime('2024-09-01'));
+        $offer->setEndDate(new \DateTime('2025-08-31'));
+        $offer->setType(OfferType::Internship);
+        $offer->setStudylevel(StudyLevel::Level1);
+        $offer->setDuration(Duration::between6and12months);
+        $offer->setDescription('Stage de plusieurs mois a sein de l\'équipe de développement.');
+        $offer->setPromoteStatus('Bac+2');
+        $offer->setRevenue('Entre 1.000€ et 1.300€');
+        $offer->setRemote('Télétravail 1 jour par semaine');
+        $offer->setAvailablePlace(3);
+        $offer->setApplicationLimitDate(new \DateTime('2024-01-01'));
+        $offer->setJobProfile($this->entityManager->getRepository(JobProfile::class)->findOneBy([], ['id' => 'DESC']));
+        $manager->persist($offer);
+        $manager->flush();
+
+        $lastCompany = $this->entityManager->getRepository(Company::class)->findOneBy([], ['id' => 'DESC']);
+        $offer       = new Offer();
+        $offer->setCompany($lastCompany);
+        $offer->setName('Développeur Web');
+        $offer->setStartDate(new \DateTime('2024-11-01'));
+        $offer->setEndDate(new \DateTime('2025-12-31'));
+        $offer->setType(OfferType::Internship);
+        $offer->setStudylevel(StudyLevel::Level4);
+        $offer->setDuration(Duration::between6and12months);
+        $offer->setDescription('Stage de plusieurs mois a sein de l\'équipe de développement.');
+        $offer->setPromoteStatus('Bac+2');
+        $offer->setRevenue('Entre 1.000€ et 1.300€');
+        $offer->setRemote('Télétravail 1 jour par semaine');
+        $offer->setAvailablePlace(3);
+        $offer->setApplicationLimitDate(new \DateTime('2024-08-01'));
+        $offer->setJobProfile($this->entityManager->getRepository(JobProfile::class)->findOneBy([], ['id' => 'DESC']));
+        $manager->persist($offer);
+        $manager->flush();
     }
 }
