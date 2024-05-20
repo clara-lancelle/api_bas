@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use App\Controller\OfferCount;
 use App\Enum\Duration;
 use App\Enum\OfferType;
 use App\Enum\StudyLevel;
@@ -13,6 +15,21 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Symfony\Component\Validator\Constraints as Assert;
 
+
+#[ApiResource(
+    operations: [
+        new \ApiPlatform\Metadata\Get(
+            uriTemplate: '/offers/count',
+            controller: OfferCount::class,
+            name: 'api_offers_count',
+            read: false,
+            openapiContext: [
+                'summary'     => 'Obtenir le nombre d\'offres de stage',
+                'description' => 'Retourne le nombre d\'offres de stage dans la base de données'
+            ]
+        )
+    ]
+)]
 #[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: OfferRepository::class)]
 class Offer
