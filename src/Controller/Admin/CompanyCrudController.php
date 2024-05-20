@@ -14,10 +14,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -48,6 +50,20 @@ class CompanyCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             TextField::new('name', 'Nom'),
             TextField::new('website_url', 'Site web')->hideOnIndex(),
+            ImageField::new('picto_image', 'Pictogramme')
+                ->setUploadedFileNamePattern(
+                    fn(UploadedFile $file): string => sprintf('upload_%d_%s.%s', random_int(1, 999), $file->getFilename(), $file->guessExtension())
+                )
+                ->setUploadDir('public/assets/images/companies')
+                ->setBasePath('assets/images/companies')
+                ->setRequired($pageName != 'edit'),
+            ImageField::new('large_image', 'Image large')
+                ->setUploadedFileNamePattern(
+                    fn(UploadedFile $file): string => sprintf('upload_%d_%s.%s', random_int(1, 999), $file->getFilename(), $file->guessExtension())
+                )
+                ->setUploadDir('public/assets/images/companies')
+                ->setBasePath('assets/images/companies')
+                ->setRequired($pageName != 'edit'),
             TextField::new('social_reason', 'Statut juridique'),
             TextField::new('siret', 'Siret')->hideOnIndex(),
             TextField::new('address', 'Adresse')->hideOnIndex(),

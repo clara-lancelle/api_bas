@@ -87,14 +87,26 @@ class Company
     #[ORM\OneToMany(targetEntity: Offer::class, mappedBy: 'company', orphanRemoval: true)]
     private Collection $offers;
 
+    #[ORM\Column(length: 255)]
+    #[Assert\Regex(
+        pattern: '/\.(jpeg|jpg|png|gif|webp)$/i',
+        message: 'Veuillez télécharger un fichier image valide avec l\'une des extensions suivantes : jpeg, jpg, png, gif, webp.'
+    )]
+    private ?string $large_image = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\Regex(
+        pattern: '/\.(jpeg|jpg|png|gif|webp)$/i',
+        message: 'Veuillez télécharger un fichier image valide avec l\'une des extensions suivantes : jpeg, jpg, png, gif, webp.'
+    )]
+    private ?string $picto_image = null;
+
     public function __construct()
     {
         $this->companyAdministrators = new ArrayCollection();
         $this->created_at            = new DateTimeImmutable();
         $this->updated_at            = new DateTimeImmutable();
         $this->offers                = new ArrayCollection();
-
-
     }
 
     public function getId(): ?int
@@ -391,5 +403,29 @@ class Company
     public function __toString(): string
     {
         return $this->getName();
+    }
+
+    public function getLargeImage(): ?string
+    {
+        return $this->large_image;
+    }
+
+    public function setLargeImage(string $large_image): static
+    {
+        $this->large_image = $large_image;
+
+        return $this;
+    }
+
+    public function getPictoImage(): ?string
+    {
+        return $this->picto_image;
+    }
+
+    public function setPictoImage(string $picto_image): static
+    {
+        $this->picto_image = $picto_image;
+
+        return $this;
     }
 }
