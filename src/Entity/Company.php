@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use App\Controller\CompanyWithMostOffers;
 use App\Repository\CompanyRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,6 +13,21 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 
+
+#[ApiResource(
+    operations: [
+        new \ApiPlatform\Metadata\Get(
+            uriTemplate: '/companies/mostOffersList',
+            controller: CompanyWithMostOffers::class,
+            name: 'api_companies_most_offers_list',
+            read: false,
+            openapiContext: [
+                'summary'     => 'Obtenir la liste des 5 entreprises possédant le plus d\'offres actives',
+                'description' => 'Retourne la liste des 5 entreprises possédant le plus d\'offres actives dans la base de données'
+            ]
+        )
+    ]
+)]
 #[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 class Company

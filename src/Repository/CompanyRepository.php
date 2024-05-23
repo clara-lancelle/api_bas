@@ -21,6 +21,22 @@ class CompanyRepository extends ServiceEntityRepository
         parent::__construct($registry, Company::class);
     }
 
+    public function getCompaniesWithTheMostOffers(): ?array
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT c.large_image, c.name, COUNT(o.id) AS offer_count
+            FROM App\Entity\Company c
+            JOIN c.offers o
+            WHERE o.application_limit_date > :now
+            GROUP BY c.id
+            ORDER BY offer_count DESC'
+        )->setParameter('now', new \DateTime())
+            ->setMaxResults(5);
+
+        return $query->getResult();
+    }
     //    /**
     //     * @return Company[] Returns an array of Company objects
     //     */
