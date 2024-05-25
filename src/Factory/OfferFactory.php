@@ -60,7 +60,6 @@ final class OfferFactory extends ModelFactory
             'description'            => self::faker()->text(255),
             'duration'               => self::faker()->randomElement(Duration::cases()),
             'end_date'               => self::faker()->dateTime(),
-            'job_profile'            => self::faker()->randomElement($this->jobProfileRepository->findAll()), // TODO add App\Entity\JobProfile type manually
             'name'                   => self::faker()->jobTitle(),
             'promote_status'         => self::faker()->text(20),
             'remote'                 => self::faker()->text(20),

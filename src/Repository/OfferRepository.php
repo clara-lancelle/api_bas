@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\JobProfile;
 use App\Entity\Offer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -21,28 +22,25 @@ class OfferRepository extends ServiceEntityRepository
         parent::__construct($registry, Offer::class);
     }
 
-    //    /**
-    //     * @return Offer[] Returns an array of Offer objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('o')
-    //            ->andWhere('o.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('o.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Offer
-    //    {
-    //        return $this->createQueryBuilder('o')
-    //            ->andWhere('o.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function getLastOffers($limit = 8): array
+    {
+        $offers = $this->createQueryBuilder('o')
+            ->select('o.id', 'c.name as companyName', 'c.picto_image', 'o.name', 'o.type', 'o.description', 'c.city')
+            ->join('o.company', 'c')
+            ->orderBy('o.created_at', 'ASC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+        ;
+        foreach ($offers as &$offer) {
+            $offerEntity = $this->findOneBy(['id' => $offer['id']]);
+            $offer['job_profiles'] = $offerEntity->getJobProfile()->map(function ($jp) {
+                return [
+                    'name' => $jp->getName(),
+                    'color' => $jp->getColor()
+                ];
+            })->toArray();
+        }
+        return $offers;
+    }
 }

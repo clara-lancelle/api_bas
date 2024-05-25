@@ -8,6 +8,7 @@ use App\Entity\Company;
 use App\Enum\Duration;
 use App\Enum\OfferType;
 use App\Enum\StudyLevel;
+use App\Factory\JobProfileFactory;
 use App\Factory\OfferFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,16 +16,13 @@ use Doctrine\Persistence\ObjectManager;
 
 class OfferFixtures extends Fixture
 {
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct()
     {
-        $this->entityManager = $entityManager;
     }
 
     public function load(ObjectManager $manager)
     {
-        $firstCompany = $this->entityManager->getRepository(Company::class)->findOneBy([], ['id' => 'ASC']);
+        $firstCompany = $manager->getRepository(Company::class)->findOneBy([], ['id' => 'ASC']);
         $offer        = new Offer();
         $offer->setCompany($firstCompany);
         $offer->setName('Développeur Web Junior');
@@ -39,11 +37,12 @@ class OfferFixtures extends Fixture
         $offer->setRemote('Télétravail 1 jour par semaine');
         $offer->setAvailablePlace(3);
         $offer->setApplicationLimitDate(new \DateTime('2024-01-01'));
-        $offer->setJobProfile($this->entityManager->getRepository(JobProfile::class)->findOneBy([], ['id' => 'ASC']));
+        $offer->addJobProfile($manager->getRepository(JobProfile::class)->findOneBy([], ['id' => 'ASC']));
+        $offer->addJobProfile($manager->getRepository(JobProfile::class)->findOneBy([], ['id' => 'DESC']));
         $manager->persist($offer);
         $manager->flush();
 
-        $firstCompany = $this->entityManager->getRepository(Company::class)->findOneBy([], ['id' => 'ASC']);
+        $firstCompany = $manager->getRepository(Company::class)->findOneBy([], ['id' => 'ASC']);
         $offer        = new Offer();
         $offer->setCompany($firstCompany);
         $offer->setName('Développeur Web');
@@ -58,10 +57,10 @@ class OfferFixtures extends Fixture
         $offer->setRemote('Télétravail 1 jour par semaine');
         $offer->setAvailablePlace(3);
         $offer->setApplicationLimitDate(new \DateTime('2024-01-01'));
-        $offer->setJobProfile($this->entityManager->getRepository(JobProfile::class)->findOneBy([], ['id' => 'DESC']));
+        $offer->addJobProfile($manager->getRepository(JobProfile::class)->findOneBy([], ['id' => 'DESC']));
         $manager->persist($offer);
 
-        $lastCompany = $this->entityManager->getRepository(Company::class)->findOneBy([], ['id' => 'DESC']);
+        $lastCompany = $manager->getRepository(Company::class)->findOneBy([], ['id' => 'DESC']);
         $offer       = new Offer();
         $offer->setCompany($lastCompany);
         $offer->setName('Développeur Web');
@@ -76,11 +75,11 @@ class OfferFixtures extends Fixture
         $offer->setRemote('Télétravail 1 jour par semaine');
         $offer->setAvailablePlace(3);
         $offer->setApplicationLimitDate(new \DateTime('2024-08-01'));
-        $offer->setJobProfile($this->entityManager->getRepository(JobProfile::class)->findOneBy([], ['id' => 'DESC']));
+        $offer->addJobProfile($manager->getRepository(JobProfile::class)->findOneBy([], ['id' => 'DESC']));
         $manager->persist($offer);
 
         $manager->flush();
 
-        OfferFactory::createMany(10);
+        OfferFactory::createMany(10, ['job_profile' => JobProfileFactory::new()->many(0, 3)]);
     }
 }

@@ -3,13 +3,15 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use App\Controller\LastOffers;
 use App\Controller\OfferCount;
 use App\Enum\Duration;
 use App\Enum\OfferType;
 use App\Enum\StudyLevel;
 use App\Repository\JobProfileRepository;
 use App\Repository\OfferRepository;
-use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
@@ -26,6 +28,16 @@ use Symfony\Component\Validator\Constraints as Assert;
             openapiContext: [
                 'summary'     => 'Obtenir le nombre d\'offres de stage',
                 'description' => 'Retourne le nombre d\'offres de stage dans la base de données'
+            ]
+        ),
+        new \ApiPlatform\Metadata\Get(
+            uriTemplate: '/offers/last',
+            controller: LastOffers::class,
+            name: 'api_offers_last',
+            read: false,
+            openapiContext: [
+                'summary'     => 'Obtenir les dernières offres',
+                'description' => 'Retourne les dernières offres dans la base de données'
             ]
         )
     ]
@@ -83,11 +95,6 @@ class Offer
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $application_limit_date = null;
 
-    #[ORM\ManyToOne(inversedBy: 'offers')]
-    #[ORM\JoinColumn(nullable: false)]
-    //#[Assert\Choice(callback: 'getJobProfiles')]
-    private ?JobProfile $job_profile = null;
-
     // -- ENUM
 
     #[ORM\Column(length: 255, enumType: OfferType::class)]
@@ -99,6 +106,12 @@ class Offer
     #[ORM\Column(length: 255, enumType: Duration::class)]
     private ?Duration $duration = null;
 
+    /**
+     * @var Collection<int, JobProfile>
+     */
+    #[ORM\OneToMany(targetEntity: JobProfile::class, mappedBy: 'offer')]
+    private Collection $jobProfile;
+
     // END ENUM --
 
     public function __construct()
@@ -106,6 +119,8 @@ class Offer
         $this->study_level = StudyLevel::Level1;
         $this->type        = OfferType::Internship;
         $this->duration    = Duration::between2and6months;
+
+        $this->jobProfile = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -289,18 +304,6 @@ class Offer
         return $this;
     }
 
-    public function getJobprofile(): ?JobProfile
-    {
-        return $this->job_profile;
-    }
-
-    public function setJobprofile(?JobProfile $job_profile): static
-    {
-        $this->job_profile = $job_profile;
-
-        return $this;
-    }
-
     // -- ENUM getters & setters
 
     public function getType(): OfferType
@@ -345,5 +348,35 @@ class Offer
     public static function getJobProfiles(JobProfileRepository $jobProfileRepository): array
     {
         return $jobProfileRepository->findAll();
+    }
+
+    /**
+     * @return Collection<int, JobProfile>
+     */
+    public function getJobProfile(): Collection
+    {
+        return $this->jobProfile;
+    }
+
+    public function addJobProfile(JobProfile $jobProfile): static
+    {
+        if (!$this->jobProfile->contains($jobProfile)) {
+            $this->jobProfile->add($jobProfile);
+            $jobProfile->setOffer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJobProfile(JobProfile $jobProfile): static
+    {
+        if ($this->jobProfile->removeElement($jobProfile)) {
+            // set the owning side to null (unless already changed)
+            if ($jobProfile->getOffer() === $this) {
+                $jobProfile->setOffer(null);
+            }
+        }
+
+        return $this;
     }
 }

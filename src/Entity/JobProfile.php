@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\JobProfileRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: JobProfileRepository::class)]
@@ -18,18 +16,14 @@ class JobProfile
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    /**
-     * @var Collection<int, Offer>
-     */
-    #[ORM\OneToMany(targetEntity: Offer::class, mappedBy: 'job_profile')]
-    private Collection $offers;
-
     #[ORM\Column(length: 15)]
     private ?string $color = null;
 
+    #[ORM\ManyToOne(inversedBy: 'jobProfile')]
+    private ?Offer $offer = null;
+
     public function __construct()
     {
-        $this->offers = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -55,36 +49,6 @@ class JobProfile
         return $this;
     }
 
-    /**
-     * @return Collection<int, Offer>
-     */
-    public function getOffers(): Collection
-    {
-        return $this->offers;
-    }
-
-    public function addOffer(Offer $offer): static
-    {
-        if (!$this->offers->contains($offer)) {
-            $this->offers->add($offer);
-            $offer->setJobprofile($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOffer(Offer $offer): static
-    {
-        if ($this->offers->removeElement($offer)) {
-            // set the owning side to null (unless already changed)
-            if ($offer->getJobprofile() === $this) {
-                $offer->setJobprofile(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getColor(): ?string
     {
         return $this->color;
@@ -93,6 +57,18 @@ class JobProfile
     public function setColor(string $color): static
     {
         $this->color = $color;
+
+        return $this;
+    }
+
+    public function getOffer(): ?Offer
+    {
+        return $this->offer;
+    }
+
+    public function setOffer(?Offer $offer): static
+    {
+        $this->offer = $offer;
 
         return $this;
     }

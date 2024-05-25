@@ -3,7 +3,9 @@
 namespace App\DataFixtures;
 
 use App\Entity\JobProfile;
+use App\Entity\Offer;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
 class JobProfileFixtures extends Fixture
@@ -34,14 +36,12 @@ class JobProfileFixtures extends Fixture
             ['Artisanat', '#DAA520'],
             ['Services à la personne', '#FF69B4']
         ];
-
         foreach ($jobProfiles as $profile) {
             $jobProfile = new JobProfile();
             $jobProfile->setName($profile[0]);
             $jobProfile->setColor($profile[1]);
             $manager->persist($jobProfile);
         }
-
         $manager->flush();
     }
 }
