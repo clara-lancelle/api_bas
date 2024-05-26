@@ -34,7 +34,7 @@ class OfferRepository extends ServiceEntityRepository
         ;
         foreach ($offers as &$offer) {
             $offerEntity = $this->findOneBy(['id' => $offer['id']]);
-            $offer['job_profiles'] = $offerEntity->getJobProfile()->map(function ($jp) {
+            $offer['job_profiles'] = $offerEntity->getJobProfiles()->map(function ($jp) {
                 return [
                     'name' => $jp->getName(),
                     'color' => $jp->getColor()

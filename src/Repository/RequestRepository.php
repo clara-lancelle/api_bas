@@ -16,6 +16,28 @@ class RequestRepository extends ServiceEntityRepository
         parent::__construct($registry, Request::class);
     }
 
+    public function getLastRequests($limit = 8): array
+    {
+        $requests = $this->createQueryBuilder('r')
+            ->select('r.*', 's.name as companyName', 's.city', 's.profile_image')
+            ->join('r.student', 's')
+            ->orderBy('r.created_at', 'ASC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+        ;
+        foreach ($requests as &$request) {
+            $requestEntity = $this->findOneBy(['id' => $request['id']]);
+            $requests['job_profiles'] = $requestEntity->getJobProfiles()->map(function ($jp) {
+                return [
+                    'name' => $jp->getName(),
+                    'color' => $jp->getColor()
+                ];
+            })->toArray();
+        }
+        return $requests;
+    }
+
 //    /**
 //     * @return Request[] Returns an array of Request objects
 //     */

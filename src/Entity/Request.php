@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use App\Controller\LastRequests;
 use App\Enum\Duration;
 use App\Enum\OfferType;
 use App\Enum\StudyLevel;
@@ -11,6 +13,20 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ApiResource(
+    operations: [
+        new \ApiPlatform\Metadata\Get(
+            uriTemplate: '/requests/last',
+            controller: LastRequests::class,
+            name: 'api_requests_last',
+            read: false,
+            openapiContext: [
+                'summary'     => 'Obtenir les dernières demandes',
+                'description' => 'Retourne les dernières demandes dans la base de données'
+            ]
+        )
+    ]
+)]
 #[ORM\Entity(repositoryClass: RequestRepository::class)]
 class Request
 {
