@@ -51,13 +51,26 @@ class Request
     #[ORM\Column(length: 255)]
     private ?string $school = null;
 
+    // -- START Generate Dates 
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $created_at = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $updated_at = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $deleted_at = null;
+
+    // -- END Generate Dates 
+
     /**
      * @var Collection<int, JobProfile>
      */
     #[ORM\ManyToMany(targetEntity: JobProfile::class, inversedBy: 'requests')]
     private Collection $job_profiles;
 
-    //ENUMS 
+    // START ENUMS 
     
     #[ORM\Column(length: 255, enumType: OfferType::class)]
     private ?OfferType $type = null;
@@ -67,6 +80,8 @@ class Request
 
     #[ORM\Column(length: 255, enumType: Duration::class)]
     private ?Duration $duration = null;
+
+    // -- END ENUMS 
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
@@ -79,6 +94,67 @@ class Request
         $this->duration    = Duration::between2and6months;
         $this->job_profiles = new ArrayCollection();
     }
+
+    // -- START Generate Dates 
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): static
+    {
+        $this->created_at = new \DateTimeImmutable();
+        $this->setUpdatedAtValue();
+        return $this;
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): static
+    {
+        $this->updated_at = new \DateTimeImmutable();
+        return $this;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->deleted_at === null ? 'Actif' : 'Inactif';
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(\DateTimeImmutable $updated_at): static
+    {
+        $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getDeletedAt(): ?\DateTimeImmutable
+    {
+        return $this->deleted_at;
+    }
+
+    public function setDeletedAt(?\DateTimeImmutable $deleted_at): static
+    {
+        $this->deleted_at = $deleted_at;
+
+        return $this;
+    }
+
+    // -- END Generate Dates 
+
 
     public function getId(): ?int
     {

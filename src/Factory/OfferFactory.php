@@ -55,7 +55,6 @@ final class OfferFactory extends ModelFactory
             'application_limit_date' => self::faker()->dateTimeInInterval('-1 week', '+3 month'),
             'available_place'        => self::faker()->numberBetween(0, 50),
             'company'                => CompanyFactory::new(),
-            'created_at'             => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'description'            => self::faker()->text(255),
             'duration'               => self::faker()->randomElement(Duration::cases()),
             'end_date'               => self::faker()->dateTime(),
@@ -65,6 +64,7 @@ final class OfferFactory extends ModelFactory
             'start_date'             => self::faker()->dateTime(),
             'study_level'            => self::faker()->randomElement(StudyLevel::cases()),
             'type'                   => self::faker()->randomElement(OfferType::cases()),
+            'created_at'             => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'updated_at'             => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
         ];
     }

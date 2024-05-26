@@ -17,7 +17,7 @@ class LastRequests extends AbstractController
     public function __construct(private RequestRepository $requestRepository)
     {
     }
-
+    #[Route('/tutu')]
     public function __invoke(): JsonResponse
     {
         $lastRequests = $this->requestRepository->getLastRequests();

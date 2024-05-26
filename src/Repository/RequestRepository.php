@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Request;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @extends ServiceEntityRepository<Request>
@@ -19,7 +20,7 @@ class RequestRepository extends ServiceEntityRepository
     public function getLastRequests($limit = 8): array
     {
         $requests = $this->createQueryBuilder('r')
-            ->select('r.*', 's.name as companyName', 's.city', 's.profile_image')
+            ->select('r.id', 'r.name', 'r.description', 'r.start_date', 'r.end_date', 'r.type', 's.name as companyName', 's.city', 's.profile_image')
             ->join('r.student', 's')
             ->orderBy('r.created_at', 'ASC')
             ->setMaxResults($limit)
@@ -27,8 +28,8 @@ class RequestRepository extends ServiceEntityRepository
             ->getResult()
         ;
         foreach ($requests as &$request) {
-            $requestEntity = $this->findOneBy(['id' => $request['id']]);
-            $requests['job_profiles'] = $requestEntity->getJobProfiles()->map(function ($jp) {
+            $requestEntity = $this->find($request['id']);
+            $request['job_profiles'] = $requestEntity->getJobProfiles()->map(function ($jp) {
                 return [
                     'name' => $jp->getName(),
                     'color' => $jp->getColor()
