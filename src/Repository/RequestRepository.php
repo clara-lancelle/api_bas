@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Request;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,7 +21,7 @@ class RequestRepository extends ServiceEntityRepository
     public function getLastRequests($limit = 8): array
     {
         $requests = $this->createQueryBuilder('r')
-            ->select('r.id', 'r.name', 'r.description', 'r.start_date', 'r.end_date', 'r.type', 's.name as companyName', 's.city', 's.profile_image')
+            ->select('r.id', 'r.name', 'r.description', 'r.start_date', 'r.end_date', 'r.type', 's.firstname', 's.birthdate', 's.city', 's.profile_image')
             ->join('r.student', 's')
             ->orderBy('r.created_at', 'ASC')
             ->setMaxResults($limit)
@@ -28,6 +29,12 @@ class RequestRepository extends ServiceEntityRepository
             ->getResult()
         ;
         foreach ($requests as &$request) {
+            $calcul_duration = $request['start_date']->diff($request['end_date']);
+            $calcul_age = $request['birthdate']->diff(new DateTime());
+            $request['calcul_duration'] = $calcul_duration->d;
+            $request['calcul_age'] = $calcul_age->y;
+            $request['start_date'] = date_format($request['start_date'], 'd/m/Y');
+            $request['end_date'] = date_format($request['end_date'], 'd/m/Y');
             $requestEntity = $this->find($request['id']);
             $request['job_profiles'] = $requestEntity->getJobProfiles()->map(function ($jp) {
                 return [
