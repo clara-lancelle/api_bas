@@ -41,12 +41,19 @@ class Student extends User
     #[ORM\OneToMany(targetEntity: Experience::class, mappedBy: 'student', orphanRemoval: true)]
     private Collection $experiences;
 
+    /**
+     * @var Collection<int, Request>
+     */
+    #[ORM\OneToMany(targetEntity: Request::class, mappedBy: 'student')]
+    private Collection $requests;
+
     public function __construct()
     {
         $this->hobbies     = new ArrayCollection();
         $this->formations  = new ArrayCollection();
         $this->skills      = new ArrayCollection();
         $this->experiences = new ArrayCollection();
+        $this->requests = new ArrayCollection();
     }
 
     public function getBirthdate(): ?\DateTime
@@ -174,6 +181,36 @@ class Student extends User
             // set the owning side to null (unless already changed)
             if ($experience->getStudent() === $this) {
                 $experience->setStudent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Request>
+     */
+    public function getRequests(): Collection
+    {
+        return $this->requests;
+    }
+
+    public function addRequest(Request $request): static
+    {
+        if (!$this->requests->contains($request)) {
+            $this->requests->add($request);
+            $request->setStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRequest(Request $request): static
+    {
+        if ($this->requests->removeElement($request)) {
+            // set the owning side to null (unless already changed)
+            if ($request->getStudent() === $this) {
+                $request->setStudent(null);
             }
         }
 

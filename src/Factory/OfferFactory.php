@@ -7,7 +7,6 @@ use App\Entity\Offer;
 use App\Enum\Duration;
 use App\Enum\OfferType;
 use App\Enum\StudyLevel;
-use App\Repository\JobProfileRepository;
 use App\Repository\OfferRepository;
 
 use Zenstruck\Foundry\ModelFactory;
@@ -40,7 +39,7 @@ final class OfferFactory extends ModelFactory
      *
      * @todo inject services if required
      */
-    public function __construct(private JobProfileRepository $jobProfileRepository)
+    public function __construct()
     {
         parent::__construct();
     }
@@ -61,7 +60,6 @@ final class OfferFactory extends ModelFactory
             'duration'               => self::faker()->randomElement(Duration::cases()),
             'end_date'               => self::faker()->dateTime(),
             'name'                   => self::faker()->jobTitle(),
-            'promote_status'         => self::faker()->text(20),
             'remote'                 => self::faker()->text(20),
             'revenue'                => self::faker()->text(20),
             'start_date'             => self::faker()->dateTime(),

@@ -72,9 +72,6 @@ class Offer
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $promote_status = null;
-
-    #[ORM\Column(length: 255)]
     private ?string $revenue = null;
 
     #[ORM\Column(length: 255)]
@@ -199,18 +196,6 @@ class Offer
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getPromoteStatus(): ?string
-    {
-        return $this->promote_status;
-    }
-
-    public function setPromoteStatus(string $promote_status): static
-    {
-        $this->promote_status = $promote_status;
 
         return $this;
     }

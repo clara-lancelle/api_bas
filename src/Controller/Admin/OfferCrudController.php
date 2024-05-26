@@ -42,7 +42,8 @@ class OfferCrudController extends AbstractCrudController
             ->setEntityLabelInSingular(
                 fn(?Offer $offer, ?string $pageName) => $offer ? $offer->getName() : 'Offre'
             )
-            ->setEntityLabelInPlural('Offres');
+            ->setEntityLabelInPlural('Offres')
+            ->setSearchFields(['company', 'name', 'type', 'description']);
     }
 
     public function configureFields(string $pageName): iterable
@@ -86,7 +87,6 @@ class OfferCrudController extends AbstractCrudController
             DateField::new('end_date', 'Date de fin'),
             DateField::new('application_limit_date', 'Date limite de dépôt des candidatures'),
             TextEditorField::new('description', 'Description')->hideOnIndex(),
-            TextField::new('promote_status', 'Niveau d\'études')->hideOnIndex(),
             TextField::new('revenue', 'Salaire')->hideOnIndex(),
             TextField::new('remote', 'Télétravail')->hideOnIndex(),
             IntegerField::new('available_place', 'Places disponibles')->hideOnIndex(),

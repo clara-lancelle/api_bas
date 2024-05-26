@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\JobProfileRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: JobProfileRepository::class)]
@@ -22,8 +24,15 @@ class JobProfile
     #[ORM\ManyToOne(inversedBy: 'jobProfile')]
     private ?Offer $offer = null;
 
+    /**
+     * @var Collection<int, Request>
+     */
+    #[ORM\ManyToMany(targetEntity: Request::class, mappedBy: 'job_profiles')]
+    private Collection $requests;
+
     public function __construct()
     {
+        $this->requests = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -69,6 +78,33 @@ class JobProfile
     public function setOffer(?Offer $offer): static
     {
         $this->offer = $offer;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Request>
+     */
+    public function getRequests(): Collection
+    {
+        return $this->requests;
+    }
+
+    public function addRequest(Request $request): static
+    {
+        if (!$this->requests->contains($request)) {
+            $this->requests->add($request);
+            $request->addJobProfile($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRequest(Request $request): static
+    {
+        if ($this->requests->removeElement($request)) {
+            $request->removeJobProfile($this);
+        }
 
         return $this;
     }
