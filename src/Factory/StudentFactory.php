@@ -49,17 +49,18 @@ final class StudentFactory extends ModelFactory
     {
         return [
             'birthdate' => self::faker()->dateTime(),
-            'cellphone' => self::faker()->text(15),
-            'city' => self::faker()->text(255),
+            'cellphone' => '0615141615',
+            'city' => self::faker()->city(),
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'email' => self::faker()->text(180),
-            'firstname' => self::faker()->text(255),
+            'email' => self::faker()->email(),
+            'firstname' => self::faker()->firstName(),
             'gender' => self::faker()->randomElement(Gender::cases()),
-            'name' => self::faker()->text(255),
-            'password' => self::faker()->text(),
-            'roles' => [],
+            'name' => self::faker()->name(),
+            'password' => self::faker()->password(),
+            'profile_image' => 'usr.png',
+            'roles' => ['ROLE_USER'],
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'zipCode' => self::faker()->text(255),
+            'zipCode' => '77258',
         ];
     }
 

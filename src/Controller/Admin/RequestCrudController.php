@@ -30,7 +30,7 @@ class RequestCrudController extends AbstractCrudController
                 fn(?Request $request, ?string $pageName) => $request ? $request->getName() : 'Demande'
             )
             ->setEntityLabelInPlural('Demandes')
-            ->setSearchFields(['student', 'name', 'description', 'type', 'school']);
+            ->setSearchFields([ 'name', 'description', 'type', 'school']);
     }
 
     public function configureFields(string $pageName): iterable
@@ -69,7 +69,7 @@ class RequestCrudController extends AbstractCrudController
                 ->formatValue(function (Duration $choice): string {
                     return $choice->value;
                 }),
-            AssociationField::new('job_profile', 'Profil metier')->setFormTypeOption('choice_label', 'name'),
+            AssociationField::new('job_profiles', 'Profil metier')->setFormTypeOption('choice_label', 'name'),
             DateField::new('start_date', 'Date de début'),
             DateField::new('end_date', 'Date de fin'),
             TextField::new('school', 'Ecole'),
@@ -77,7 +77,6 @@ class RequestCrudController extends AbstractCrudController
             DateField::new('created_at', 'Crée le')->hideOnIndex()->hideOnForm(),
             DateField::new('updated_at', 'Mis à jour le')->hideOnIndex()->hideOnForm(),
             DateField::new('deleted_at', 'Supprimé le')->hideOnIndex()->hideOnForm(),
-            Field::new('status', 'Statut')->hideOnForm()
         ];
     }
 

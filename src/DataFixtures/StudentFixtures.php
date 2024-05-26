@@ -12,6 +12,9 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class StudentFixtures extends Fixture
 {
@@ -20,9 +23,21 @@ class StudentFixtures extends Fixture
     {
     }
 
+    public function fakeUpload(File $file): string
+    {
+        $filesystem = new Filesystem();
+        try {
+            $filesystem->copy($file, __DIR__ . '/../../public/assets/images/users/' . $file->getFilename());
+        } catch (FileException $e) {
+            dd($e);
+        }
+        return $file;
+    }
+
     public function load(ObjectManager $manager)
     {
         //Student
+        $avatar = 'avatar.png';
         $user = new Student();
         $user->setName('student');
         $user->setFirstname('test');
@@ -35,6 +50,8 @@ class StudentFixtures extends Fixture
         $user->setBirthdate(new \DateTime('2000-04-03'));
         $user->setRoles(['ROLE_USER']);
         $user->setGender(Gender::Male);
+        $this->fakeUpload(new File(__DIR__ . '/images/users/'. $avatar));
+        $user->setProfileImage($avatar);
         $manager->persist($user);
         $manager->flush();
 
@@ -75,5 +92,7 @@ class StudentFixtures extends Fixture
         $form->setStudent($user);
         $manager->persist($form);
         $manager->flush();
+
+        $this->fakeUpload(new File(__DIR__ . '/images/users/usr.png'));
     }
 }

@@ -57,6 +57,10 @@ class Request
 
     public function __construct()
     {
+
+        $this->study_level = StudyLevel::Level1;
+        $this->type        = OfferType::Internship;
+        $this->duration    = Duration::between2and6months;
         $this->job_profiles = new ArrayCollection();
     }
 

@@ -64,7 +64,6 @@ class CompanyFixtures extends Fixture
         $company->setActivity('Service d\'hébergement de fichiers');
         $this->fakeUpload(new File(__DIR__ . '/images/companies/' . $db));
         $company->setLargeImage($db);
-        $this->fakeUpload(new File(__DIR__ . '/images/companies/' . $db));
         $company->setPictoImage($db);
 
         $manager->persist($company);
@@ -82,9 +81,8 @@ class CompanyFixtures extends Fixture
         $company->setDescription('Canva est une plateforme de conception graphique en ligne qui permet de créer des graphiques, des présentations, des affiches et d\'autres contenus visuels.');
         $company->setActivity('Service de conception graphique en ligne');
         $this->fakeUpload(new File(__DIR__ . '/images/companies/' . $canva));
-        $company->setLargeImage($db);
-        $this->fakeUpload(new File(__DIR__ . '/images/companies/' . $canva));
-        $company->setPictoImage($db);
+        $company->setLargeImage($canva);
+        $company->setPictoImage($canva);
 
         $manager->flush();
 

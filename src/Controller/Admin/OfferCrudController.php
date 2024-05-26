@@ -82,7 +82,8 @@ class OfferCrudController extends AbstractCrudController
                 ->formatValue(function (Duration $choice): string {
                     return $choice->value;
                 }),
-            AssociationField::new('job_profile', 'Profil metier')->setFormTypeOption('choice_label', 'name'),
+            //AssociationField::new('job_profiles', 'Profil metier')->setFormTypeOption('choice_label', 'name'),
+            AssociationField::new('job_profiles', 'Profil metier')->setFormTypeOption('choice_label', 'name'),
             DateField::new('start_date', 'Date de début'),
             DateField::new('end_date', 'Date de fin'),
             DateField::new('application_limit_date', 'Date limite de dépôt des candidatures'),

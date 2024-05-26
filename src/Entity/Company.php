@@ -91,7 +91,6 @@ class Company
     #[ORM\OneToMany(targetEntity: CompanyUser::class, mappedBy: 'company', orphanRemoval: true)]
     private Collection $companyAdministrators;
 
-
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 

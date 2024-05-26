@@ -107,7 +107,7 @@ class Offer
      * @var Collection<int, JobProfile>
      */
     #[ORM\OneToMany(targetEntity: JobProfile::class, mappedBy: 'offer')]
-    private Collection $jobProfile;
+    private Collection $job_profiles;
 
     // END ENUM --
 
@@ -116,8 +116,7 @@ class Offer
         $this->study_level = StudyLevel::Level1;
         $this->type        = OfferType::Internship;
         $this->duration    = Duration::between2and6months;
-
-        $this->jobProfile = new ArrayCollection();
+        $this->job_profiles = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -329,25 +328,18 @@ class Offer
 
     // -- END ENUM getters & setters
 
-
-    public static function getJobProfiles(JobProfileRepository $jobProfileRepository): array
-    {
-        return $jobProfileRepository->findAll();
-    }
-
-    /**
+  /**
      * @return Collection<int, JobProfile>
      */
-    public function getJobProfile(): Collection
+    public function getJobProfiles(): Collection
     {
-        return $this->jobProfile;
+        return $this->job_profiles;
     }
 
     public function addJobProfile(JobProfile $jobProfile): static
     {
-        if (!$this->jobProfile->contains($jobProfile)) {
-            $this->jobProfile->add($jobProfile);
-            $jobProfile->setOffer($this);
+        if (!$this->job_profiles->contains($jobProfile)) {
+            $this->job_profiles->add($jobProfile);
         }
 
         return $this;
@@ -355,12 +347,7 @@ class Offer
 
     public function removeJobProfile(JobProfile $jobProfile): static
     {
-        if ($this->jobProfile->removeElement($jobProfile)) {
-            // set the owning side to null (unless already changed)
-            if ($jobProfile->getOffer() === $this) {
-                $jobProfile->setOffer(null);
-            }
-        }
+        $this->job_profiles->removeElement($jobProfile);
 
         return $this;
     }

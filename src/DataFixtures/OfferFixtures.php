@@ -11,7 +11,6 @@ use App\Enum\StudyLevel;
 use App\Factory\JobProfileFactory;
 use App\Factory\OfferFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 
 class OfferFixtures extends Fixture
@@ -32,7 +31,6 @@ class OfferFixtures extends Fixture
         $offer->setStudylevel(StudyLevel::Level3);
         $offer->setDuration(Duration::between2and6months);
         $offer->setDescription('Alternance de plusieurs mois a sein de l\'équipe de développement.');
-        $offer->setPromoteStatus('Bac+2');
         $offer->setRevenue('Entre 1.000€ et 1.300€');
         $offer->setRemote('Télétravail 1 jour par semaine');
         $offer->setAvailablePlace(3);
@@ -52,7 +50,6 @@ class OfferFixtures extends Fixture
         $offer->setStudylevel(StudyLevel::Level1);
         $offer->setDuration(Duration::between6and12months);
         $offer->setDescription('Stage de plusieurs mois a sein de l\'équipe de développement.');
-        $offer->setPromoteStatus('Bac+2');
         $offer->setRevenue('Entre 1.000€ et 1.300€');
         $offer->setRemote('Télétravail 1 jour par semaine');
         $offer->setAvailablePlace(3);
@@ -70,7 +67,6 @@ class OfferFixtures extends Fixture
         $offer->setStudylevel(StudyLevel::Level4);
         $offer->setDuration(Duration::between6and12months);
         $offer->setDescription('Stage de plusieurs mois a sein de l\'équipe de développement.');
-        $offer->setPromoteStatus('Bac+2');
         $offer->setRevenue('Entre 1.000€ et 1.300€');
         $offer->setRemote('Télétravail 1 jour par semaine');
         $offer->setAvailablePlace(3);
@@ -80,6 +76,6 @@ class OfferFixtures extends Fixture
 
         $manager->flush();
 
-        OfferFactory::createMany(10, ['job_profile' => JobProfileFactory::new()->many(0, 3)]);
+        OfferFactory::createMany(10, ['job_profiles' => JobProfileFactory::new()->many(0, 3)]);
     }
 }

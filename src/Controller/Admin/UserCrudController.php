@@ -16,9 +16,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -51,6 +53,13 @@ class UserCrudController extends AbstractCrudController
             TextField::new('name', 'Nom'),
             EmailField::new('email', 'Email'),
             TextField::new('plainPassword', 'Mot de passe')->hideOnIndex(),
+            ImageField::new('profile_image', 'Image de profil')
+                ->setUploadedFileNamePattern(
+                    fn(UploadedFile $file): string => sprintf('upload_%d_%s.%s', random_int(1, 999), $file->getFilename(), $file->guessExtension())
+                )
+                ->setUploadDir('public/assets/images/users')
+                ->setBasePath('assets/images/users')
+                ->setRequired(false),
             ChoiceField::new('gender', 'Genre')->setFormType(EnumType::class)
                 ->setFormTypeOptions([
                     'class'        => Gender::class,

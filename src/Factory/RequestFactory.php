@@ -53,11 +53,11 @@ final class RequestFactory extends ModelFactory
         return [
             'duration' => self::faker()->randomElement(Duration::cases()),
             'end_date' => self::faker()->dateTime(),
-            'name' => self::faker()->text(255),
-            'school' => self::faker()->text(255),
+            'name' => self::faker()->text(25),
+            'school' => self::faker()->text(25),
             'start_date' => self::faker()->dateTime(),
             'description' => self::faker()->text(),
-            'student' => self::faker()->randomElement($this->studentRepository->findAll()),
+            'student' => StudentFactory::new(),
             'study_level' => self::faker()->randomElement(StudyLevel::cases()),
             'type' => self::faker()->randomElement(OfferType::cases()),
         ];

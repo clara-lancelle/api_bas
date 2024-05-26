@@ -81,6 +81,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     private ?string $plainPassword = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Regex(
+        pattern: '/\.(jpeg|jpg|png|gif|webp)$/i',
+        message: 'Veuillez télécharger un fichier image valide avec l\'une des extensions suivantes : jpeg, jpg, png, gif, webp.'
+    )]
+    private ?string $profile_image = null;
+
+    public function __toString(): string
+    {
+        return $this->getFirstname() . ' ' . $this->getName();
+    }
+
     #[ORM\PrePersist]
     public function setCreatedAtValue(): static
     {
@@ -94,11 +106,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->updated_at = new \DateTimeImmutable();
         return $this;
-    }
-
-    public function __toString(): string
-    {
-        return $this->getFirstname() . ' ' . $this->getName();
     }
 
     public function eraseCredentials(): void
@@ -293,6 +300,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPlainPassword(?string $plainPassword): static
     {
         $this->plainPassword = $plainPassword;
+        return $this;
+    }
+
+    public function getProfileImage(): ?string
+    {
+        return $this->profile_image;
+    }
+
+    public function setProfileImage(?string $profile_image): static
+    {
+        $this->profile_image = $profile_image;
+
         return $this;
     }
 }

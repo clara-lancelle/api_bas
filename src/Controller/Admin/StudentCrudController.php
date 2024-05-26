@@ -16,9 +16,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -51,6 +53,13 @@ class StudentCrudController extends AbstractCrudController
             TextField::new('firstname', 'Prénom'),
             TextField::new('name', 'Nom'),
             EmailField::new('email', 'Email'),
+            ImageField::new('profile_image', 'Image de profil')
+                ->setUploadedFileNamePattern(
+                    fn(UploadedFile $file): string => sprintf('upload_%d_%s.%s', random_int(1, 999), $file->getFilename(), $file->guessExtension())
+                )
+                ->setUploadDir('public/assets/images/users')
+                ->setBasePath('assets/images/users')
+                ->setRequired(false),
             TextField::new('cellphone', 'Téléphone portable'),
             NumberField::new('zipCode', 'Code Postal'),
             TextField::new('city', 'Ville'),

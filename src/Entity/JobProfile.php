@@ -21,7 +21,7 @@ class JobProfile
     #[ORM\Column(length: 15)]
     private ?string $color = null;
 
-    #[ORM\ManyToOne(inversedBy: 'jobProfile')]
+    #[ORM\ManyToOne(inversedBy: 'job_profiles')]
     private ?Offer $offer = null;
 
     /**
