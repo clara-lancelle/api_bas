@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Controller\LastOffers;
 use App\Controller\OfferCount;
 use App\Enum\Duration;
@@ -20,7 +22,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [
-        new \ApiPlatform\Metadata\Get(
+        new Get(),
+        new GetCollection(),
+        new Get(
             uriTemplate: '/offers/count',
             controller: OfferCount::class,
             name: 'api_offers_count',
@@ -30,7 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 'description' => 'Retourne le nombre d\'offres de stage dans la base de données'
             ]
         ),
-        new \ApiPlatform\Metadata\Get(
+        new Get(
             uriTemplate: '/offers/last',
             controller: LastOffers::class,
             name: 'api_offers_last',
