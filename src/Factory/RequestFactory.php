@@ -60,6 +60,8 @@ final class RequestFactory extends ModelFactory
             'student' => StudentFactory::new(),
             'study_level' => self::faker()->randomElement(StudyLevel::cases()),
             'type' => self::faker()->randomElement(OfferType::cases()),
+            'created_at'             => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+            'updated_at'             => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
         ];
     }
 
