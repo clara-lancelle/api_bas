@@ -10,7 +10,6 @@ use App\Controller\OfferCount;
 use App\Enum\Duration;
 use App\Enum\OfferType;
 use App\Enum\StudyLevel;
-use App\Repository\JobProfileRepository;
 use App\Repository\OfferRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -22,8 +21,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [
-        new Get(),
-        new GetCollection(),
+        new Get(
+            uriTemplate: '/offers/last',
+            controller: LastOffers::class,
+            name: 'api_offers_last',
+            read: false,
+            openapiContext: [
+                'summary'     => 'Obtenir les dernières offres',
+                'description' => 'Retourne les dernières offres dans la base de données'
+            ]
+        ),
         new Get(
             uriTemplate: '/offers/count',
             controller: OfferCount::class,
@@ -34,16 +41,8 @@ use Symfony\Component\Validator\Constraints as Assert;
                 'description' => 'Retourne le nombre d\'offres de stage dans la base de données'
             ]
         ),
-        new Get(
-            uriTemplate: '/offers/last',
-            controller: LastOffers::class,
-            name: 'api_offers_last',
-            read: false,
-            openapiContext: [
-                'summary'     => 'Obtenir les dernières offres',
-                'description' => 'Retourne les dernières offres dans la base de données'
-            ]
-        )
+        new Get(),
+        new GetCollection(),
     ]
 )]
 #[HasLifecycleCallbacks]
