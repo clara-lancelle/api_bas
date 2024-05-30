@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use App\Controller\CompanyWithMostOffers;
 use App\Repository\CompanyRepository;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,11 +14,11 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
     operations: [
-        new \ApiPlatform\Metadata\Get(
+        new GetCollection(
             uriTemplate: '/companies/mostOffersList',
             controller: CompanyWithMostOffers::class,
             name: 'api_companies_most_offers_list',
@@ -25,7 +27,8 @@ use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
                 'summary'     => 'Obtenir la liste des 5 entreprises possédant le plus d\'offres actives',
                 'description' => 'Retourne la liste des 5 entreprises possédant le plus d\'offres actives dans la base de données'
             ]
-        )
+            ),
+        new Get(),
     ]
 )]
 #[HasLifecycleCallbacks]
@@ -35,15 +38,14 @@ class Company
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('offer')]
     private ?int $id = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 3)]
     #[ORM\Column(length: 255)]
+    #[Groups('offer')]
     private ?string $name = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $logo = null;
 
     #[Assert\Url]
     #[ORM\Column(length: 255, nullable: true)]
@@ -69,6 +71,7 @@ class Company
     #[Assert\NotBlank]
     #[Assert\Length(min: 3)]
     #[ORM\Column(length: 255)]
+    #[Groups('offer')]
     private ?string $city = null;
 
     #[Assert\Regex('/^[0-9]{5}$/')]
@@ -115,6 +118,7 @@ class Company
         pattern: '/\.(jpeg|jpg|png|gif|webp)$/i',
         message: 'Veuillez télécharger un fichier image valide avec l\'une des extensions suivantes : jpeg, jpg, png, gif, webp.'
     )]
+    #[Groups('offer')]
     private ?string $picto_image = null;
 
     public function __construct()
@@ -138,18 +142,6 @@ class Company
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getLogo(): ?string
-    {
-        return $this->logo;
-    }
-
-    public function setLogo(?string $logo): static
-    {
-        $this->logo = $logo;
 
         return $this;
     }

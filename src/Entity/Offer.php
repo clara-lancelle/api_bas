@@ -4,40 +4,29 @@ namespace App\Entity;
 
 use ApiPlatform\Doctrine\Odm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
-use Doctrine\ODM\MongoDB\Types\Type;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use App\Controller\ApprenticeshipOffers;
-use App\Controller\InternshipOffers;
-use App\Controller\LastOffers;
 use App\Controller\OfferCount;
 use App\Enum\Duration;
 use App\Enum\OfferType;
 use App\Enum\StudyLevel;
 use App\Repository\OfferRepository;
-use App\State\OfferProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Symfony\Component\Serializer\Annotation\Context;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
 #[ApiResource(
+    normalizationContext: ['groups' => ['offer']],
     operations: [
-        new GetCollection(
-            uriTemplate: '/offers/last',
-            controller: LastOffers::class,
-            name: 'api_offers_last',
-            read: false,
-            openapiContext: [
-                'summary'     => 'Obtenir les dernières offres',
-                'description' => 'Retourne les dernières offres dans la base de données'
-            ]
-        ),
         new GetCollection(
             uriTemplate: '/offers/count',
             controller: OfferCount::class,
@@ -48,15 +37,21 @@ use Symfony\Component\Validator\Constraints as Assert;
                 'description' => 'Retourne le nombre d\'offres de stage dans la base de données'
             ]
         ),
+        new GetCollection(
+            uriTemplate: '/offers/{id}'
+        ),
+        new GetCollection(
+            uriTemplate: '/offers'
+        ),
         new Get(),
-        new GetCollection(),
     ]
 )]
-#[ApiResource(provider: OfferProvider::class)]
-#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'type' => 'exact', 'job_profile.name' => 'exact', 'duration' => 'exact', 'study_level' => 'exact'])]
+
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'type' => 'exact', 'job_profile' => 'exact', 'duration' => 'exact', 'study_level' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['created_at' => 'ASC', 'name' => 'ASC', 'application_limit_date' => 'ASC' ])]
 #[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: OfferRepository::class)]
+#[Groups('offer')]
 class Offer
 {
     #[ORM\Id]
@@ -66,7 +61,7 @@ class Offer
 
     #[ORM\ManyToOne(inversedBy: 'offers')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Company $company = null;
+    private Company $company;
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 3)]
@@ -74,9 +69,11 @@ class Offer
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Context([DateTimeNormalizer::FORMAT_KEY => 'd/m/Y'])]
     private ?\DateTimeInterface $start_date = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Context([DateTimeNormalizer::FORMAT_KEY => 'd/m/Y'])]
     private ?\DateTimeInterface $end_date = null;
 
     #[Assert\NotBlank]
@@ -103,6 +100,7 @@ class Offer
     private ?\DateTimeImmutable $deleted_at = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Context([DateTimeNormalizer::FORMAT_KEY => 'd/m/Y'])]
     private ?\DateTimeInterface $application_limit_date = null;
 
     // -- ENUM
@@ -120,9 +118,11 @@ class Offer
      * @var Collection<int, JobProfile>
      */
     #[ORM\OneToMany(targetEntity: JobProfile::class, mappedBy: 'offer')]
+    #[Groups('offer')]
     private Collection $job_profiles;
 
     // END ENUM --
+
 
     public function __construct()
     {
@@ -341,6 +341,7 @@ class Offer
 
     // -- END ENUM getters & setters
 
+
   /**
      * @return Collection<int, JobProfile>
      */
@@ -363,5 +364,17 @@ class Offer
         $this->job_profiles->removeElement($jobProfile);
 
         return $this;
+    }
+
+    #[Groups('offer')]
+    public function getCalculatedDuration() :int
+    {
+        return ($this->getStartDate()->diff($this->getEndDate()))->d;
+    }
+
+    #[Groups('offer')]
+    public function getCalculatedLimitDays() :int
+    {
+        return ($this->getApplicationLimitDate()->diff(new \DateTime()))->d;
     }
 }

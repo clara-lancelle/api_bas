@@ -2,23 +2,29 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\JobProfileRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource]
 #[ORM\Entity(repositoryClass: JobProfileRepository::class)]
 class JobProfile
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('offer')]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('offer')]
     private ?string $name = null;
 
     #[ORM\Column(length: 15)]
+    #[Groups('offer')]
     private ?string $color = null;
 
     #[ORM\ManyToOne(inversedBy: 'job_profiles')]

@@ -2,31 +2,34 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
-use App\Controller\LastRequests;
+use ApiPlatform\Metadata\GetCollection;
 use App\Enum\Duration;
 use App\Enum\OfferType;
+use ApiPlatform\Metadata\Get;
 use App\Enum\StudyLevel;
 use App\Repository\RequestRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Context;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 
 #[ApiResource(
+    normalizationContext: ['groups' => ['request']],
     operations: [
-        new \ApiPlatform\Metadata\Get(
-            uriTemplate: '/requests/last',
-            controller: LastRequests::class,
-            name: 'api_requests_last',
-            read: false,
-            openapiContext: [
-                'summary'     => 'Obtenir les dernières demandes',
-                'description' => 'Retourne les dernières demandes dans la base de données'
-            ]
-        )
+        new GetCollection(),
+        new Get(),
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'type' => 'exact', 'job_profile' => 'exact', 'duration' => 'exact', 'study_level' => 'exact'])]
+#[ApiFilter(OrderFilter::class, properties: ['created_at' => 'ASC', 'name' => 'ASC'])]
+#[Groups('request')]
 #[ORM\Entity(repositoryClass: RequestRepository::class)]
 class Request
 {
@@ -43,9 +46,11 @@ class Request
     private ?Student $student = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Context([DateTimeNormalizer::FORMAT_KEY => 'd/m/Y'])]
     private ?\DateTimeInterface $start_date = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Context([DateTimeNormalizer::FORMAT_KEY => 'd/m/Y'])]
     private ?\DateTimeInterface $end_date = null;
 
     #[ORM\Column(length: 255)]
@@ -295,5 +300,11 @@ class Request
         $this->description = $description;
 
         return $this;
+    }
+
+    #[Groups('request')]
+    public function getCalculatedDuration() :int
+    {
+        return ($this->getStartDate()->diff($this->getEndDate()))->d;
     }
 }

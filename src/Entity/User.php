@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\InheritanceType;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[HasLifecycleCallbacks]
@@ -25,6 +26,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('request')]
     private ?int $id = null;
 
     #[Assert\Email]
@@ -52,6 +54,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank]
     #[Assert\Length(min: 3)]
     #[ORM\Column(length: 255)]
+    #[Groups('request')]
     private ?string $firstname = null;
 
     #[Assert\Regex('/^((0|(\+33))[1-79]){1}([\-|\.| |\][0-9]{2}){4}$/')]
@@ -61,6 +64,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank]
     #[Assert\Length(min: 3)]
     #[ORM\Column(length: 255)]
+    #[Groups('request')]
     private ?string $city = null;
 
     #[Assert\Regex('/^[0-9]{5}$/')]
@@ -86,6 +90,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         pattern: '/\.(jpeg|jpg|png|gif|webp)$/i',
         message: 'Veuillez télécharger un fichier image valide avec l\'une des extensions suivantes : jpeg, jpg, png, gif, webp.'
     )]
+    #[Groups('request')]
     private ?string $profile_image = null;
 
     public function __toString(): string
