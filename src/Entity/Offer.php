@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Doctrine\Odm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Odm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use Doctrine\ODM\MongoDB\Types\Type;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
@@ -11,11 +13,11 @@ use App\Controller\ApprenticeshipOffers;
 use App\Controller\InternshipOffers;
 use App\Controller\LastOffers;
 use App\Controller\OfferCount;
-use App\Controller\OffersByType;
 use App\Enum\Duration;
 use App\Enum\OfferType;
 use App\Enum\StudyLevel;
 use App\Repository\OfferRepository;
+use App\State\OfferProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -46,20 +48,13 @@ use Symfony\Component\Validator\Constraints as Assert;
                 'description' => 'Retourne le nombre d\'offres de stage dans la base de données'
             ]
         ),
-        new GetCollection( 
-            uriTemplate: '/offers/internship',
-            controller: InternshipOffers::class,
-            name: 'api_offers_internship'
-        ),
-        new GetCollection( 
-            uriTemplate: '/offers/apprenticeship',
-            controller: ApprenticeshipOffers::class,
-            name: 'api_offers_apprenticeship'
-        ),
         new Get(),
+        new GetCollection(),
     ]
 )]
-// #[ApiFilter(SearchFilter::class, properties: [OfferType::class])]
+#[ApiResource(provider: OfferProvider::class)]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'type' => 'exact', 'job_profile.name' => 'exact', 'duration' => 'exact', 'study_level' => 'exact'])]
+#[ApiFilter(OrderFilter::class, properties: ['created_at' => 'ASC', 'name' => 'ASC', 'application_limit_date' => 'ASC' ])]
 #[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: OfferRepository::class)]
 class Offer
