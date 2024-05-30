@@ -7,19 +7,20 @@ use App\Repository\OfferRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-
+use Symfony\Component\Routing\Annotation\Route;
 
 #[AsController]
-class LastOffers extends AbstractController
+class InternshipOffers extends AbstractController
 {
 
     public function __construct(private OfferRepository $offerRepository)
     {
     }
 
+    // #[Route('/tutu')]
     public function __invoke(): JsonResponse
     {
-        $lastOffers = $this->offerRepository->getOffers(null, 8);
-        return new JsonResponse($lastOffers);
+        $internshipOffers = $this->offerRepository->getOffers(OfferType::Internship);
+        return new JsonResponse($internshipOffers);
     }
 }

@@ -8,9 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 
-
 #[AsController]
-class LastOffers extends AbstractController
+class ApprenticeshipOffers extends AbstractController
 {
 
     public function __construct(private OfferRepository $offerRepository)
@@ -19,7 +18,7 @@ class LastOffers extends AbstractController
 
     public function __invoke(): JsonResponse
     {
-        $lastOffers = $this->offerRepository->getOffers(null, 8);
-        return new JsonResponse($lastOffers);
+        $apprenticeshipOffers = $this->offerRepository->getOffers(OfferType::Apprenticeship);
+        return new JsonResponse($apprenticeshipOffers);
     }
 }

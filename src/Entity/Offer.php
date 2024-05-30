@@ -2,11 +2,16 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Odm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use App\Controller\ApprenticeshipOffers;
+use App\Controller\InternshipOffers;
 use App\Controller\LastOffers;
 use App\Controller\OfferCount;
+use App\Controller\OffersByType;
 use App\Enum\Duration;
 use App\Enum\OfferType;
 use App\Enum\StudyLevel;
@@ -21,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [
-        new Get(
+        new GetCollection(
             uriTemplate: '/offers/last',
             controller: LastOffers::class,
             name: 'api_offers_last',
@@ -31,7 +36,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 'description' => 'Retourne les dernières offres dans la base de données'
             ]
         ),
-        new Get(
+        new GetCollection(
             uriTemplate: '/offers/count',
             controller: OfferCount::class,
             name: 'api_offers_count',
@@ -41,10 +46,20 @@ use Symfony\Component\Validator\Constraints as Assert;
                 'description' => 'Retourne le nombre d\'offres de stage dans la base de données'
             ]
         ),
+        new GetCollection( 
+            uriTemplate: '/offers/internship',
+            controller: InternshipOffers::class,
+            name: 'api_offers_internship'
+        ),
+        new GetCollection( 
+            uriTemplate: '/offers/apprenticeship',
+            controller: ApprenticeshipOffers::class,
+            name: 'api_offers_apprenticeship'
+        ),
         new Get(),
-        new GetCollection(),
     ]
 )]
+// #[ApiFilter(SearchFilter::class, properties: [OfferType::class])]
 #[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: OfferRepository::class)]
 class Offer

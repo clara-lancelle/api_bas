@@ -29,12 +29,16 @@ class RequestRepository extends ServiceEntityRepository
             ->getResult()
         ;
         foreach ($requests as &$request) {
+            
+            // date calcul & formats
             $calcul_duration = $request['start_date']->diff($request['end_date']);
             $calcul_age = $request['birthdate']->diff(new DateTime());
             $request['calcul_duration'] = $calcul_duration->d;
             $request['calcul_age'] = $calcul_age->y;
             $request['start_date'] = date_format($request['start_date'], 'd/m/Y');
             $request['end_date'] = date_format($request['end_date'], 'd/m/Y');
+
+             // add job_profiles
             $requestEntity = $this->find($request['id']);
             $request['job_profiles'] = $requestEntity->getJobProfiles()->map(function ($jp) {
                 return [
