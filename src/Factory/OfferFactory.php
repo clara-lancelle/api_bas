@@ -52,7 +52,7 @@ final class OfferFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            'application_limit_date' => self::faker()->dateTimeInInterval('-1 week', '+3 month'),
+            'application_limit_date' => self::faker()->dateTimeInInterval('+1 week', '+10 month'),
             'available_place'        => self::faker()->numberBetween(0, 50),
             'company'                => CompanyFactory::new(),
             'description'            => self::faker()->text(255),

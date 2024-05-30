@@ -28,7 +28,7 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
     ]
 )]
 #[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'type' => 'exact', 'job_profile' => 'exact', 'duration' => 'exact', 'study_level' => 'exact'])]
-#[ApiFilter(OrderFilter::class, properties: ['created_at' => 'ASC', 'name' => 'ASC'])]
+#[ApiFilter(OrderFilter::class, properties: ['created_at' => 'ASC', 'name' => 'ASC', ''])]
 #[Groups('request')]
 #[ORM\Entity(repositoryClass: RequestRepository::class)]
 class Request
@@ -305,6 +305,6 @@ class Request
     #[Groups('request')]
     public function getCalculatedDuration() :int
     {
-        return ($this->getStartDate()->diff($this->getEndDate()))->d;
+        return ($this->getStartDate()->diff($this->getEndDate()))->days;
     }
 }

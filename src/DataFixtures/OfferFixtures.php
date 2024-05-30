@@ -34,7 +34,7 @@ class OfferFixtures extends Fixture
         $offer->setRevenue('Entre 1.000€ et 1.300€');
         $offer->setRemote('Télétravail 1 jour par semaine');
         $offer->setAvailablePlace(3);
-        $offer->setApplicationLimitDate(new \DateTime('2024-01-01'));
+        $offer->setApplicationLimitDate(new \DateTime('2024-10-01'));
         $offer->addJobProfile($manager->getRepository(JobProfile::class)->findOneBy([], ['id' => 'ASC']));
         $offer->addJobProfile($manager->getRepository(JobProfile::class)->findOneBy([], ['id' => 'DESC']));
         $manager->persist($offer);
@@ -53,7 +53,7 @@ class OfferFixtures extends Fixture
         $offer->setRevenue('Entre 1.000€ et 1.300€');
         $offer->setRemote('Télétravail 1 jour par semaine');
         $offer->setAvailablePlace(3);
-        $offer->setApplicationLimitDate(new \DateTime('2024-01-01'));
+        $offer->setApplicationLimitDate(new \DateTime('2024-11-01'));
         $offer->addJobProfile($manager->getRepository(JobProfile::class)->findOneBy([], ['id' => 'DESC']));
         $manager->persist($offer);
 

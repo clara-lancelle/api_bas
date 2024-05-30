@@ -3,13 +3,20 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\JobProfileRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use ApiPlatform\Metadata\Get;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new GetCollection(),
+        new Get(),
+    ]
+)]
 #[ORM\Entity(repositoryClass: JobProfileRepository::class)]
 class JobProfile
 {

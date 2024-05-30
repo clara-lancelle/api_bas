@@ -221,7 +221,7 @@ class Student extends User
     #[Groups('request')]
     public function getCalculatedAge() :int
     {
-        return ($this->getBirthdate()->diff(new \DateTime()))->d;
+        return ($this->getBirthdate()->diff(new \DateTime()))->days;
     }
 
 }

@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Doctrine\Odm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
@@ -48,7 +48,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 
 #[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'type' => 'exact', 'job_profile' => 'exact', 'duration' => 'exact', 'study_level' => 'exact'])]
-#[ApiFilter(OrderFilter::class, properties: ['created_at' => 'ASC', 'name' => 'ASC', 'application_limit_date' => 'ASC' ])]
+#[ApiFilter(OrderFilter::class, properties: ['created_at' => 'ASC', 'name', 'application_limit_date' ], arguments: ['orderParameterName' => 'order'])]
 #[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: OfferRepository::class)]
 #[Groups('offer')]
@@ -369,12 +369,12 @@ class Offer
     #[Groups('offer')]
     public function getCalculatedDuration() :int
     {
-        return ($this->getStartDate()->diff($this->getEndDate()))->d;
+        return ($this->getStartDate()->diff($this->getEndDate()))->days;
     }
 
     #[Groups('offer')]
     public function getCalculatedLimitDays() :int
     {
-        return ($this->getApplicationLimitDate()->diff(new \DateTime()))->d;
+        return ($this->getApplicationLimitDate()->diff(new \DateTime()))->days;
     }
 }
