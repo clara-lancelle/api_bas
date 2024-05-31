@@ -133,6 +133,12 @@ class Company
     #[ORM\Column(length: 255, enumType: WorkforceRange::class)]
     private ?WorkforceRange $workforce_range = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $additional_address = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $schedules = null;
+
     public function __construct()
     {
         $this->companyAdministrators = new ArrayCollection();
@@ -492,6 +498,30 @@ class Company
     public function setWorkforceRange(WorkforceRange $workforce_range): static
     {
         $this->workforce_range = $workforce_range;
+        return $this;
+    }
+
+    public function getAdditionalAddress(): ?string
+    {
+        return $this->additional_address;
+    }
+
+    public function setAdditionalAddress(?string $additional_address): static
+    {
+        $this->additional_address = $additional_address;
+
+        return $this;
+    }
+
+    public function getSchedules(): ?string
+    {
+        return $this->schedules;
+    }
+
+    public function setSchedules(?string $schedules): static
+    {
+        $this->schedules = $schedules;
+
         return $this;
     }
 }
