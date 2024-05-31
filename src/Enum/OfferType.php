@@ -2,6 +2,7 @@
 
 namespace App\Enum;
 
+
 enum OfferType: string
 {
     case Internship     = 'Stage';

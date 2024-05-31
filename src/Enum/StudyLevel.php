@@ -2,6 +2,7 @@
 
 namespace App\Enum;
 
+
 enum StudyLevel: string
 {
     case Level1 = 'CAP, BEP';
