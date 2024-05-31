@@ -8,6 +8,7 @@ use App\Enum\Duration;
 use App\Enum\OfferType;
 use App\Enum\StudyLevel;
 use App\Repository\CompanyRepository;
+use App\Repository\JobProfileRepository;
 use App\Repository\OfferRepository;
 
 use Zenstruck\Foundry\ModelFactory;
@@ -40,7 +41,10 @@ final class OfferFactory extends ModelFactory
      *
      * @todo inject services if required
      */
-    public function __construct(private CompanyRepository $companyRepository)
+    public function __construct(
+        private CompanyRepository $companyRepository,
+        private JobProfileRepository $jobProfileRepository
+        )
     {
         parent::__construct();
     }
@@ -52,6 +56,7 @@ final class OfferFactory extends ModelFactory
      */
     protected function getDefaults(): array
     {
+        $jobProfiles = $this->jobProfileRepository->findAll();
         $companies = $this->companyRepository->findAll();
         return [
             'application_limit_date' => self::faker()->dateTimeInInterval('+1 week', '+10 month'),
@@ -66,6 +71,7 @@ final class OfferFactory extends ModelFactory
             'start_date'             => self::faker()->dateTime(),
             'study_level'            => self::faker()->randomElement(StudyLevel::cases()),
             'type'                   => self::faker()->randomElement(OfferType::cases()),
+            'job_profiles' => self::faker()->randomElements($jobProfiles, self::faker()->numberBetween(1, 3)),
             'created_at'             => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'updated_at'             => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
         ];

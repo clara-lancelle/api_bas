@@ -15,6 +15,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -39,12 +40,10 @@ class OfferCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular(
-                fn(?Offer $offer, ?string $pageName) => $offer ? $offer->getName() : 'Offre'
-            )
+            ->setEntityLabelInSingular('Offre')
             ->setEntityLabelInPlural('Offres')
             ->setSearchFields(['company', 'name', 'type', 'description']);
-    }
+    }   
 
     public function configureFields(string $pageName): iterable
     {
@@ -82,6 +81,8 @@ class OfferCrudController extends AbstractCrudController
                 ->formatValue(function (Duration $choice): string {
                     return $choice->value;
                 }),
+            CollectionField::new('missions', 'Missions')->useEntryCrudForm(OfferMissionCrudController::class),
+            CollectionField::new('required_profiles', 'Profil recherché')->useEntryCrudForm(OfferRequiredProfileCrudController::class),
             AssociationField::new('job_profiles', 'Profil metier')->setFormTypeOption('choice_label', 'name'),
             DateField::new('start_date', 'Date de début'),
             DateField::new('end_date', 'Date de fin'),
