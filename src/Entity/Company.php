@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
     operations: [
-        new GetCollection(
+        new Get(
             uriTemplate: '/companies/mostOffersList',
             controller: CompanyWithMostOffers::class,
             name: 'api_companies_most_offers_list',
