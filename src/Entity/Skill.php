@@ -7,17 +7,21 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: SkillRepository::class)]
+// #[Groups('offer')]
 class Skill
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('offer')]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups('offer')]
     private ?string $name = null;
 
     /**
@@ -31,7 +35,7 @@ class Skill
     {
         $this->offers = new ArrayCollection();
     }
-    
+
     public function __toString(): string
     {
         return $this->getName();

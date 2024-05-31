@@ -57,7 +57,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ]
 )]
 
-#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'type' => 'exact', 'job_profiles.id' => 'exact', 'duration' => 'exact', 'study_level' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'type' => 'exact', 'job_profiles.name' => 'exact','skills.name', 'duration' => 'exact', 'study_level' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['created_at' => 'ASC', 'name', 'application_limit_date' ], arguments: ['orderParameterName' => 'order'])]
 #[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: OfferRepository::class)]

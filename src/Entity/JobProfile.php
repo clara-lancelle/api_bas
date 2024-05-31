@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Get(),
     ]
 )]
-#[ORM\Entity(repositoryClass: JobProfileRepository::class)]
+#[ORM\Entity(repositoryClass: JobProfileRepository::class)] 
 class JobProfile
 {
     #[ORM\Id]
