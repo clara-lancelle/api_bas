@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
@@ -66,6 +67,8 @@ class CompanyCrudController extends AbstractCrudController
                 ->setRequired($pageName != 'edit'),
             TextField::new('social_reason', 'Statut juridique'),
             TextField::new('siret', 'Siret')->hideOnIndex(),
+            AssociationField::new('category', 'Categorie')->setFormTypeOption('choice_label', 'name'),
+            AssociationField::new('activity', 'Activite')->setFormTypeOption('choice_label', 'name'),
             TextField::new('address', 'Adresse')->hideOnIndex(),
             NumberField::new('numberOfOffers', 'Nombre d\'offres')->hideOnForm(),
             TextField::new('zip_code', 'Code postal'),

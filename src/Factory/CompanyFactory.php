@@ -50,8 +50,7 @@ final class CompanyFactory extends ModelFactory
     {
         $categories = $this->companyCategoryRepository->findAll();
         $activities = $this->companyActivityRepository->findAll();
-        // $activities = [...self::faker()->randomElements($categories)];
-        // dd($activities);
+
         return [
             'address'       => self::faker()->address(),
             'city'          => self::faker()->city(),
