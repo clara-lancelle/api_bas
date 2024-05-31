@@ -3,53 +3,45 @@
 namespace App\Entity;
 
 use App\Repository\SkillRepository;
-use Doctrine\DBAL\Types\Types;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: SkillRepository::class)]
+// #[Groups('offer')]
 class Skill
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('offer')]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups('offer')]
     private ?string $name = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $start_date = null;
+    /**
+     * @var Collection<int, Offer>
+     */
+    #[ORM\ManyToMany(targetEntity: Offer::class, mappedBy: 'skills')]
+    private Collection $offers;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $end_date = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $updated_at = null;
-
-    #[ORM\ManyToOne(inversedBy: 'skills')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Student $student = null;
-
-    #[ORM\PrePersist]
-    public function setCreatedAtValue(): static
+   
+    public function __construct()
     {
-        $this->created_at = new \DateTimeImmutable();
-        $this->setUpdatedAtValue();
-        return $this;
+        $this->offers = new ArrayCollection();
     }
 
-    #[ORM\PreUpdate]
-    public function setUpdatedAtValue(): static
+    public function __toString(): string
     {
-        $this->updated_at = new \DateTimeImmutable();
-        return $this;
+        return $this->getName();
     }
-    public function getId(): ?int
+
+        public function getId(): ?int
     {
         return $this->id;
     }
@@ -66,63 +58,31 @@ class Skill
         return $this;
     }
 
-    public function getStartDate(): ?\DateTimeInterface
+    /**
+     * @return Collection<int, Offer>
+     */
+    public function getOffers(): Collection
     {
-        return $this->start_date;
+        return $this->offers;
     }
 
-    public function setStartDate(\DateTimeInterface $start_date): static
+    public function addOffer(Offer $offer): static
     {
-        $this->start_date = $start_date;
+        if (!$this->offers->contains($offer)) {
+            $this->offers->add($offer);
+            $offer->addSkill($this);
+        }
 
         return $this;
     }
 
-    public function getEndDate(): ?\DateTimeInterface
+    public function removeOffer(Offer $offer): static
     {
-        return $this->end_date;
-    }
-
-    public function setEndDate(?\DateTimeInterface $end_date): static
-    {
-        $this->end_date = $end_date;
+        if ($this->offers->removeElement($offer)) {
+            $offer->removeSkill($this);
+        }
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->created_at;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updated_at;
-    }
-
-    public function setUpdatedAt(?\DateTimeImmutable $updated_at): static
-    {
-        $this->updated_at = $updated_at;
-
-        return $this;
-    }
-
-    public function getStudent(): ?Student
-    {
-        return $this->student;
-    }
-
-    public function setStudent(?Student $student): static
-    {
-        $this->student = $student;
-
-        return $this;
-    }
 }

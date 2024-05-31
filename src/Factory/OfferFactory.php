@@ -10,7 +10,7 @@ use App\Enum\StudyLevel;
 use App\Repository\CompanyRepository;
 use App\Repository\JobProfileRepository;
 use App\Repository\OfferRepository;
-
+use App\Repository\SkillRepository;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
 use Zenstruck\Foundry\RepositoryProxy;
@@ -43,7 +43,8 @@ final class OfferFactory extends ModelFactory
      */
     public function __construct(
         private CompanyRepository $companyRepository,
-        private JobProfileRepository $jobProfileRepository
+        private JobProfileRepository $jobProfileRepository,
+        private SkillRepository $skillRepository
         )
     {
         parent::__construct();
@@ -58,6 +59,7 @@ final class OfferFactory extends ModelFactory
     {
         $jobProfiles = $this->jobProfileRepository->findAll();
         $companies = $this->companyRepository->findAll();
+        $skills = $this->skillRepository->findAll();
         return [
             'application_limit_date' => self::faker()->dateTimeInInterval('+1 week', '+10 month'),
             'available_place'        => self::faker()->numberBetween(0, 50),
@@ -71,6 +73,7 @@ final class OfferFactory extends ModelFactory
             'start_date'             => self::faker()->dateTime(),
             'study_level'            => self::faker()->randomElement(StudyLevel::cases()),
             'type'                   => self::faker()->randomElement(OfferType::cases()),
+            'skills' => self::faker()->randomElements($skills, self::faker()->numberBetween(1, 6)),
             'job_profiles' => self::faker()->randomElements($jobProfiles, self::faker()->numberBetween(1, 3)),
             'created_at'             => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'updated_at'             => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),

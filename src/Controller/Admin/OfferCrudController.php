@@ -84,6 +84,7 @@ class OfferCrudController extends AbstractCrudController
             CollectionField::new('missions', 'Missions')->useEntryCrudForm(OfferMissionCrudController::class),
             CollectionField::new('required_profiles', 'Profil recherché')->useEntryCrudForm(OfferRequiredProfileCrudController::class),
             AssociationField::new('job_profiles', 'Profil metier')->setFormTypeOption('choice_label', 'name'),
+            AssociationField::new('skills', 'Compétences recherchées')->setFormTypeOption('choice_label', 'name'),
             DateField::new('start_date', 'Date de début'),
             DateField::new('end_date', 'Date de fin'),
             DateField::new('application_limit_date', 'Date limite de dépôt des candidatures'),

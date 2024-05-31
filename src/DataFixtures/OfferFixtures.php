@@ -7,17 +7,18 @@ use App\Entity\Offer;
 use App\Entity\Company;
 use App\Entity\OfferMission;
 use App\Entity\OfferRequiredProfile;
+use App\Entity\Skill;
 use App\Enum\Duration;
 use App\Enum\OfferType;
 use App\Enum\StudyLevel;
-use App\Factory\JobProfileFactory;
 use App\Factory\OfferFactory;
 use App\Factory\OfferMissionFactory;
 use App\Factory\OfferRequiredProfileFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class OfferFixtures extends Fixture
+class OfferFixtures extends Fixture implements DependentFixtureInterface
 {
     public function __construct()
     {
@@ -39,6 +40,10 @@ class OfferFixtures extends Fixture
         $offer->setRemote('Télétravail 1 jour par semaine');
         $offer->setAvailablePlace(3);
         $offer->setApplicationLimitDate(new \DateTime('2024-08-01'));
+        $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'Canva']));
+        $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'Réseaux sociaux']));
+        $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'Gestion de projet']));
+        $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'Marketing de contenu']));
         $offer->addJobProfile($manager->getRepository(JobProfile::class)->findOneBy(['name' => 'Design']));
         $offer->addJobProfile($manager->getRepository(JobProfile::class)->findOneBy(['name' => 'Marketing']));
         $offer->addMission((new OfferMission())->setText('Engagement de la communauté pour s\'assurer qu\'elle est soutenue et activement représentée en ligne'));
@@ -68,6 +73,10 @@ class OfferFixtures extends Fixture
         $offer->setRemote('Télétravail 1 jour par semaine');
         $offer->setAvailablePlace(3);
         $offer->setApplicationLimitDate(new \DateTime('2024-11-01'));
+        $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'React']));
+        $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'JavaScript']));
+        $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'Gestion de projet']));
+        $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'Méthodologies Agile']));
         $offer->addMission((new OfferMission())->setText('Développement de nouvelles fonctionnalités pour nos applications web'));
         $offer->addMission((new OfferMission())->setText('Maintenance et amélioration du code existant'));
         $offer->addMission((new OfferMission())->setText('Participation aux revues de code et aux tests'));
@@ -95,6 +104,11 @@ class OfferFixtures extends Fixture
         $offer->setRemote('Télétravail 1 jour par semaine');
         $offer->setAvailablePlace(3);
         $offer->setApplicationLimitDate(new \DateTime('2024-08-01'));
+        $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'PHP']));
+        $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'MySQL']));
+        $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'Gestion de projet']));
+        $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'Méthodologies Agile']));
+        $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'Symfony']));
         $offer->addMission((new OfferMission())->setText('Participation au développement de projets web innovants'));
         $offer->addMission((new OfferMission())->setText('Assurer la qualité du code via des tests et des revues de code'));
         $offer->addMission((new OfferMission())->setText('Collaborer avec des équipes multidisciplinaires pour atteindre les objectifs du projet'));
@@ -113,5 +127,11 @@ class OfferFixtures extends Fixture
             'required_profiles' => OfferRequiredProfileFactory::new()->many(1, 5)
         ]);
         $manager->flush();
+    }
+    public function getDependencies()
+    {
+        return [
+            SkillFixtures::class,
+        ];
     }
 }
