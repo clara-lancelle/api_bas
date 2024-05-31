@@ -31,12 +31,6 @@ class Student extends User
     private Collection $formations;
 
     /**
-     * @var Collection<int, Skill>
-     */
-    #[ORM\OneToMany(targetEntity: Skill::class, mappedBy: 'student', orphanRemoval: true)]
-    private Collection $skills;
-
-    /**
      * @var Collection<int, Experience>
      */
     #[ORM\OneToMany(targetEntity: Experience::class, mappedBy: 'student', orphanRemoval: true)]
@@ -52,7 +46,6 @@ class Student extends User
     {
         $this->hobbies     = new ArrayCollection();
         $this->formations  = new ArrayCollection();
-        $this->skills      = new ArrayCollection();
         $this->experiences = new ArrayCollection();
         $this->requests = new ArrayCollection();
     }
@@ -131,33 +124,7 @@ class Student extends User
     /**
      * @return Collection<int, Skill>
      */
-    public function getSkills(): Collection
-    {
-        return $this->skills;
-    }
-
-    public function addSkill(Skill $skill): static
-    {
-        if (!$this->skills->contains($skill)) {
-            $this->skills->add($skill);
-            $skill->setStudent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSkill(Skill $skill): static
-    {
-        if ($this->skills->removeElement($skill)) {
-            // set the owning side to null (unless already changed)
-            if ($skill->getStudent() === $this) {
-                $skill->setStudent(null);
-            }
-        }
-
-        return $this;
-    }
-
+    
     /**
      * @return Collection<int, Experience>
      */

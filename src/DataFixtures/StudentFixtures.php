@@ -6,7 +6,6 @@ use App\Entity\Experience;
 use App\Entity\Formation;
 use App\Enum\Gender;
 use App\Entity\Hobbie;
-use App\Entity\Skill;
 use App\Entity\Student;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -73,14 +72,6 @@ class StudentFixtures extends Fixture
         $exp->setEndDate(new \DateTime('2020-10-11'));
         $exp->setStudent($user);
         $manager->persist($exp);
-        $manager->flush();
-
-        //skill
-        $skill = new Skill();
-        $skill->setName('PHP');
-        $skill->setStartDate(new \DateTime('2020-10-11'));
-        $skill->setStudent($user);
-        $manager->persist($skill);
         $manager->flush();
 
         //formation

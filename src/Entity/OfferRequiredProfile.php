@@ -5,11 +5,13 @@ namespace App\Entity;
 use App\Repository\OfferRequiredProfileRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: OfferRequiredProfileRepository::class)]
+#[Groups('offer')]
 class OfferRequiredProfile
 {
-    #[ORM\Id]
+    #[ORM\Id]   
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
@@ -24,7 +26,7 @@ class OfferRequiredProfile
     {
         return $this->getText();
     }
-    
+
     public function getId(): ?int
     {
         return $this->id;

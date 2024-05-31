@@ -143,6 +143,13 @@ class Offer
     #[ORM\OneToMany(targetEntity: OfferRequiredProfile::class, mappedBy: 'offer', cascade: ["persist"])]
     private Collection $required_profiles;
 
+    /**
+     * @var Collection<int, Skill>
+     */
+    #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'offers')]
+    private Collection $skills;
+
+
     // END ENUM --
 
 
@@ -154,6 +161,7 @@ class Offer
         $this->job_profiles = new ArrayCollection();
         $this->missions = new ArrayCollection();
         $this->required_profiles = new ArrayCollection();
+        $this->skills = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -461,4 +469,29 @@ class Offer
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Skill>
+     */
+    public function getSkills(): Collection
+    {
+        return $this->skills;
+    }
+
+    public function addSkill(Skill $skill): static
+    {
+        if (!$this->skills->contains($skill)) {
+            $this->skills->add($skill);
+        }
+
+        return $this;
+    }
+
+    public function removeSkill(Skill $skill): static
+    {
+        $this->skills->removeElement($skill);
+
+        return $this;
+    }
+
 }
