@@ -88,7 +88,7 @@ class Offer
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 3)]
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
@@ -131,6 +131,18 @@ class Offer
     #[Groups('offer')]
     private Collection $job_profiles;
 
+    /**
+     * @var Collection<int, OfferMission>
+     */
+    #[ORM\OneToMany(targetEntity: OfferMission::class, mappedBy: 'offer', cascade: ["persist"])]
+    private Collection $missions;
+
+    /**
+     * @var Collection<int, OfferRequiredProfile>
+     */
+    #[ORM\OneToMany(targetEntity: OfferRequiredProfile::class, mappedBy: 'offer', cascade: ["persist"])]
+    private Collection $required_profiles;
+
     // END ENUM --
 
 
@@ -140,6 +152,8 @@ class Offer
         $this->type        = OfferType::Internship;
         $this->duration    = Duration::between2and6months;
         $this->job_profiles = new ArrayCollection();
+        $this->missions = new ArrayCollection();
+        $this->required_profiles = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -386,5 +400,65 @@ class Offer
     public function getCalculatedLimitDays() :int
     {
         return ($this->getApplicationLimitDate()->diff(new \DateTime()))->days;
+    }
+
+    /**
+     * @return Collection<int, OfferMission>
+     */
+    public function getMissions(): Collection
+    {
+        return $this->missions;
+    }
+
+    public function addMission(OfferMission $mission): static
+    {
+        if (!$this->missions->contains($mission)) {
+            $this->missions->add($mission);
+            $mission->setOffer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMission(OfferMission $mission): static
+    {
+        if ($this->missions->removeElement($mission)) {
+            // set the owning side to null (unless already changed)
+            if ($mission->getOffer() === $this) {
+                $mission->setOffer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OfferRequiredProfile>
+     */
+    public function getRequiredProfiles(): Collection
+    {
+        return $this->required_profiles;
+    }
+
+    public function addRequiredProfile(OfferRequiredProfile $requiredProfile): static
+    {
+        if (!$this->required_profiles->contains($requiredProfile)) {
+            $this->required_profiles->add($requiredProfile);
+            $requiredProfile->setOffer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRequiredProfile(OfferRequiredProfile $requiredProfile): static
+    {
+        if ($this->required_profiles->removeElement($requiredProfile)) {
+            // set the owning side to null (unless already changed)
+            if ($requiredProfile->getOffer() === $this) {
+                $requiredProfile->setOffer(null);
+            }
+        }
+
+        return $this;
     }
 }
