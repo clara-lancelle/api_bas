@@ -3,6 +3,8 @@
 namespace App\Factory;
 
 use App\Entity\Company;
+use App\Repository\CompanyActivityRepository;
+use App\Repository\CompanyCategoryRepository;
 use App\Repository\CompanyRepository;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
@@ -34,7 +36,10 @@ final class CompanyFactory extends ModelFactory
      *
      * @todo inject services if required
      */
-    public function __construct()
+    public function __construct(
+        private CompanyActivityRepository $companyActivityRepository, 
+        private CompanyCategoryRepository $companyCategoryRepository
+        )
     {
         parent::__construct();
     }
@@ -46,8 +51,10 @@ final class CompanyFactory extends ModelFactory
      */
     protected function getDefaults(): array
     {
+        $categories = $this->companyCategoryRepository->findAll();
+        $activities = $this->companyActivityRepository->findAll();
+
         return [
-            'activity'      => self::faker()->text(15),
             'address'       => self::faker()->address(),
             'city'          => self::faker()->city(),
             'created_at'    => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
@@ -56,8 +63,11 @@ final class CompanyFactory extends ModelFactory
             'name'          => self::faker()->company(),
             'phone_num'     => self::faker()->phoneNumber(),
             'picto_image'   => 'img.png',
+            'workforce' => strval(self::faker()->numberBetween(1, 1500)),
             'siret'         => self::faker()->text(255),
-            'social_reason' => self::faker()->text(255),
+            'social_reason' => self::faker()->text(7),
+            'category' => self::faker()->randomElements($categories)[0],
+            'activity' => self::faker()->randomElements($activities)[0],
             'updated_at'    => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'zip_code'      => self::faker()->numberBetween(10000, 99999),
         ];

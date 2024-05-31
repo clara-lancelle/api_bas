@@ -2,11 +2,15 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Odm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Odm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Controller\CompanyWithMostOffers;
 use App\Repository\CompanyRepository;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use App\Enum\WorkforceRange;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -31,6 +35,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Get(),
     ]
 )]
+
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'name' => 'exact', 'job_profiles.id' => 'exact', 'duration' => 'exact', 'study_level' => 'exact'])]
+#[ApiFilter(OrderFilter::class, properties: ['created_at' => 'ASC', 'name', 'application_limit_date' ], arguments: ['orderParameterName' => 'order'])]
 #[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 class Company
@@ -81,15 +88,11 @@ class Company
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $creation_date = null;
 
-
     #[ORM\Column(length: 255)]
     private ?string $phone_num = null;
 
     #[ORM\Column(length: 255)]
     private ?string $description = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $activity = null;
 
     #[ORM\OneToMany(targetEntity: CompanyUser::class, mappedBy: 'company', orphanRemoval: true)]
     private Collection $companyAdministrators;
@@ -121,6 +124,15 @@ class Company
     #[Groups('offer')]
     private ?string $picto_image = null;
 
+    #[ORM\ManyToOne(inversedBy: 'companies')]
+    private ?CompanyActivity $activity = null;
+
+    #[ORM\ManyToOne(inversedBy: 'companies')]
+    private ?CompanyCategory $category = null;
+
+    #[ORM\Column(length: 255, enumType: WorkforceRange::class)]
+    private ?WorkforceRange $workforce_range = null;
+
     public function __construct()
     {
         $this->companyAdministrators = new ArrayCollection();
@@ -128,6 +140,44 @@ class Company
         $this->updated_at            = new DateTimeImmutable();
         $this->offers                = new ArrayCollection();
     }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): static
+    {
+        $this->created_at = new \DateTimeImmutable();
+        $this->setUpdatedAtValue();
+        return $this;
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): static
+    {
+        $this->updated_at = new \DateTimeImmutable();
+        return $this;
+    }
+
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function setWorkforceRangeByWorkforceValue(): static
+    {
+        $workforce = (int) $this->getWorkforce();
+        if ($workforce < 10) {
+            $this->workforce_range = WorkforceRange::lessThanTen;
+        } elseif ($workforce < 50) {
+            $this->workforce_range = WorkforceRange::TenToFifty;
+        } elseif ($workforce < 100) {
+            $this->workforce_range = WorkforceRange::FiftyToHundred;
+        } elseif ($workforce < 250) {
+            $this->workforce_range = WorkforceRange::HundredToTwoHundred;
+        } elseif ($workforce < 1000) {
+            $this->workforce_range = WorkforceRange::TwoHundredToThousand;
+        } else {
+            $this->workforce_range = WorkforceRange::moreThanThousand;
+        }
+
+        return $this;
+    }
+
 
     public function getId(): ?int
     {
@@ -277,19 +327,7 @@ class Company
 
         return $this;
     }
-
-    public function getActivity(): ?string
-    {
-        return $this->activity;
-    }
-
-    public function setActivity(string $activity): static
-    {
-        $this->activity = $activity;
-
-        return $this;
-    }
-
+    
     /**
      * @return Collection<int, CompanyUser>
      */
@@ -341,21 +379,6 @@ class Company
     {
         $this->updated_at = $updated_at;
 
-        return $this;
-    }
-
-    #[ORM\PrePersist]
-    public function setCreatedAtValue(): static
-    {
-        $this->created_at = new \DateTimeImmutable();
-        $this->setUpdatedAtValue();
-        return $this;
-    }
-
-    #[ORM\PreUpdate]
-    public function setUpdatedAtValue(): static
-    {
-        $this->updated_at = new \DateTimeImmutable();
         return $this;
     }
 
@@ -434,6 +457,41 @@ class Company
     {
         $this->picto_image = $picto_image;
 
+        return $this;
+    }
+
+    public function getActivity(): ?CompanyActivity
+    {
+        return $this->activity;
+    }
+
+    public function setActivity(?CompanyActivity $activity): static
+    {
+        $this->activity = $activity;
+
+        return $this;
+    }
+
+    public function getCategory(): ?CompanyCategory
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?CompanyCategory $category): static
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getWorkforceRange(): WorkforceRange
+    {
+        return $this->workforce_range;
+    }
+
+    public function setWorkforceRange(WorkforceRange $workforce_range): static
+    {
+        $this->workforce_range = $workforce_range;
         return $this;
     }
 }

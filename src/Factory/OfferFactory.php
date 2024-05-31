@@ -7,6 +7,7 @@ use App\Entity\Offer;
 use App\Enum\Duration;
 use App\Enum\OfferType;
 use App\Enum\StudyLevel;
+use App\Repository\CompanyRepository;
 use App\Repository\OfferRepository;
 
 use Zenstruck\Foundry\ModelFactory;
@@ -39,7 +40,7 @@ final class OfferFactory extends ModelFactory
      *
      * @todo inject services if required
      */
-    public function __construct()
+    public function __construct(private CompanyRepository $companyRepository)
     {
         parent::__construct();
     }
@@ -51,10 +52,11 @@ final class OfferFactory extends ModelFactory
      */
     protected function getDefaults(): array
     {
+        $companies = $this->companyRepository->findAll();
         return [
             'application_limit_date' => self::faker()->dateTimeInInterval('+1 week', '+10 month'),
             'available_place'        => self::faker()->numberBetween(0, 50),
-            'company'                => CompanyFactory::new(),
+            'company'                => self::faker()->randomElements($companies)[0],
             'description'            => self::faker()->text(255),
             'duration'               => self::faker()->randomElement(Duration::cases()),
             'end_date'               => self::faker()->dateTime(),

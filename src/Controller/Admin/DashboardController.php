@@ -4,6 +4,8 @@ namespace App\Controller\Admin;
 
 use App\Entity\Administrator;
 use App\Entity\Company;
+use App\Entity\CompanyActivity;
+use App\Entity\CompanyCategory;
 use App\Entity\CompanyUser;
 use App\Entity\JobProfile;
 use App\Entity\Offer;
@@ -63,6 +65,9 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Administateurs d\'entreprise', 'fas fa-users', CompanyUser::class);
         yield MenuItem::linkToCrud('Offres', 'fas fa-briefcase', Offer::class);
         yield MenuItem::linkToCrud('Profils metiers', 'fas fa-table', JobProfile::class);
+        yield MenuItem::linkToCrud('Categories', 'fas fa-table', CompanyCategory::class);
+        yield MenuItem::linkToCrud('Activités', 'fas fa-table', CompanyActivity::class);
+
 
         yield MenuItem::section('Etudiants');
         yield MenuItem::linkToCrud('Etudiants', 'fas fa-users', Student::class);

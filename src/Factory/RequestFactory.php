@@ -52,19 +52,6 @@ final class RequestFactory extends ModelFactory
     protected function getDefaults(): array
     {
         $jobProfiles = $this->jobProfileRepository->findAll();
-        // return [
-        //     'duration' => self::faker()->randomElement(Duration::cases()),
-        //     'end_date' => self::faker()->dateTime(),
-        //     'name' => self::faker()->text(25),
-        //     'school' => self::faker()->text(25),
-        //     'start_date' => self::faker()->dateTime(),
-        //     'description' => self::faker()->text(),
-        //     'student' => StudentFactory::new(),
-        //     'study_level' => self::faker()->randomElement(StudyLevel::cases()),
-        //     'type' => self::faker()->randomElement(OfferType::cases()),
-        //     'created_at'             => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-        //     'updated_at'             => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-        // ];
         return [
             'name' => self::faker()->randomElement([
                 'Développeur web',
