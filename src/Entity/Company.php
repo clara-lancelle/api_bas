@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Odm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Odm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Controller\CompanyWithMostOffers;
 use App\Repository\CompanyRepository;
@@ -31,6 +34,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Get(),
     ]
 )]
+
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'name' => 'exact', 'job_profiles.id' => 'exact', 'duration' => 'exact', 'study_level' => 'exact'])]
+#[ApiFilter(OrderFilter::class, properties: ['created_at' => 'ASC', 'name', 'application_limit_date' ], arguments: ['orderParameterName' => 'order'])]
 #[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 class Company
@@ -81,15 +87,11 @@ class Company
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $creation_date = null;
 
-
     #[ORM\Column(length: 255)]
     private ?string $phone_num = null;
 
     #[ORM\Column(length: 255)]
     private ?string $description = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $activity = null;
 
     #[ORM\OneToMany(targetEntity: CompanyUser::class, mappedBy: 'company', orphanRemoval: true)]
     private Collection $companyAdministrators;
@@ -120,6 +122,12 @@ class Company
     )]
     #[Groups('offer')]
     private ?string $picto_image = null;
+
+    #[ORM\ManyToOne(inversedBy: 'companies')]
+    private ?CompanyActivity $activity = null;
+
+    #[ORM\ManyToOne(inversedBy: 'companies')]
+    private ?CompanyCategory $category = null;
 
     public function __construct()
     {
@@ -277,19 +285,7 @@ class Company
 
         return $this;
     }
-
-    public function getActivity(): ?string
-    {
-        return $this->activity;
-    }
-
-    public function setActivity(string $activity): static
-    {
-        $this->activity = $activity;
-
-        return $this;
-    }
-
+    
     /**
      * @return Collection<int, CompanyUser>
      */
@@ -433,6 +429,30 @@ class Company
     public function setPictoImage(string $picto_image): static
     {
         $this->picto_image = $picto_image;
+
+        return $this;
+    }
+
+    public function getActivity(): ?CompanyActivity
+    {
+        return $this->activity;
+    }
+
+    public function setActivity(?CompanyActivity $activity): static
+    {
+        $this->activity = $activity;
+
+        return $this;
+    }
+
+    public function getCategory(): ?CompanyCategory
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?CompanyCategory $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }
