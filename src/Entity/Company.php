@@ -10,6 +10,7 @@ use App\Controller\CompanyWithMostOffers;
 use App\Repository\CompanyRepository;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use App\Enum\WorkforceRange;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -129,6 +130,9 @@ class Company
     #[ORM\ManyToOne(inversedBy: 'companies')]
     private ?CompanyCategory $category = null;
 
+    #[ORM\Column(length: 255, enumType: WorkforceRange::class)]
+    private ?WorkforceRange $workforce_range = null;
+
     public function __construct()
     {
         $this->companyAdministrators = new ArrayCollection();
@@ -136,6 +140,44 @@ class Company
         $this->updated_at            = new DateTimeImmutable();
         $this->offers                = new ArrayCollection();
     }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): static
+    {
+        $this->created_at = new \DateTimeImmutable();
+        $this->setUpdatedAtValue();
+        return $this;
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): static
+    {
+        $this->updated_at = new \DateTimeImmutable();
+        return $this;
+    }
+
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function setWorkforceRangeByWorkforceValue(): static
+    {
+        $workforce = (int) $this->getWorkforce();
+        if ($workforce < 10) {
+            $this->workforce_range = WorkforceRange::lessThanTen;
+        } elseif ($workforce < 50) {
+            $this->workforce_range = WorkforceRange::TenToFifty;
+        } elseif ($workforce < 100) {
+            $this->workforce_range = WorkforceRange::FiftyToHundred;
+        } elseif ($workforce < 250) {
+            $this->workforce_range = WorkforceRange::HundredToTwoHundred;
+        } elseif ($workforce < 1000) {
+            $this->workforce_range = WorkforceRange::TwoHundredToThousand;
+        } else {
+            $this->workforce_range = WorkforceRange::moreThanThousand;
+        }
+
+        return $this;
+    }
+
 
     public function getId(): ?int
     {
@@ -340,21 +382,6 @@ class Company
         return $this;
     }
 
-    #[ORM\PrePersist]
-    public function setCreatedAtValue(): static
-    {
-        $this->created_at = new \DateTimeImmutable();
-        $this->setUpdatedAtValue();
-        return $this;
-    }
-
-    #[ORM\PreUpdate]
-    public function setUpdatedAtValue(): static
-    {
-        $this->updated_at = new \DateTimeImmutable();
-        return $this;
-    }
-
     public function getDeletedAt(): ?\DateTimeImmutable
     {
         return $this->deleted_at;
@@ -454,6 +481,17 @@ class Company
     {
         $this->category = $category;
 
+        return $this;
+    }
+
+    public function getWorkforceRange(): WorkforceRange
+    {
+        return $this->workforce_range;
+    }
+
+    public function setWorkforceRange(WorkforceRange $workforce_range): static
+    {
+        $this->workforce_range = $workforce_range;
         return $this;
     }
 }

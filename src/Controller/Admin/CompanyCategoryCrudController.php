@@ -18,7 +18,8 @@ class CompanyCategoryCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Catégorie')
               
-            ->setEntityLabelInPlural('Catégories');
+            ->setEntityLabelInPlural('Catégories')
+            ->setSearchFields(['name']);
     }
 
     /*

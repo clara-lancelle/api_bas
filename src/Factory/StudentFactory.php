@@ -55,7 +55,7 @@ final class StudentFactory extends ModelFactory
             'email' => self::faker()->email(),
             'firstname' => self::faker()->firstName(),
             'gender' => self::faker()->randomElement(Gender::cases()),
-            'name' => self::faker()->name(),
+            'name' => self::faker()->lastName(),
             'password' => self::faker()->password(),
             'profile_image' => 'usr.png',
             'roles' => ['ROLE_USER'],

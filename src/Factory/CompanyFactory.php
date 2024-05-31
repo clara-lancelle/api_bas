@@ -36,7 +36,10 @@ final class CompanyFactory extends ModelFactory
      *
      * @todo inject services if required
      */
-    public function __construct(private CompanyActivityRepository $companyActivityRepository, private CompanyCategoryRepository $companyCategoryRepository)
+    public function __construct(
+        private CompanyActivityRepository $companyActivityRepository, 
+        private CompanyCategoryRepository $companyCategoryRepository
+        )
     {
         parent::__construct();
     }
@@ -60,6 +63,7 @@ final class CompanyFactory extends ModelFactory
             'name'          => self::faker()->company(),
             'phone_num'     => self::faker()->phoneNumber(),
             'picto_image'   => 'img.png',
+            'workforce' => strval(self::faker()->numberBetween(1, 1500)),
             'siret'         => self::faker()->text(255),
             'social_reason' => self::faker()->text(7),
             'category' => self::faker()->randomElements($categories)[0],

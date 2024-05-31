@@ -3,7 +3,6 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Company;
-use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -19,7 +18,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -41,7 +40,8 @@ class CompanyCrudController extends AbstractCrudController
             ->setEntityLabelInSingular(
                 fn(?Company $company, ?string $pageName) => $company ? $company->getName() : 'Entreprise'
             )
-            ->setEntityLabelInPlural('Entreprises');
+            ->setEntityLabelInPlural('Entreprises')
+            ->setSearchFields(['name', 'description']);
     }
 
 
@@ -50,7 +50,7 @@ class CompanyCrudController extends AbstractCrudController
         return [
             IdField::new('id')->hideOnForm(),
             TextField::new('name', 'Nom'),
-            TextField::new('website_url', 'Site web')->hideOnIndex(),
+            UrlField::new('website_url', 'Site web')->hideOnIndex(),
             ImageField::new('picto_image', 'Pictogramme')
                 ->setUploadedFileNamePattern(
                     fn(UploadedFile $file): string => sprintf('upload_%d_%s.%s', random_int(1, 999), $file->getFilename(), $file->guessExtension())
@@ -65,10 +65,12 @@ class CompanyCrudController extends AbstractCrudController
                 ->setUploadDir('public/assets/images/companies')
                 ->setBasePath('assets/images/companies')
                 ->setRequired($pageName != 'edit'),
+            
             TextField::new('social_reason', 'Statut juridique'),
             TextField::new('siret', 'Siret')->hideOnIndex(),
             AssociationField::new('category', 'Categorie')->setFormTypeOption('choice_label', 'name'),
             AssociationField::new('activity', 'Activite')->setFormTypeOption('choice_label', 'name'),
+            TextField::new('workforce', 'Effectif'),
             TextField::new('address', 'Adresse')->hideOnIndex(),
             NumberField::new('numberOfOffers', 'Nombre d\'offres')->hideOnForm(),
             TextField::new('zip_code', 'Code postal'),
@@ -76,7 +78,6 @@ class CompanyCrudController extends AbstractCrudController
             DateField::new('creation_date', 'Date de création')->hideOnIndex(),
             TextField::new('phone_num', 'Téléphone')->hideOnIndex(),
             TextEditorField::new('description', 'Description')->hideOnIndex(),
-            TextField::new('activity', 'Activité')->hideOnIndex(),
             DateTimeField::new('created_at', 'Crée le')->hideOnIndex()->hideOnForm(),
             DateTimeField::new('updated_at', 'Mis à jour le')->hideOnIndex()->hideOnForm(),
             DateTimeField::new('deleted_at', 'Supprimé le')->hideOnIndex()->hideOnForm(),

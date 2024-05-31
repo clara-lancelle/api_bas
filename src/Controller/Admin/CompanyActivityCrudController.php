@@ -20,7 +20,8 @@ class CompanyActivityCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Activité')
               
-            ->setEntityLabelInPlural('Activités');
+            ->setEntityLabelInPlural('Activités')
+            ->setSearchFields(['name']);
     }
 
     /*
