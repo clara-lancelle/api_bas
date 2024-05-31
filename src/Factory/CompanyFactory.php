@@ -62,7 +62,7 @@ final class CompanyFactory extends ModelFactory
             'phone_num'     => self::faker()->phoneNumber(),
             'picto_image'   => 'img.png',
             'siret'         => self::faker()->text(255),
-            'social_reason' => self::faker()->text(255),
+            'social_reason' => self::faker()->text(7),
             'category' => self::faker()->randomElements($categories)[0],
             'activity' => self::faker()->randomElements($activities)[0],
             'updated_at'    => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
