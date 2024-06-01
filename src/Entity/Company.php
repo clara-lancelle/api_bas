@@ -41,7 +41,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
                 read: false,
             ),
         new Get(),
-        new GetCollection()
+        new GetCollection(
+            uriTemplate: '/companies'
+        ),
     ]
 )]
 
