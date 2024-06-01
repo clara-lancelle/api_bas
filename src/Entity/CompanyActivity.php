@@ -2,20 +2,33 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
 use App\Repository\CompanyActivityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+
+#[ApiResource(
+    operations: [
+        new GetCollection(),
+        new Get(),
+    ]
+)]
 #[ORM\Entity(repositoryClass: CompanyActivityRepository::class)]
 class CompanyActivity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('company')]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('company')]
     private ?string $name = null;
 
     /**

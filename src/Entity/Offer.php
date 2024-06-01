@@ -76,6 +76,7 @@ class Offer
     #[Assert\NotBlank]
     #[Assert\Length(min: 3)]
     #[ORM\Column(length: 255)]
+    #[Groups('company')]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -116,6 +117,7 @@ class Offer
     // -- ENUM
 
     #[ORM\Column(length: 255, enumType: OfferType::class)]
+    #[Groups('company')]
     private ?OfferType $type = null;
 
     #[ORM\Column(length: 255, enumType: StudyLevel::class)]
