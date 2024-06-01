@@ -34,8 +34,8 @@ class JobProfile
     #[Groups('offer')]
     private ?string $color = null;
 
-    #[ORM\ManyToOne(inversedBy: 'job_profiles')]
-    private ?Offer $offer = null;
+    #[ORM\ManyToMany(targetEntity: Offer::class, mappedBy: 'job_profiles', cascade: ["persist"])]
+    private Collection $offers;
 
     /**
      * @var Collection<int, Request>
@@ -46,6 +46,7 @@ class JobProfile
     public function __construct()
     {
         $this->requests = new ArrayCollection();
+        $this->offers = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -83,14 +84,23 @@ class JobProfile
         return $this;
     }
 
-    public function getOffer(): ?Offer
+    public function getOffers(): Collection
     {
-        return $this->offer;
+        return $this->offers;
     }
 
-    public function setOffer(?Offer $offer): static
+    public function addOffer(Offer $offer): static
     {
-        $this->offer = $offer;
+        if (!$this->offers->contains($offer)) {
+            $this->offers->add($offer);
+        }
+
+        return $this;
+    }
+
+    public function removeOffer(Offer $offer): static
+    {
+        $this->offers->removeElement($offer);
 
         return $this;
     }

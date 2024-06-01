@@ -14,9 +14,11 @@ class OfferMission
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('offer')]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('offer')]
     private ?string $text = null;
 
     #[ORM\ManyToOne(inversedBy: 'missions')]

@@ -127,7 +127,8 @@ class Offer
     /**
      * @var Collection<int, JobProfile>
      */
-    #[ORM\OneToMany(targetEntity: JobProfile::class, mappedBy: 'offer')]
+    #[ORM\ManyToMany(targetEntity: JobProfile::class, inversedBy: 'offers', cascade: ["persist"])]
+    #[ORM\JoinTable(name: 'offer_job_profile')]
     #[Groups('offer')]
     private Collection $job_profiles;
 
