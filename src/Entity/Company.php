@@ -2,14 +2,15 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Doctrine\Odm\Filter\OrderFilter;
-use ApiPlatform\Doctrine\Odm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Controller\CompanyWithMostOffers;
 use App\Repository\CompanyRepository;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use App\Controller\WorkforceRanges;
 use App\Enum\WorkforceRange;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -21,6 +22,7 @@ use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
+    normalizationContext: ['groups' => ['company']],
     operations: [
         new Get(
             uriTemplate: '/companies/mostOffersList',
@@ -32,14 +34,25 @@ use Symfony\Component\Serializer\Annotation\Groups;
                 'description' => 'Retourne la liste des 5 entreprises possédant le plus d\'offres actives dans la base de données'
             ]
             ),
+            new GetCollection(
+                uriTemplate: '/companies/workforce_ranges',
+                controller: WorkforceRanges::class,
+                name: 'api_offers_workforce_ranges',
+                read: false,
+            ),
         new Get(),
+        new GetCollection(
+            uriTemplate: '/companies'
+        ),
     ]
 )]
 
-#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'name' => 'exact', 'activities.name', 'categories.name'])]
+
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'name' => 'exact', 'activities', 'categories', 'workforce_range'])]
 #[ApiFilter(OrderFilter::class, properties: ['created_at' => 'ASC', 'name', ], arguments: ['orderParameterName' => 'order'])]
 #[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
+#[Groups('company')]
 class Company
 {
     #[ORM\Id]

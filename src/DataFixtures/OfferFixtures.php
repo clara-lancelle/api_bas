@@ -123,7 +123,7 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
         $offer->addRequiredProfile((new OfferRequiredProfile())->setText('Capacité à résoudre des problèmes techniques complexes'));    
 
 
-        $randProfile = rand(1, count(JobProfileFixtures::data()));
+        $randProfile = rand(1, 3);
         for ($i = 0; $i < $randProfile; $i++) {
             $offer->addJobProfile($this->getReference(JobProfileFixtures::REFERENCE.$i));
         }

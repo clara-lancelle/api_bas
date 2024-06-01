@@ -45,10 +45,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriTemplate: '/offers/durations',
             controller: Durations::class,
             name: 'api_offers_durations',
-            read: false,
-        ),
-        new GetCollection(
-            uriTemplate: '/offers/{id}'
+            read: false,    
         ),
         new GetCollection(
             uriTemplate: '/offers'
@@ -57,7 +54,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ]
 )]
 
-#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'type' => 'exact', 'job_profiles.name' => 'exact', 'duration' => 'exact', 'study_level' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'type' => 'exact', 'job_profiles' => 'exact', 'duration' => 'exact', 'study_level' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['created_at' => 'ASC', 'name', 'application_limit_date' ], arguments: ['orderParameterName' => 'order'])]
 #[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: OfferRepository::class)]
@@ -76,6 +73,7 @@ class Offer
     #[Assert\NotBlank]
     #[Assert\Length(min: 3)]
     #[ORM\Column(length: 255)]
+    #[Groups('company')]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -116,6 +114,7 @@ class Offer
     // -- ENUM
 
     #[ORM\Column(length: 255, enumType: OfferType::class)]
+    #[Groups('company')]
     private ?OfferType $type = null;
 
     #[ORM\Column(length: 255, enumType: StudyLevel::class)]
