@@ -114,12 +114,19 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
         $offer->addMission((new OfferMission())->setText('Collaborer avec des équipes multidisciplinaires pour atteindre les objectifs du projet'));
         $offer->addMission((new OfferMission())->setText('Contribuer à l\'optimisation et à la performance des applications web'));
         $offer->addMission((new OfferMission())->setText('Assister dans la résolution des problèmes techniques et des bugs'));
+
+        
         $offer->addRequiredProfile((new OfferRequiredProfile())->setText('Bonne connaissance des langages web tels que JavaScript, HTML, CSS, et PHP'));
         $offer->addRequiredProfile((new OfferRequiredProfile())->setText('Capacité à travailler de manière autonome et en équipe'));
         $offer->addRequiredProfile((new OfferRequiredProfile())->setText('Expérience avec des systèmes de gestion de version comme Git'));
         $offer->addRequiredProfile((new OfferRequiredProfile())->setText('Connaissance des principes de développement agile'));
         $offer->addRequiredProfile((new OfferRequiredProfile())->setText('Capacité à résoudre des problèmes techniques complexes'));    
-        $offer->addJobProfile($manager->getRepository(JobProfile::class)->findOneBy([], ['id' => 'DESC']));
+
+
+        $randProfile = rand(1, count(JobProfileFixtures::data()));
+        for ($i = 0; $i < $randProfile; $i++) {
+            $offer->addJobProfile($this->getReference(JobProfileFixtures::REFERENCE.$i));
+        }
         $manager->persist($offer);
 
         OfferFactory::createMany(10, [
@@ -128,9 +135,11 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
         ]);
         $manager->flush();
     }
-    public function getDependencies()
+
+    public function getDependencies(): array
     {
         return [
+            JobProfileFixtures::class,
             SkillFixtures::class,
         ];
     }
