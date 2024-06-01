@@ -11,7 +11,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: SkillRepository::class)]
-// #[Groups('offer')]
 class Skill
 {
     #[ORM\Id]
