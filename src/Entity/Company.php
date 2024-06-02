@@ -48,7 +48,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 
 
-#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'name' => 'exact', 'activities', 'categories', 'workforce_range'])]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'name' => 'exact', 'activity', 'category', 'workforce_range'])]
 #[ApiFilter(OrderFilter::class, properties: ['created_at' => 'ASC', 'name', ], arguments: ['orderParameterName' => 'order'])]
 #[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]

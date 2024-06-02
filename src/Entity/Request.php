@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\GetCollection;
 use App\Enum\Duration;
 use App\Enum\OfferType;
 use ApiPlatform\Metadata\Get;
+use App\Controller\LastRequest;
 use App\Enum\StudyLevel;
 use App\Repository\RequestRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -23,6 +24,12 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 #[ApiResource(
     normalizationContext: ['groups' => ['request']],
     operations: [
+        new GetCollection(
+            uriTemplate: '/requests/last',
+            controller: LastRequest::class,
+            name: 'api_requests_last',
+            read: false,
+        ),
         new GetCollection(),
         new Get(),
     ]

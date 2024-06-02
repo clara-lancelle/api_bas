@@ -21,7 +21,7 @@ class RequestRepository extends ServiceEntityRepository
     public function getLastRequests($limit = 8): array
     {
         $requests = $this->createQueryBuilder('r')
-            ->select('r.id', 'r.name', 'r.description', 'r.start_date', 'r.end_date', 'r.type', 's.firstname', 's.birthdate', 's.city', 's.profile_image')
+            ->select('r.id', 'r.name as requestName', 'r.description', 'r.start_date', 'r.end_date', 'r.type', 's.firstname', 's.name', 's.birthdate', 's.city', 's.profile_image')
             ->join('r.student', 's')
             ->orderBy('r.created_at', 'ASC')
             ->setMaxResults($limit)
