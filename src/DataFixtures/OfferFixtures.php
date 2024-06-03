@@ -31,7 +31,7 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
         $offer->setCompany($firstCompany);
         $offer->setName('Assistant Social Media');
         $offer->setStartDate(new \DateTime('2024-09-01'));
-        $offer->setEndDate(new \DateTime('2025-08-31'));
+        $offer->setEndDate(new \DateTime('2025-10-31'));
         $offer->setType(OfferType::Apprenticeship);
         $offer->setStudylevel(StudyLevel::Level3);
         $offer->setDuration(Duration::between2and6months);
@@ -72,7 +72,7 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
         $offer->setRevenue('Entre 1.000€ et 1.300€');
         $offer->setRemote('Télétravail 1 jour par semaine');
         $offer->setAvailablePlace(3);
-        $offer->setApplicationLimitDate(new \DateTime('2024-11-01'));
+        $offer->setApplicationLimitDate(new \DateTime('+3 days'));
         $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'React']));
         $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'JavaScript']));
         $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'Gestion de projet']));
@@ -103,7 +103,7 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
         $offer->setRevenue('Entre 1.000€ et 1.300€');
         $offer->setRemote('Télétravail 1 jour par semaine');
         $offer->setAvailablePlace(3);
-        $offer->setApplicationLimitDate(new \DateTime('2024-08-01'));
+        $offer->setApplicationLimitDate(new \DateTime('+7 days'));
         $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'PHP']));
         $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'MySQL']));
         $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'Gestion de projet']));

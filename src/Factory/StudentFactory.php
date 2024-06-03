@@ -48,7 +48,7 @@ final class StudentFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            'birthdate' => self::faker()->dateTime(),
+            'birthdate' => self::faker()->dateTimeBetween('-30 years', '-15 year'),
             'cellphone' => '0615141615',
             'city' => self::faker()->city(),
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
