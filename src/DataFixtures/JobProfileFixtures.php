@@ -36,10 +36,6 @@ class JobProfileFixtures extends Fixture
         ];
     }
 
-    public function __construct()
-    {
-    }
-
     public function load(ObjectManager $manager)
     {
         foreach (self::data() as $loop => $profileData) {

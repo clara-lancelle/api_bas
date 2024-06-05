@@ -40,7 +40,7 @@ class Skill
         return $this->getName();
     }
 
-        public function getId(): ?int
+    public function getId(): ?int
     {
         return $this->id;
     }

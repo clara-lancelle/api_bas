@@ -22,6 +22,11 @@ class CompanyImage
     #[ORM\ManyToOne(inversedBy: 'companyImages')]
     private ?Company $company = null;
 
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
+    
     public function getId(): ?int
     {
         return $this->id;

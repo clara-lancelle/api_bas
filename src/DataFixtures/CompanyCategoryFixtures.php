@@ -8,9 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class CompanyCategoryFixtures extends Fixture
 {
-    public function __construct()
-    {
-    }
+    public const REFERENCE = 'category_';
 
     public function load(ObjectManager $manager)
     {
@@ -21,10 +19,12 @@ class CompanyCategoryFixtures extends Fixture
            'Association, ONG',
             'Organismes d’état',
         ];
-        foreach ($categories as $category) {
-            $jobProfile = new CompanyCategory();
-            $jobProfile->setName($category);
-            $manager->persist($jobProfile);
+        foreach ($categories as $i => $item) {
+            $category = new CompanyCategory();
+            $category->setName($item);
+            $manager->persist($category);
+
+            $this->addReference(self::REFERENCE.$i, $category);
         }
         $manager->flush();
     }
