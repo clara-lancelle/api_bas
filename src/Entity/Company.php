@@ -152,12 +152,19 @@ class Company
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $schedules = null;
 
+    /**
+     * @var Collection<int, CompanyImage>
+     */
+    #[ORM\OneToMany(targetEntity: CompanyImage::class, mappedBy: 'company', cascade: ["persist"])]
+    private Collection $companyImages;
+
     public function __construct()
     {
         $this->companyAdministrators = new ArrayCollection();
         $this->created_at            = new DateTimeImmutable();
         $this->updated_at            = new DateTimeImmutable();
         $this->offers                = new ArrayCollection();
+        $this->companyImages = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -534,6 +541,36 @@ class Company
     public function setSchedules(?string $schedules): static
     {
         $this->schedules = $schedules;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CompanyImage>
+     */
+    public function getCompanyImages(): Collection
+    {
+        return $this->companyImages;
+    }
+
+    public function addCompanyImage(CompanyImage $companyImage): static
+    {
+        if (!$this->companyImages->contains($companyImage)) {
+            $this->companyImages->add($companyImage);
+            $companyImage->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompanyImage(CompanyImage $companyImage): static
+    {
+        if ($this->companyImages->removeElement($companyImage)) {
+            // set the owning side to null (unless already changed)
+            if ($companyImage->getCompany() === $this) {
+                $companyImage->setCompany(null);
+            }
+        }
 
         return $this;
     }

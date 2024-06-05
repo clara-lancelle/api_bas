@@ -9,9 +9,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class CompanyActivityFixtures extends Fixture
 {
-    public function __construct()
-    {
-    }
+    public const REFERENCE = 'activity_';
 
     public function load(ObjectManager $manager)
     {
@@ -29,10 +27,12 @@ class CompanyActivityFixtures extends Fixture
             'Immobilier, BTP',
             'Média'
         ];
-        foreach ($activities as $activity) {
-            $jobProfile = new CompanyActivity();
-            $jobProfile->setName($activity);
-            $manager->persist($jobProfile);
+        foreach ($activities as $i => $item) {
+            $activity = new CompanyActivity();
+            $activity->setName($item);
+            $manager->persist($activity);
+
+            $this->addReference(self::REFERENCE.$i, $activity);
         }
         $manager->flush();
     }

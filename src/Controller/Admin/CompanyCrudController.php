@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
@@ -65,7 +66,7 @@ class CompanyCrudController extends AbstractCrudController
                 ->setUploadDir('public/assets/images/companies')
                 ->setBasePath('assets/images/companies')
                 ->setRequired($pageName != 'edit'),
-            
+            CollectionField::new('companyImages', 'Images')->useEntryCrudForm(CompanyImageCrudController::class),
             TextField::new('social_reason', 'Statut juridique'),
             TextField::new('siret', 'Siret')->hideOnIndex(),
             AssociationField::new('category', 'Categorie')->setFormTypeOption('choice_label', 'name'),
