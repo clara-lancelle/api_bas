@@ -3,16 +3,12 @@
 namespace App\DataFixtures;
 
 use App\Entity\Company;
-use App\Entity\CompanyActivity;
-use App\Entity\CompanyImage;
 use App\Factory\CompanyFactory;
 use App\Factory\CompanyImageFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Filesystem\Filesystem;
+
 
 class CompanyFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -40,11 +36,11 @@ class CompanyFixtures extends Fixture implements DependentFixtureInterface
             ->setPictoImage($picto)
             ->setLargeImage($largeImage)
         ;
-
         $manager->persist($company);
-        for($i = 0; $i <= 5; $i++) {
-            $company->addCompanyImage(CompanyImageFactory::random()->save()->object());
+        for($i = 1; $i <= 5; $i++) {
+            $company->addCompanyImage(CompanyImageFactory::createOne()->object());        
         }
+        
         $manager->flush();
 
 
@@ -66,10 +62,9 @@ class CompanyFixtures extends Fixture implements DependentFixtureInterface
             ->setLargeImage($db)
             ->setPictoImage($db)
         ;
-
         $manager->persist($company);
-        for($i = 0; $i <= 5; $i++) {
-            $company->addCompanyImage(CompanyImageFactory::random()->save()->object());
+        for($i = 1; $i <= 5; $i++) {
+            $company->addCompanyImage(CompanyImageFactory::createOne()->object());           
         }
         $manager->flush();
 
@@ -91,21 +86,19 @@ class CompanyFixtures extends Fixture implements DependentFixtureInterface
             ->setLargeImage($canva)
             ->setPictoImage($canva);
 
-            $manager->persist($company);
-        for($i = 0; $i <= 5; $i++) {
-            $company->addCompanyImage(CompanyImageFactory::random()->save()->object());        
+        $manager->persist($company);    
+        for($i = 1; $i <= 5; $i++) {
+            $company->addCompanyImage(CompanyImageFactory::createOne()->object());          
         }
-
         $manager->flush();
-        
-        CompanyFactory::createMany(10, fn () => ['companyImages' => CompanyImageFactory::createMany(rand(4, 5))]);
+        CompanyFactory::createMany(10, fn () => ['companyImages' => CompanyImageFactory::createMany(rand(5, 5))]);
     }
 
     public function getDependencies(): array
     {
         return [
             CompanyActivityFixtures::class,
-            CompanyCategoryFixtures::class,
+            CompanyCategoryFixtures::class
         ];
     }
 }
