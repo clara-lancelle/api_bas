@@ -46,6 +46,10 @@ final class CompanyImageFactory extends ModelFactory
         'companyImage2.png',
         'companyImage3.png',
         'companyImage4.png',
+        'companyImage5.png',
+        'companyImage6.png',
+        'companyImage7.png',
+        'companyImage8.png',
     ];
 
     /**
