@@ -55,16 +55,17 @@ final class CompanyFactory extends ModelFactory
         $activities = $this->companyActivityRepository->findAll();
 
         return [
-            'address'       => self::faker()->address(),
+            'address'       => self::faker()->streetAddress(),
+            'additional_address'       => 'Batiment 4C',
             'city'          => self::faker()->city(),
             'created_at'    => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'description'   => self::faker()->text(255),
             'large_image'   => 'img.png',
             'name'          => self::faker()->company(),
-            'phone_num'     => self::faker()->phoneNumber(),
+            'phone_num'     => self::faker()->e164PhoneNumber(),
             'picto_image'   => 'img.png',
             'workforce' => strval(self::faker()->numberBetween(1, 1500)),
-            'siret'         => self::faker()->text(255),
+            'siret'         => self::faker()->numberBetween(00011111111111, 99999999999999),
             'social_reason' => self::faker()->text(7),
             'category' => self::faker()->randomElements($categories)[0],
             'activity' => self::faker()->randomElements($activities)[0],
