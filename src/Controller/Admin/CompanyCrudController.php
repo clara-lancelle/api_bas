@@ -51,7 +51,13 @@ class CompanyCrudController extends AbstractCrudController
         return [
             IdField::new('id')->hideOnForm(),
             TextField::new('name', 'Nom'),
-            UrlField::new('website_url', 'Site web')->hideOnIndex(),
+            TextField::new('social_reason', 'Statut juridique'),
+            TextField::new('siret', 'Siret')->hideOnIndex(),
+            TextField::new('revenue', 'Chiffre d\'affaire')->hideOnIndex(),
+            AssociationField::new('category', 'Categorie')->setFormTypeOption('choice_label', 'name'),
+            AssociationField::new('activity', 'Activite')->setFormTypeOption('choice_label', 'name'),
+            TextField::new('workforce', 'Effectif'),
+            
             ImageField::new('picto_image', 'Pictogramme')
                 ->setUploadedFileNamePattern(
                     fn(UploadedFile $file): string => sprintf('upload_%d_%s.%s', random_int(1, 999), $file->getFilename(), $file->guessExtension())
@@ -67,13 +73,10 @@ class CompanyCrudController extends AbstractCrudController
                 ->setBasePath('assets/images/companies')
                 ->setRequired($pageName != 'edit'),
             CollectionField::new('companyImages', 'Images')->useEntryCrudForm(CompanyImageCrudController::class)->hideOnIndex(),
+
             CollectionField::new('socialLinks', 'lien de vos réseaux sociaux')->useEntryCrudForm(SocialLinkCrudController::class)->hideOnIndex(),
-            TextField::new('social_reason', 'Statut juridique'),
-            TextField::new('siret', 'Siret')->hideOnIndex(),
-            TextField::new('revenue', 'Chiffre d\'affaire')->hideOnIndex(),
-            AssociationField::new('category', 'Categorie')->setFormTypeOption('choice_label', 'name'),
-            AssociationField::new('activity', 'Activite')->setFormTypeOption('choice_label', 'name'),
-            TextField::new('workforce', 'Effectif'),
+            UrlField::new('website_url', 'Site web')->hideOnIndex(),
+            
             NumberField::new('numberOfOffers', 'Nombre d\'offres')->hideOnForm(),
             TextField::new('address', 'Adresse')->hideOnIndex(),
             TextField::new('additional_address', 'Compément d\'adresse')->hideOnIndex(),
@@ -81,6 +84,7 @@ class CompanyCrudController extends AbstractCrudController
             TextField::new('city', 'Ville'),
             DateField::new('creation_date', 'Date de création')->hideOnIndex(),
             TextField::new('phone_num', 'Téléphone')->hideOnIndex(),
+            TextField::new('schedule', 'Horaires')->hideOnIndex(),
             TextEditorField::new('description', 'Description')->hideOnIndex(),
             DateTimeField::new('created_at', 'Crée le')->hideOnIndex()->hideOnForm(),
             DateTimeField::new('updated_at', 'Mis à jour le')->hideOnIndex()->hideOnForm(),

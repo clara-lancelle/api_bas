@@ -32,6 +32,8 @@ class CompanyFixtures extends Fixture implements DependentFixtureInterface
         ->setZipCode('60610')
         ->setCity('La Croix-Saint-Ouen')
         ->setPhoneNum('0344862255')
+        ->setSchedule('Du lundi au mardi de 9h à 17h')
+        ->setCreationDate(new \DateTime('2015-04-01'))
         ->setDescription('Mentalworks est une agence web spécialisée dans la création de sites de sites web, d\'applis mobiles et le développement d\'applications métiers sur-mesure.')
         ->setActivity($this->getReference(CompanyActivityFixtures::REFERENCE.rand(0, 11)))
             ->setCategory($this->getReference(CompanyCategoryFixtures::REFERENCE.rand(0, 4)))
@@ -69,6 +71,8 @@ class CompanyFixtures extends Fixture implements DependentFixtureInterface
             ->setActivity($this->getReference(CompanyActivityFixtures::REFERENCE.rand(0, 11)))
             ->setCategory($this->getReference(CompanyCategoryFixtures::REFERENCE.rand(0, 4)))
             ->setLargeImage($db)
+            ->setSchedule('Du lundi au vendredi de 8h à 15h')
+            ->setCreationDate(new \DateTime('2009-04-01'))
             ->setPictoImage($db)
             ->setRevenue('10512500')
         ;
@@ -100,6 +104,8 @@ class CompanyFixtures extends Fixture implements DependentFixtureInterface
             ->setCategory($this->getReference(CompanyCategoryFixtures::REFERENCE.rand(0, 4)))
             ->setLargeImage($canva)
             ->setPictoImage($canva)
+            ->setSchedule('Du lundi au samedu de 9h à 12h')
+            ->setCreationDate(new \DateTime('2011-12-16'))
             ->setRevenue('854450000')
             ;
 

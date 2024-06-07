@@ -80,9 +80,6 @@ class Company
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $workforce = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $turnover = null;
-
     #[Assert\NotBlank]
     #[Assert\Length(min: 3)]
     #[ORM\Column(length: 255)]
@@ -150,7 +147,7 @@ class Company
     private ?string $additional_address = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $schedules = null;
+    private ?string $schedule = null;
 
     /**
      * @var Collection<int, CompanyImage>
@@ -276,18 +273,6 @@ class Company
     public function setWorkforce(?string $workforce): static
     {
         $this->workforce = $workforce;
-
-        return $this;
-    }
-
-    public function getTurnover(): ?string
-    {
-        return $this->turnover;
-    }
-
-    public function setTurnover(?string $turnover): static
-    {
-        $this->turnover = $turnover;
 
         return $this;
     }
@@ -543,14 +528,14 @@ class Company
         return $this;
     }
 
-    public function getSchedules(): ?string
+    public function getSchedule(): ?string
     {
-        return $this->schedules;
+        return $this->schedule;
     }
 
-    public function setSchedules(?string $schedules): static
+    public function setSchedule(?string $schedule): static
     {
-        $this->schedules = $schedules;
+        $this->schedule = $schedule;
 
         return $this;
     }
