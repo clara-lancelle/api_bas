@@ -37,10 +37,9 @@ final class CompanyFactory extends ModelFactory
      * @todo inject services if required
      */
     public function __construct(
-        private CompanyActivityRepository $companyActivityRepository, 
+        private CompanyActivityRepository $companyActivityRepository,
         private CompanyCategoryRepository $companyCategoryRepository
-        )
-    {
+    ) {
         parent::__construct();
     }
 
@@ -55,23 +54,26 @@ final class CompanyFactory extends ModelFactory
         $activities = $this->companyActivityRepository->findAll();
 
         return [
-            'address'       => self::faker()->streetAddress(),
-            'additional_address'       => 'Batiment 4C',
-            'city'          => self::faker()->city(),
-            'created_at'    => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'description'   => self::faker()->text(255),
-            'large_image'   => 'img.png',
-            'revenue'       => strval(self::faker()->numberBetween(100000, 9999999999)),
-            'name'          => self::faker()->company(),
-            'phone_num'     => self::faker()->e164PhoneNumber(),
-            'picto_image'   => 'img.png',
-            'workforce'     => strval(self::faker()->numberBetween(1, 1500)),
-            'siret'         => self::faker()->numberBetween(00011111111111, 99999999999999),
-            'social_reason' => self::faker()->text(7),
-            'category'      => self::faker()->randomElements($categories)[0],
-            'activity'      => self::faker()->randomElements($activities)[0],
-            'updated_at'    => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'zip_code'      => self::faker()->numberBetween(10000, 99999),
+            'address'            => self::faker()->streetAddress(),
+            'additional_address' => 'Batiment 4C',
+            'city'               => self::faker()->city(),
+            'created_at'         => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+            'website_url'        => self::faker()->url(),
+            'description'        => self::faker()->text(255),
+            'large_image'        => 'img.png',
+            'creation_date'      => self::faker()->dateTime(),
+            'schedule'           => self::faker()->text(30),
+            'revenue'            => strval(self::faker()->numberBetween(100000, 999999999)),
+            'name'               => self::faker()->company(),
+            'phone_num'          => self::faker()->e164PhoneNumber(),
+            'picto_image'        => 'img.png',
+            'workforce'          => strval(self::faker()->numberBetween(1, 1500)),
+            'siret'              => self::faker()->numberBetween(00011111111111, 99999999999999),
+            'social_reason'      => self::faker()->randomElement(['SSII', 'SARL', 'SAS']),
+            'category'           => self::faker()->randomElements($categories)[0],
+            'activity'           => self::faker()->randomElements($activities)[0],
+            'updated_at'         => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+            'zip_code'           => self::faker()->numberBetween(10000, 99999),
         ];
     }
 
