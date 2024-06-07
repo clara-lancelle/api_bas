@@ -71,7 +71,6 @@ final class CompanyFactory extends ModelFactory
             'siret'              => self::faker()->numberBetween(00011111111111, 99999999999999),
             'social_reason'      => self::faker()->randomElement(['SSII', 'SARL', 'SAS']),
             'category'           => self::faker()->randomElements($categories)[0],
-            'activity'           => self::faker()->randomElements($activities)[0],
             'updated_at'         => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'zip_code'           => self::faker()->numberBetween(10000, 99999),
         ];

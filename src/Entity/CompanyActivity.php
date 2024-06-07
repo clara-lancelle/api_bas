@@ -34,7 +34,7 @@ class CompanyActivity
     /**
      * @var Collection<int, Company>
      */
-    #[ORM\OneToMany(targetEntity: Company::class, mappedBy: 'activity')]
+    #[ORM\ManyToMany(targetEntity: Company::class, mappedBy: 'activities')]
     private Collection $companies;
 
     public function __construct()
@@ -75,7 +75,7 @@ class CompanyActivity
     {
         if (!$this->companies->contains($company)) {
             $this->companies->add($company);
-            $company->setActivity($this);
+            $company->addActivity($this);
         }
 
         return $this;
@@ -84,12 +84,10 @@ class CompanyActivity
     public function removeCompany(Company $company): static
     {
         if ($this->companies->removeElement($company)) {
-            // set the owning side to null (unless already changed)
-            if ($company->getActivity() === $this) {
-                $company->setActivity(null);
-            }
+            $company->removeActivity($this);
         }
 
         return $this;
     }
+
 }
