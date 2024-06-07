@@ -66,9 +66,11 @@ class CompanyCrudController extends AbstractCrudController
                 ->setUploadDir('public/assets/images/companies')
                 ->setBasePath('assets/images/companies')
                 ->setRequired($pageName != 'edit'),
-            CollectionField::new('companyImages', 'Images')->useEntryCrudForm(CompanyImageCrudController::class),
+            CollectionField::new('companyImages', 'Images')->useEntryCrudForm(CompanyImageCrudController::class)->hideOnIndex(),
+            CollectionField::new('socialLinks', 'lien de vos réseaux sociaux')->useEntryCrudForm(SocialLinkCrudController::class)->hideOnIndex(),
             TextField::new('social_reason', 'Statut juridique'),
             TextField::new('siret', 'Siret')->hideOnIndex(),
+            TextField::new('revenue', 'Chiffre d\'affaire')->hideOnIndex(),
             AssociationField::new('category', 'Categorie')->setFormTypeOption('choice_label', 'name'),
             AssociationField::new('activity', 'Activite')->setFormTypeOption('choice_label', 'name'),
             TextField::new('workforce', 'Effectif'),

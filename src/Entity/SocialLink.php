@@ -26,6 +26,10 @@ class SocialLink
     #[Groups('company')]
     private ?SocialNetwork $social_network = null;
 
+    public function __toString(): string
+    {
+        return $this->getUrl();
+    }
     public function getId(): ?int
     {
         return $this->id;
