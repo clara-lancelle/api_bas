@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Company;
 use App\Factory\CompanyFactory;
 use App\Factory\CompanyImageFactory;
+use App\Factory\SocialLinkFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -21,25 +22,31 @@ class CompanyFixtures extends Fixture implements DependentFixtureInterface
         $picto      = 'picto_mw.png';
         $company    = new Company();
         $company
-            ->setName('MentalWorks')
-            ->setWebsiteUrl('https://mentalworks.fr/')
-            ->setSocialReason('SARL')
-            ->setSiret('39242018800048')
-            ->setAddress('41 Rue Irene Joliot Curie')
-            ->setAdditionalAddress('bât Millenium 2')
-            ->setWorkforce('22')
-            ->setZipCode('60610')
-            ->setCity('La Croix-Saint-Ouen')
-            ->setPhoneNum('0344862255')
-            ->setDescription('Mentalworks est une agence web spécialisée dans la création de sites de sites web, d\'applis mobiles et le développement d\'applications métiers sur-mesure.')
-            ->setActivity($this->getReference(CompanyActivityFixtures::REFERENCE.rand(0, 11)))
+        ->setName('MentalWorks')
+        ->setWebsiteUrl('https://mentalworks.fr/')
+        ->setSocialReason('SARL')
+        ->setSiret('39242018800048')
+        ->setAddress('41 Rue Irene Joliot Curie')
+        ->setAdditionalAddress('bât Millenium 2')
+        ->setWorkforce('22')
+        ->setZipCode('60610')
+        ->setCity('La Croix-Saint-Ouen')
+        ->setPhoneNum('0344862255')
+        ->setDescription('Mentalworks est une agence web spécialisée dans la création de sites de sites web, d\'applis mobiles et le développement d\'applications métiers sur-mesure.')
+        ->setActivity($this->getReference(CompanyActivityFixtures::REFERENCE.rand(0, 11)))
             ->setCategory($this->getReference(CompanyCategoryFixtures::REFERENCE.rand(0, 4)))
             ->setPictoImage($picto)
             ->setLargeImage($largeImage)
-        ;
-        $manager->persist($company);
+            ->setRevenue('1000000')
+            ;
+            $manager->persist($company);
         for($i = 1; $i <= 5; $i++) {
             $company->addCompanyImage(CompanyImageFactory::createOne()->object());        
+        }
+        for($i = 0; $i <= 3; $i++) {
+            $link = SocialLinkFactory::createOne(['social_network' => $this->getReference(SocialNetworkFixtures::REFERENCE.$i)])->object();
+            
+            $company->addSocialLink($link);        
         }
         
         $manager->flush();
@@ -63,10 +70,15 @@ class CompanyFixtures extends Fixture implements DependentFixtureInterface
             ->setCategory($this->getReference(CompanyCategoryFixtures::REFERENCE.rand(0, 4)))
             ->setLargeImage($db)
             ->setPictoImage($db)
+            ->setRevenue('10512500')
         ;
         $manager->persist($company);
         for($i = 1; $i <= 5; $i++) {
             $company->addCompanyImage(CompanyImageFactory::createOne()->object());           
+        }
+        for($i = 0; $i <= 3; $i++) {
+            $link = SocialLinkFactory::createOne(['social_network' => $this->getReference(SocialNetworkFixtures::REFERENCE.$i)])->object();
+            $company->addSocialLink($link); 
         }
         $manager->flush();
 
@@ -87,21 +99,28 @@ class CompanyFixtures extends Fixture implements DependentFixtureInterface
             ->setActivity($this->getReference(CompanyActivityFixtures::REFERENCE.rand(0, 11)))
             ->setCategory($this->getReference(CompanyCategoryFixtures::REFERENCE.rand(0, 4)))
             ->setLargeImage($canva)
-            ->setPictoImage($canva);
+            ->setPictoImage($canva)
+            ->setRevenue('854450000')
+            ;
 
         $manager->persist($company);    
         for($i = 1; $i <= 5; $i++) {
             $company->addCompanyImage(CompanyImageFactory::createOne()->object());          
         }
+        for($i = 0; $i <= 3; $i++) {
+            $link = SocialLinkFactory::createOne(['social_network' => $this->getReference(SocialNetworkFixtures::REFERENCE.$i)])->object();
+            $company->addSocialLink($link); 
+        }
         $manager->flush();
-        CompanyFactory::createMany(10, fn () => ['companyImages' => CompanyImageFactory::createMany(rand(5, 5))]);
+        CompanyFactory::createMany(10, fn () => ['companyImages' => CompanyImageFactory::createMany(rand(5, 5)), 'social_Links' => SocialLinkFactory::createMany(3, ['social_network' => $this->getReference(SocialNetworkFixtures::REFERENCE.rand(0,3))])]);
     }
 
     public function getDependencies(): array
     {
         return [
             CompanyActivityFixtures::class,
-            CompanyCategoryFixtures::class
+            CompanyCategoryFixtures::class,
+            SocialNetworkFixtures::class
         ];
     }
 }

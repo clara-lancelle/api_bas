@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\CompanyImageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CompanyImageRepository::class)]
 class CompanyImage
@@ -13,9 +14,11 @@ class CompanyImage
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('company')]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
+    #[Groups('company')]
     #[ORM\Column(length: 255)]
     private ?string $path = null;
 

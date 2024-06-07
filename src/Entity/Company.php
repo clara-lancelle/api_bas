@@ -158,6 +158,15 @@ class Company
     #[ORM\OneToMany(targetEntity: CompanyImage::class, mappedBy: 'company', cascade: ["persist"])]
     private Collection $companyImages;
 
+    #[ORM\Column(length: 15)]
+    private ?string $revenue = null;
+
+    /**
+     * @var Collection<int, SocialLink>
+     */
+    #[ORM\OneToMany(targetEntity: SocialLink::class, mappedBy: 'company', cascade: ["persist"])]
+    private Collection $socialLinks;
+
     public function __construct()
     {
         $this->companyAdministrators = new ArrayCollection();
@@ -165,6 +174,7 @@ class Company
         $this->updated_at            = new DateTimeImmutable();
         $this->offers                = new ArrayCollection();
         $this->companyImages = new ArrayCollection();
+        $this->socialLinks = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -569,6 +579,48 @@ class Company
             // set the owning side to null (unless already changed)
             if ($companyImage->getCompany() === $this) {
                 $companyImage->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getRevenue(): ?string
+    {
+        return $this->revenue;
+    }
+
+    public function setRevenue(string $revenue): static
+    {
+        $this->revenue = $revenue;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SocialLink>
+     */
+    public function getSocialLinks(): Collection
+    {
+        return $this->socialLinks;
+    }
+
+    public function addSocialLink(SocialLink $socialLink): static
+    {
+        if (!$this->socialLinks->contains($socialLink)) {
+            $this->socialLinks->add($socialLink);
+            $socialLink->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSocialLink(SocialLink $socialLink): static
+    {
+        if ($this->socialLinks->removeElement($socialLink)) {
+            // set the owning side to null (unless already changed)
+            if ($socialLink->getCompany() === $this) {
+                $socialLink->setCompany(null);
             }
         }
 
