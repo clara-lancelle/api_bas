@@ -48,7 +48,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 
 
-#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'name' => 'exact', 'activity', 'category', 'workforce_range'])]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'name' => 'exact', 'activities', 'category', 'workforce_range'])]
 #[ApiFilter(OrderFilter::class, properties: ['created_at' => 'ASC', 'name', ], arguments: ['orderParameterName' => 'order'])]
 #[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
@@ -134,8 +134,6 @@ class Company
     #[Groups('offer')]
     private ?string $picto_image = null;
 
-    #[ORM\ManyToOne(inversedBy: 'companies')]
-    private ?CompanyActivity $activity = null;
 
     #[ORM\ManyToOne(inversedBy: 'companies')]
     private ?CompanyCategory $category = null;
@@ -164,6 +162,12 @@ class Company
     #[ORM\OneToMany(targetEntity: SocialLink::class, mappedBy: 'company', cascade: ["persist"])]
     private Collection $socialLinks;
 
+    /**
+     * @var Collection<int, CompanyActivity>
+     */
+    #[ORM\ManyToMany(targetEntity: CompanyActivity::class, inversedBy: 'companies')]
+    private Collection $activities;
+
     public function __construct()
     {
         $this->companyAdministrators = new ArrayCollection();
@@ -172,6 +176,7 @@ class Company
         $this->offers                = new ArrayCollection();
         $this->companyImages = new ArrayCollection();
         $this->socialLinks = new ArrayCollection();
+        $this->activities = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -481,18 +486,6 @@ class Company
         return $this;
     }
 
-    public function getActivity(): ?CompanyActivity
-    {
-        return $this->activity;
-    }
-
-    public function setActivity(?CompanyActivity $activity): static
-    {
-        $this->activity = $activity;
-
-        return $this;
-    }
-
     public function getCategory(): ?CompanyCategory
     {
         return $this->category;
@@ -608,6 +601,30 @@ class Company
                 $socialLink->setCompany(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CompanyActivity>
+     */
+    public function getActivities(): Collection
+    {
+        return $this->activities;
+    }
+
+    public function addActivity(CompanyActivity $activity): static
+    {
+        if (!$this->activities->contains($activity)) {
+            $this->activities->add($activity);
+        }
+
+        return $this;
+    }
+
+    public function removeActivity(CompanyActivity $activity): static
+    {
+        $this->activities->removeElement($activity);
 
         return $this;
     }

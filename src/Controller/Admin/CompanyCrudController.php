@@ -55,7 +55,7 @@ class CompanyCrudController extends AbstractCrudController
             TextField::new('siret', 'Siret')->hideOnIndex(),
             TextField::new('revenue', 'Chiffre d\'affaire')->hideOnIndex(),
             AssociationField::new('category', 'Categorie')->setFormTypeOption('choice_label', 'name'),
-            AssociationField::new('activity', 'Activite')->setFormTypeOption('choice_label', 'name'),
+            AssociationField::new('activities', 'Activités')->setFormTypeOption('choice_label', 'name'),
             TextField::new('workforce', 'Effectif'),
             
             ImageField::new('picto_image', 'Pictogramme')
