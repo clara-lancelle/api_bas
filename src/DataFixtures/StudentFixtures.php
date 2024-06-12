@@ -48,7 +48,11 @@ class StudentFixtures extends Fixture
         $user->setZipCode(75002);
         $user->setBirthdate(new \DateTime('2000-04-03'));
         $user->setRoles(['ROLE_USER']);
-        $user->setGender(Gender::Male);
+        $user->setGender(Gender::Male)
+        ->setPersonnalWebsite('http://test.com')
+        ->setHandicap(true)
+        ->setDriverLicense(false)
+        ->setLinkedinPage('http://linkedin.com/test');
         $this->fakeUpload(new File(__DIR__ . '/images/users/'. $avatar));
         $user->setProfileImage($avatar);
         $manager->persist($user);

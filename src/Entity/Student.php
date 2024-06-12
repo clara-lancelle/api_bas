@@ -42,6 +42,18 @@ class Student extends User
     #[ORM\OneToMany(targetEntity: Request::class, mappedBy: 'student')]
     private Collection $requests;
 
+    #[ORM\Column]
+    private ?bool $driver_license = null;
+
+    #[ORM\Column]
+    private ?bool $handicap = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $linkedin_page = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $personnal_website = null;
+
     public function __construct()
     {
         $this->hobbies     = new ArrayCollection();
@@ -189,6 +201,54 @@ class Student extends User
     public function getCalculatedAge() :int
     {
         return ($this->getBirthdate()->diff(new \DateTime()))->days;
+    }
+
+    public function isDriverLicense(): ?bool
+    {
+        return $this->driver_license;
+    }
+
+    public function setDriverLicense(bool $driver_license): static
+    {
+        $this->driver_license = $driver_license;
+
+        return $this;
+    }
+
+    public function isHandicap(): ?bool
+    {
+        return $this->handicap;
+    }
+
+    public function setHandicap(bool $handicap): static
+    {
+        $this->handicap = $handicap;
+
+        return $this;
+    }
+
+    public function getLinkedinPage(): ?string
+    {
+        return $this->linkedin_page;
+    }
+
+    public function setLinkedinPage(?string $linkedin_page): static
+    {
+        $this->linkedin_page = $linkedin_page;
+
+        return $this;
+    }
+
+    public function getPersonnalWebsite(): ?string
+    {
+        return $this->personnal_website;
+    }
+
+    public function setPersonnalWebsite(?string $personnal_website): static
+    {
+        $this->personnal_website = $personnal_website;
+
+        return $this;
     }
 
 }

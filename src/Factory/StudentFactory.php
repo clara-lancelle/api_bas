@@ -61,6 +61,10 @@ final class StudentFactory extends ModelFactory
             'roles' => ['ROLE_USER'],
             'updated_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'zipCode' => '77258',
+            'handicap' => self::faker()->boolean(),
+            'driver_license' => self::faker()->boolean(),
+            'linkedin_page' => self::faker()->url(),
+            'personnal_website' => self::faker()->url(),
         ];
     }
 

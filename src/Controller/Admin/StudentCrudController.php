@@ -19,6 +19,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -76,6 +78,10 @@ class StudentCrudController extends AbstractCrudController
                 })
             ,
             DateField::new('birthdate', 'Anniversaire'),
+            Field::new('driver_license','Permis de conduire')->hideOnDetail(),
+            Field::new('handicap','Handicap')->hideOnDetail(),
+            UrlField::new('personnal_website', 'Site personnel (portfolio, book, ..)')->hideOnDetail(),
+            UrlField::new('linkedin_page', 'Page linkedin')->hideOnDetail(),
             DateTimeField::new('created_at', 'Créé le')->hideOnForm(),
             DateTimeField::new('updated_at', 'Mis à jour le')->hideOnForm(),
             DateTimeField::new('deleted_at', 'Supprimé le')->hideOnIndex()->hideOnForm(),
