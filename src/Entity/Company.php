@@ -6,6 +6,7 @@ use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use App\Controller\CompanyWithMostOffers;
 use App\Repository\CompanyRepository;
 use ApiPlatform\Metadata\Get;
@@ -44,6 +45,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new GetCollection(
             uriTemplate: '/companies'
         ),
+        new Post(),
     ]
 )]
 

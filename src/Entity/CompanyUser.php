@@ -2,10 +2,17 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use App\Repository\CompanyUserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[ApiResource(
+    operations: [
+        new Post(),
+    ]
+)]
 #[ORM\Entity(repositoryClass: CompanyUserRepository::class)]
 class CompanyUser extends User
 {
