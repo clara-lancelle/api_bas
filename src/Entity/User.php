@@ -14,6 +14,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[HasLifecycleCallbacks]
@@ -87,6 +88,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, enumType: Gender::class)]
     private Gender $gender = Gender::Male;
 
+    #[SerializedName('password')]
     private ?string $plainPassword = null;
 
     #[ORM\Column(length: 255, nullable: true)]
