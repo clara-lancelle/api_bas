@@ -49,20 +49,23 @@ class Student extends User
     #[ORM\OneToMany(targetEntity: Request::class, mappedBy: 'student')]
     private Collection $requests;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?bool $driver_license = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?bool $handicap = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Url]
     private ?string $linkedin_page = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Url]
     private ?string $personnal_website = null;
 
     public function __construct()
     {
+        $this->setRoles(['ROLE_USER']);
         $this->hobbies     = new ArrayCollection();
         $this->formations  = new ArrayCollection();
         $this->experiences = new ArrayCollection();
