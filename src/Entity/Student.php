@@ -56,13 +56,16 @@ class Student extends User
     private ?bool $handicap = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Url]
     private ?string $linkedin_page = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Url]
     private ?string $personnal_website = null;
 
     public function __construct()
     {
+        $this->setRoles(['ROLE_USER']);
         $this->hobbies     = new ArrayCollection();
         $this->formations  = new ArrayCollection();
         $this->experiences = new ArrayCollection();

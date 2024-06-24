@@ -63,4 +63,9 @@ class CompanyUser extends User
 
         return $this;
     }
+
+    public function __construct()
+    {
+        $this->setRoles(['ROLE_USER']);
+    }
 }
