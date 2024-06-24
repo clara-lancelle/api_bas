@@ -49,10 +49,10 @@ class Student extends User
     #[ORM\OneToMany(targetEntity: Request::class, mappedBy: 'student')]
     private Collection $requests;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?bool $driver_license = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?bool $handicap = null;
 
     #[ORM\Column(length: 255, nullable: true)]
