@@ -2,6 +2,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use App\Controller\UserSessionInfos;
 use App\Enum\Gender;
 use App\Repository\UserRepository;
 use DateTimeImmutable;
@@ -16,6 +22,17 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
+
+
+#[ApiResource(
+    operations: [
+        new GetCollection(
+            uriTemplate: '/security/users/', 
+        ),
+    ]
+
+)]
+#[ApiFilter(SearchFilter::class, properties: ['email' => 'exact'])]
 
 #[HasLifecycleCallbacks]
 #[UniqueEntity(
