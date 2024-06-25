@@ -11,6 +11,7 @@ use App\Controller\CompanyWithMostOffers;
 use App\Repository\CompanyRepository;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use App\Controller\PersistingUserAndCompany;
 use App\Controller\WorkforceRanges;
 use App\Enum\WorkforceRange;
 use DateTimeImmutable;
@@ -36,7 +37,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             ]
             ),
             new GetCollection(
-                uriTemplate: '/companies/workforce_ranges',
+                uriTemplate: '/companies/workforceRanges',
                 controller: WorkforceRanges::class,
                 name: 'api_offers_workforce_ranges',
                 read: false,
@@ -45,7 +46,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new GetCollection(
             uriTemplate: '/companies'
         ),
-        new Post(),
+        new Post(
+            uriTemplate: '/companies/peristingUserAndCompany',
+            controller: PersistingUserAndCompany::class,
+            name: 'api_companies_persisting_user_and_company',
+        ),
     ]
 )]
 
