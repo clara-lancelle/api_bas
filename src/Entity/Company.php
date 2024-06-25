@@ -78,7 +78,7 @@ class Company
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $website_url = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $social_reason = null;
 
     #[ORM\Column(length: 255)]
@@ -108,7 +108,7 @@ class Company
     #[ORM\Column(length: 255)]
     private ?string $phone_num = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
     #[ORM\OneToMany(targetEntity: CompanyUser::class, mappedBy: 'company', orphanRemoval: true)]
@@ -126,14 +126,14 @@ class Company
     #[ORM\OneToMany(targetEntity: Offer::class, mappedBy: 'company', orphanRemoval: true)]
     private Collection $offers;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Regex(
         pattern: '/\.(jpeg|jpg|png|gif|webp)$/i',
         message: 'Veuillez télécharger un fichier image valide avec l\'une des extensions suivantes : jpeg, jpg, png, gif, webp.'
     )]
     private ?string $large_image = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Regex(
         pattern: '/\.(jpeg|jpg|png|gif|webp)$/i',
         message: 'Veuillez télécharger un fichier image valide avec l\'une des extensions suivantes : jpeg, jpg, png, gif, webp.'
@@ -160,7 +160,7 @@ class Company
     #[ORM\OneToMany(targetEntity: CompanyImage::class, mappedBy: 'company', cascade: ["persist"])]
     private Collection $companyImages;
 
-    #[ORM\Column(length: 15)]
+    #[ORM\Column(length: 15, nullable: true)]
     private ?string $revenue = null;
 
     /**

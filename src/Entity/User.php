@@ -83,14 +83,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 15)]
     private ?string $cellphone = null;
 
-    #[Assert\NotBlank]
     #[Assert\Length(min: 3)]
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Groups('request')]
     private ?string $city = null;
 
     #[Assert\Regex('/^[0-9]{5}$/')]
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $zipCode = null;
 
     #[ORM\Column]
