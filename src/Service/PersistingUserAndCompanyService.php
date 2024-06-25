@@ -80,6 +80,8 @@ class PersistingUserAndCompanyService
 
             $this->entityManager->commit();
 
+            return new JsonResponse(Response::HTTP_CREATED);   
+            
         } catch (\Exception $e) {
             $this->entityManager->rollback();
             throw $e;
