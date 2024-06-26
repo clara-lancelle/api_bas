@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use App\Controller\Durations;
 use App\Controller\OfferCount;
 use App\Controller\StudyLevels;
@@ -52,6 +53,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriTemplate: '/offers'
         ),  
         new Get(),
+        new Post(),
     ]
 )]
 
