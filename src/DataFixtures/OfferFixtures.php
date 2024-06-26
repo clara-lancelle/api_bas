@@ -40,6 +40,7 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
         $offer->setRemote('Télétravail 1 jour par semaine');
         $offer->setAvailablePlace(3);
         $offer->setApplicationLimitDate(new \DateTime('2024-08-01'));
+        $offer->setPublicationDate(new \DateTime('2024-06-01'));
         $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'Canva']));
         $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'Réseaux sociaux']));
         $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'Gestion de projet']));
@@ -73,6 +74,7 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
         $offer->setRemote('Télétravail 1 jour par semaine');
         $offer->setAvailablePlace(3);
         $offer->setApplicationLimitDate(new \DateTime('+3 days'));
+        $offer->setPublicationDate(new \DateTime('2024-06-02'));
         $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'React']));
         $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'JavaScript']));
         $offer->addSkill($manager->getRepository(Skill::class)->findOneBy(['name' => 'Gestion de projet']));

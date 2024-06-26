@@ -17,6 +17,7 @@ use App\Enum\Duration;
 use App\Enum\OfferType;
 use App\Enum\StudyLevel;
 use App\Repository\OfferRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -57,13 +58,13 @@ use Symfony\Component\Validator\Constraints as Assert;
     ]
 )]
 
-#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'type' => 'exact', 'job_profiles' => 'exact','company' => 'exact', 'duration' => 'exact', 'study_level' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'publication_date', 'type' => 'exact', 'job_profiles' => 'exact','company' => 'exact', 'duration' => 'exact', 'study_level' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['created_at' => 'ASC', 'name', 'application_limit_date' ], arguments: ['orderParameterName' => 'order'])]
-#[ApiFilter(DateFilter::class, properties: ['application_limit_date'])]
+#[ApiFilter(DateFilter::class, properties: ['application_limit_date', 'publication_date'])]
 #[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: OfferRepository::class)]
 #[Groups('offer')]
-class Offer
+class Offer 
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -76,7 +77,7 @@ class Offer
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 3)]
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
     #[Groups('company')]
     private ?string $name = null;
 
@@ -127,6 +128,8 @@ class Offer
     #[ORM\Column(length: 255, enumType: Duration::class)]
     private ?Duration $duration = null;
 
+    // END ENUM --
+
     /**
      * @var Collection<int, JobProfile>
      */
@@ -153,8 +156,10 @@ class Offer
     #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'offers')]
     private Collection $skills;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $publication_date = null;
 
-    // END ENUM --
+    private ?bool $publication_bool = false;
 
 
     public function __construct()
@@ -173,6 +178,8 @@ class Offer
     {
         $this->created_at = new \DateTimeImmutable();
         $this->setUpdatedAtValue();
+        $this->publication_date = $this->publication_bool ? new DateTime() : null;
+
         return $this;
     }
 
@@ -180,6 +187,32 @@ class Offer
     public function setUpdatedAtValue(): static
     {
         $this->updated_at = new \DateTimeImmutable();
+        $this->publication_date = $this->publication_bool ? new DateTime() : null;
+
+        return $this;
+    }
+
+    public function getPublicationDate(): ?\DateTimeInterface
+    {
+        return $this->publication_date;
+    }
+
+    public function getPublicationBool(): ?bool
+    {
+        return $this->publication_date ? true : false;
+    }
+
+    public function setPublicationBool(?bool $bool): static
+    {
+        $this->publication_bool = $bool;
+
+        return $this;
+    }
+
+    public function setPublicationDate(?\DateTimeInterface $publication_date): static
+    {
+        $this->publication_date = $publication_date;
+
         return $this;
     }
 
@@ -497,5 +530,4 @@ class Offer
 
         return $this;
     }
-
 }

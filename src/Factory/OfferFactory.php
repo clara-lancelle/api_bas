@@ -71,6 +71,7 @@ final class OfferFactory extends ModelFactory
             'remote'                 => self::faker()->text(20),
             'revenue'                => self::faker()->text(20),
             'start_date'             => self::faker()->dateTimeInInterval('now', '+3 months'),
+            'publication_date'       => self::faker()->dateTimeInInterval('now', '-4 months'),
             'study_level'            => self::faker()->randomElement(StudyLevel::cases()),
             'type'                   => self::faker()->randomElement(OfferType::cases()),
             'skills' => self::faker()->randomElements($skills, self::faker()->numberBetween(1, 6)),
