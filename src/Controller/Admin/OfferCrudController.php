@@ -6,6 +6,7 @@ use App\Entity\Offer;
 use App\Enum\Duration;
 use App\Enum\OfferType;
 use App\Enum\StudyLevel;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -14,6 +15,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
@@ -22,9 +24,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Validator\Constraints\Date;
 
 class OfferCrudController extends AbstractCrudController
 {
@@ -86,6 +90,7 @@ class OfferCrudController extends AbstractCrudController
             AssociationField::new('job_profiles', 'Profil metier')->setFormTypeOption('choice_label', 'name'),
             AssociationField::new('skills', 'Compétences recherchées')->setFormTypeOption('choice_label', 'name'),
             DateField::new('start_date', 'Date de début'),
+            BooleanField::new('publication_bool', 'Voulez-vous publier cette offre ?')->setEmptyData(),
             DateField::new('end_date', 'Date de fin'),
             DateField::new('application_limit_date', 'Date limite de dépôt des candidatures'),
             TextEditorField::new('description', 'Description')->hideOnIndex(),

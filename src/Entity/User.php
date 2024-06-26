@@ -118,6 +118,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $additional_address = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $address = null;
+
     public function __toString(): string
     {
         return $this->getFirstname() . ' ' . $this->getName();
@@ -353,6 +356,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAdditionalAddress(?string $additional_address): static
     {
         $this->additional_address = $additional_address;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?string $address): static
+    {
+        $this->address = $address;
 
         return $this;
     }
