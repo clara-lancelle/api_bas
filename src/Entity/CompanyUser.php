@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -15,10 +17,13 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Post(),
         new Get(),
-        new GetCollection(),
+        new GetCollection(
+             uriTemplate: '/security/company_users/'
+        ),
         new Patch(),
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['email' => 'exact'])]
 #[ORM\Entity(repositoryClass: CompanyUserRepository::class)]
 class CompanyUser extends User
 {

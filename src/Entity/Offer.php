@@ -385,7 +385,7 @@ class Offer
     }
 
     public function getStudylevel(): StudyLevel
-    {
+    {   
         return $this->study_level;
     }
 
