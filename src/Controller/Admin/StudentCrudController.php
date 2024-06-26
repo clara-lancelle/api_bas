@@ -80,6 +80,7 @@ class StudentCrudController extends AbstractCrudController
             DateField::new('birthdate', 'Anniversaire'),
             Field::new('driver_license','Permis de conduire')->hideOnDetail(),
             Field::new('handicap','Handicap')->hideOnDetail(),
+            Field::new('prepared_degree','Diplome préparé')->hideOnDetail(),
             UrlField::new('personnal_website', 'Site personnel (portfolio, book, ..)')->hideOnDetail(),
             UrlField::new('linkedin_page', 'Page linkedin')->hideOnDetail(),
             DateTimeField::new('created_at', 'Créé le')->hideOnForm(),

@@ -63,6 +63,9 @@ class Student extends User
     #[Assert\Url]
     private ?string $personnal_website = null;
 
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $prepared_degree = null;
+
     public function __construct()
     {
         $this->setRoles(['ROLE_USER']);
@@ -257,6 +260,18 @@ class Student extends User
     public function setPersonnalWebsite(?string $personnal_website): static
     {
         $this->personnal_website = $personnal_website;
+
+        return $this;
+    }
+
+    public function getPreparedDegree(): ?string
+    {
+        return $this->prepared_degree;
+    }
+
+    public function setPreparedDegree(?string $prepared_degree): static
+    {
+        $this->prepared_degree = $prepared_degree;
 
         return $this;
     }
