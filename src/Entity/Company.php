@@ -11,6 +11,7 @@ use App\Controller\CompanyWithMostOffers;
 use App\Repository\CompanyRepository;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use App\Controller\PersistingUserAndCompany;
 use App\Controller\WorkforceRanges;
 use App\Enum\WorkforceRange;
@@ -51,6 +52,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             controller: PersistingUserAndCompany::class,
             name: 'api_companies_persisting_user_and_company',
         ),
+        new Patch(),
     ]
 )]
 

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Repository\StudentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,6 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Post(),
+        new Patch()
     ]
 )]
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
