@@ -20,7 +20,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Post(),
-        new Put(),
+        new Put(
+            uriTemplate: '/security/students/{id}',
+            ),
         new GetCollection(
              uriTemplate: '/security/students/', 
         )

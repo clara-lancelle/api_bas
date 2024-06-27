@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\CompanyUserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -20,7 +21,9 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(
              uriTemplate: '/security/company_users/'
         ),
-        new Patch(),
+        new Put(
+             uriTemplate: '/security/company_users/{id}',
+        ),
     ]
 )]
 #[ApiFilter(SearchFilter::class, properties: ['email' => 'exact'])]

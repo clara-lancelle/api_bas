@@ -52,7 +52,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
             controller: PersistingUserAndCompany::class,
             name: 'api_companies_persisting_user_and_company',
         ),
-        new Put(),
+        new Put(
+             uriTemplate: '/security/companies/{id}',
+        ),
     ]
 )]
 
