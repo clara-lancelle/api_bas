@@ -22,7 +22,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Symfony\Component\Validator\Constraints\PasswordStrength;
 
 #[ApiResource(
     operations: [
@@ -64,7 +64,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
-    #[Assert\PasswordStrength]
+    #[Assert\Regex(
+        pattern : '/^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%#*?&])[A-Za-zÀ-ż\d@$!#%*?&]{8,}$/',
+        message : 'Votre mot de passe doit contenir au minimum : 8 caractères, 1 majuscule et 1 caractère spécial.'
+    )]
     #[ORM\Column]
     private ?string $password = null;
 
