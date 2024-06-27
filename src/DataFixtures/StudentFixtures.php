@@ -6,6 +6,9 @@ use App\Entity\Experience;
 use App\Entity\Language;
 use App\Enum\Gender;
 use App\Entity\Student;
+use App\Enum\ExperienceType;
+use App\Enum\LanguageLevel;
+use App\Enum\LanguageName;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -62,15 +65,15 @@ class StudentFixtures extends Fixture
         //Languages
         $lang = new Language();
         $lang
-            ->setName('Français')
-            ->setLevel('B1')
+            ->setName(LanguageName::French)
+            ->setLevel(LanguageLevel::A1)
         ;
 
         //experience
         $exp = new Experience();
         $exp
             ->setCompany('Tesla')
-            ->setType('Stage')
+            ->setType(ExperienceType::Internship)
             ->setYear('2023')
         ;
 

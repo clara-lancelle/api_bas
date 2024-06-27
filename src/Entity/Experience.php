@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\ExperienceType;
 use App\Repository\ExperienceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -31,8 +32,8 @@ class Experience
     #[ORM\Column(length: 255)]
     private ?string $company = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $type = null;
+    #[ORM\Column(length: 255,  enumType: ExperienceType::class)]
+    private ExperienceType $type = ExperienceType::Internship;
 
     #[Assert\Regex('/^((19[0-9]{2})||(201[0-9]{1})||(202[0-4]{1}))$')]
     #[ORM\Column(length: 4)]
@@ -99,12 +100,12 @@ class Experience
         return $this;
     }
 
-    public function getType(): ?string
+    public function getType(): ExperienceType
     {
         return $this->type;
     }
 
-    public function setType(string $type): static
+    public function setType(ExperienceType $type): static
     {
         $this->type = $type;
 
