@@ -35,7 +35,7 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
         $offer->setType(OfferType::Apprenticeship);
         $offer->setStudylevel(StudyLevel::Level3);
         $offer->setDuration(Duration::between2and6months);
-        $offer->setDescription('Mentalworks est à la recherche d\'un(e) assistant(e) en marketing des médias sociaux pour l\'aider à gérer ses réseaux en ligne. Vous serez responsable de la surveillance de nos canaux de médias sociaux, de la création de contenu, de la recherche de moyens efficaces d\'engager la communauté et d\'inciter les autres à s\'engager sur nos canaux.');
+        $offer->setDescription('Mentalworks est à la recherche d\'un(e) assistant(e) en marketing des médias sociaux pour l\'aider à gérer ses réseaux en ligne. Vous serez responsable de la surveillance de nos canaux de médias sociaux, de la création de contenu, de la recherche de moyens efficaces d\'engager la communauté et d\'inciter les autres à s\'engager sur nos canaux. Ce stage vous offrira l\'opportunité de travailler au sein d\'une équipe dynamique et innovante, de développer vos compétences en marketing digital et de jouer un rôle clé dans l\'expansion de notre présence en ligne. Vous participerez également à l\'analyse des performances des campagnes, à la gestion des calendriers de publication, et à l\'exploration de nouvelles stratégies pour augmenter notre visibilité et notre engagement. Si vous êtes passionné(e) par les médias sociaux, créatif(ve) et désireux(se) d\'apprendre dans un environnement stimulant, nous serions ravis de vous accueillir au sein de notre équipe pour cette expérience enrichissante.');
         $offer->setRevenue('Entre 1.000€ et 1.300€');
         $offer->setRemote('Télétravail 1 jour par semaine');
         $offer->setAvailablePlace(3);
@@ -69,7 +69,7 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
         $offer->setType(OfferType::Internship);
         $offer->setStudylevel(StudyLevel::Level1);
         $offer->setDuration(Duration::between6and12months);
-        $offer->setDescription('Stage de plusieurs mois a sein de l\'équipe de développement.');
+        $offer->setDescription('Nous recherchons un(e) stagiaire motivé(e) pour rejoindre notre équipe de développement pour une durée de plusieurs mois. Ce stage vous offrira l\'opportunité de travailler sur des projets innovants, de collaborer avec des développeurs expérimentés et de contribuer activement à la création de solutions techniques de pointe. Vous participerez à toutes les phases du développement, de la conception à la mise en production, et aurez l\'occasion de développer vos compétences en programmation, en résolution de problèmes et en gestion de projet. Ce stage est une excellente opportunité pour enrichir votre expérience professionnelle et pour découvrir les meilleures pratiques de développement dans un environnement dynamique et stimulant. Si vous êtes passionné(e) par le développement logiciel et que vous souhaitez apprendre et évoluer dans une entreprise à la pointe de la technologie, nous serions ravis de vous accueillir au sein de notre équipe. ');
         $offer->setRevenue('Entre 1.000€ et 1.300€');
         $offer->setRemote('Télétravail 1 jour par semaine');
         $offer->setAvailablePlace(3);
@@ -101,7 +101,7 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
         $offer->setType(OfferType::Internship);
         $offer->setStudylevel(StudyLevel::Level4);
         $offer->setDuration(Duration::between6and12months);
-        $offer->setDescription('Stage de plusieurs mois a sein de l\'équipe de développement.');
+        $offer->setDescription('Nous recherchons un(e) stagiaire motivé(e) pour rejoindre notre équipe de développement pour une durée de plusieurs mois. Ce stage vous offrira l\'opportunité de travailler sur des projets innovants, de collaborer avec des développeurs expérimentés et de contribuer activement à la création de solutions techniques de pointe. Vous participerez à toutes les phases du développement, de la conception à la mise en production, et aurez l\'occasion de développer vos compétences en programmation, en résolution de problèmes et en gestion de projet. Ce stage est une excellente opportunité pour enrichir votre expérience professionnelle et pour découvrir les meilleures pratiques de développement dans un environnement dynamique et stimulant. Si vous êtes passionné(e) par le développement logiciel et que vous souhaitez apprendre et évoluer dans une entreprise à la pointe de la technologie, nous serions ravis de vous accueillir au sein de notre équipe.');
         $offer->setRevenue('Entre 1.000€ et 1.300€');
         $offer->setRemote('Télétravail 1 jour par semaine');
         $offer->setAvailablePlace(3);
