@@ -64,7 +64,7 @@ final class OfferFactory extends ModelFactory
             'application_limit_date' => self::faker()->dateTimeInInterval('+1 day', '+2 month'),
             'available_place'        => self::faker()->numberBetween(0, 50),
             'company'                => self::faker()->randomElements($companies)[0],
-            'description'            => self::faker()->text(255),
+            'description'            => self::faker()->text(310),
             'duration'               => self::faker()->randomElement(Duration::cases()),
             'end_date'               => self::faker()->dateTimeInInterval('+3 months, +2 years'),
             'name'                   => self::faker()->jobTitle(),

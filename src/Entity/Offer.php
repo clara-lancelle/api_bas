@@ -86,11 +86,12 @@ class Offer
     private ?\DateTimeInterface $start_date = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\GreaterThan(propertyPath: 'startDate')]
     #[Context([DateTimeNormalizer::FORMAT_KEY => 'd/m/Y'])]
     private ?\DateTimeInterface $end_date = null;
 
     #[Assert\NotBlank]
-    #[Assert\Length(min: 3)]
+    #[Assert\Length(min: 300)]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
@@ -113,6 +114,7 @@ class Offer
     private ?\DateTimeImmutable $deleted_at = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\LessThan(propertyPath: 'startDate')]
     #[Context([DateTimeNormalizer::FORMAT_KEY => 'd/m/Y'])]
     private ?\DateTimeInterface $application_limit_date = null;
 
@@ -385,7 +387,7 @@ class Offer
     }
 
     public function getStudylevel(): StudyLevel
-    {   
+    {
         return $this->study_level;
     }
 
