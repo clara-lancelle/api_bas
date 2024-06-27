@@ -42,9 +42,7 @@ class CompanyUserCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular(
-                fn(?CompanyUser $companyUser, ?string $pageName) => $companyUser ? $companyUser->__toString() : 'Administrateur d\'entreprise'
-            )
+            ->setEntityLabelInSingular('Administrateur d\'entreprise')
             ->setEntityLabelInPlural('Administrateurs d\'entreprise')
             ->setSearchFields(['firstname', 'name', 'email', 'city', 'company.name']);
     }

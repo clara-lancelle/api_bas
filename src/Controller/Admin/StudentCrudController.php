@@ -43,7 +43,7 @@ class StudentCrudController extends AbstractCrudController
     {
         return $crud
             ->setEntityLabelInSingular(
-                fn(?Student $student, ?string $pageName) => $student ? $student->__toString() : 'Etudiant'
+                'Etudiant'
             )
             ->setEntityLabelInPlural('Etudiants')
             ->setSearchFields(['firstname', 'name', 'email', 'city']);

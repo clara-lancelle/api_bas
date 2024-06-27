@@ -64,10 +64,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
-    #[Assert\Regex(
-        pattern : '/^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%#*?&])[A-Za-zÀ-ż\d@$!#%*?&]{8,}$/',
-        message : 'Votre mot de passe doit contenir au minimum : 8 caractères, 1 majuscule et 1 caractère spécial.'
-    )]
     #[ORM\Column]
     private ?string $password = null;
 
@@ -108,6 +104,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Gender $gender = Gender::Male;
 
     #[SerializedName('password')]
+    #[Assert\Regex(
+        pattern : '/^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%#*?&])[A-Za-zÀ-ż\d@$!#%*?&]{8,}$/',
+        message : 'Votre mot de passe doit contenir au minimum : 8 caractères, 1 majuscule et un caractère spécial'
+    )]
     private ?string $plainPassword = null;
 
     #[ORM\Column(length: 255, nullable: true)]
