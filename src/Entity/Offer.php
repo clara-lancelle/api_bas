@@ -69,6 +69,7 @@ class Offer
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('student')]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'offers')]
@@ -78,7 +79,7 @@ class Offer
     #[Assert\NotBlank]
     #[Assert\Length(min: 3)]
     #[ORM\Column(length: 50)]
-    #[Groups('company')]
+    #[Groups(['student', 'company'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]

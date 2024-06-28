@@ -23,11 +23,11 @@ class Skill
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('offer')]
+    #[Groups(['offer', 'student'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups('offer')]
+    #[Groups(['offer', 'student'])]
     private ?string $name = null;
 
     /**
