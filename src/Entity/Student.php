@@ -8,6 +8,8 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Enum\StudyLevel;
+use App\Enum\StudyYears;
 use App\Repository\StudentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -61,8 +63,11 @@ class Student extends User
     #[Assert\Url]
     private ?string $personnal_website = null;
 
-    #[ORM\Column(length: 100, nullable: true)]
-    private ?string $prepared_degree = null;
+    #[ORM\Column(length: 100, nullable: true, enumType: StudyLevel::class)]
+    private StudyLevel $prepared_degree = StudyLevel::Level1;
+
+     #[ORM\Column(length: 255, nullable: true)]
+    private ?string $school_name = null;
 
     /**
      * @var Collection<int, Application>
@@ -72,6 +77,9 @@ class Student extends User
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $cv = null;
+
+    #[ORM\Column(length: 255, enumType: StudyYears::class)]
+    private StudyYears $study_years = StudyYears::bac0;
 
     public function __construct()
     {
@@ -210,12 +218,12 @@ class Student extends User
         return $this;
     }
 
-    public function getPreparedDegree(): ?string
+    public function getPreparedDegree(): StudyLevel
     {
         return $this->prepared_degree;
     }
 
-    public function setPreparedDegree(?string $prepared_degree): static
+    public function setPreparedDegree(StudyLevel $prepared_degree): static
     {
         $this->prepared_degree = $prepared_degree;
 
@@ -260,6 +268,31 @@ class Student extends User
     public function setCv(?string $cv): static
     {
         $this->cv = $cv;
+
+        return $this;
+    }
+
+    public function getStudyYears(): StudyYears
+    {
+        return $this->study_years;
+    }
+
+    public function setStudyYears(StudyYears $study_years): static
+    {
+        $this->study_years = $study_years;
+
+        return $this;
+    }
+
+
+    public function getSchoolName(): ?string
+    {
+        return $this->school_name;
+    }
+
+    public function setSchoolName(?string $school_name): static
+    {
+        $this->school_name = $school_name;
 
         return $this;
     }
