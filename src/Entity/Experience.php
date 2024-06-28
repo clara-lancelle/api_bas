@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[HasLifecycleCallbacks]
@@ -17,6 +18,7 @@ class Experience
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('student')]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'experiences')]
@@ -30,13 +32,16 @@ class Experience
     private Collection $applications;
 
     #[ORM\Column(length: 255)]
+    #[Groups('student')]
     private ?string $company = null;
 
     #[ORM\Column(length: 255,  enumType: ExperienceType::class)]
+    #[Groups('student')]
     private ExperienceType $type = ExperienceType::Internship;
 
     #[Assert\Regex('/^((19[0-9]{2})||(201[0-9]{1})||(202[0-4]{1}))$')]
     #[ORM\Column(length: 4)]
+    #[Groups('student')]
     private ?string $year = null;
 
     public function __construct()
