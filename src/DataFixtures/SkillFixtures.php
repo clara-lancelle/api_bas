@@ -8,13 +8,14 @@ use Doctrine\Persistence\ObjectManager;
 
 class SkillFixtures extends Fixture
 {
+    public const REFERENCE = 'skill_';
     public function __construct()
     {
     }
 
-    public function load(ObjectManager $manager)
+    public static function data(): array
     {
-        $skills = [
+        return [
             'Canva',
             'Réseaux sociaux',
             'Java',
@@ -62,10 +63,15 @@ class SkillFixtures extends Fixture
             'Gestion financière',
             'Analyse commerciale'
         ];
-        foreach ($skills as $item) {
+    }
+
+    public function load(ObjectManager $manager)
+    {
+        foreach (self::data() as $i => $item) {
             $skill = new Skill();
             $skill->setName($item);
             $manager->persist($skill);
+            $this->setReference(self::REFERENCE.$i, $skill);
         }
         $manager->flush();
     }

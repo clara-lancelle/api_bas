@@ -142,6 +142,7 @@ class OfferFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             JobProfileFixtures::class,
+            CompanyFixtures::class,
             SkillFixtures::class,
         ];
     }

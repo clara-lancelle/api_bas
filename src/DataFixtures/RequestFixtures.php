@@ -22,16 +22,6 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
-        $students = $manager->getRepository(Student::class)->findAll();
-
-        if (empty($students)) {
-            throw new \Exception('No students found in the database.');
-        }
-
-        // Helper function to get a random student
-        $getRandomStudent = function () use ($students) {
-            return $students[array_rand($students)];
-        };
 
       // Creating the first request
       RequestFactory::createOne([

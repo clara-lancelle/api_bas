@@ -20,7 +20,7 @@ class Experience
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'experiences')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Student $student = null;
 
     /**
