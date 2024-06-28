@@ -42,9 +42,6 @@ class Application
     #[ORM\Column(length: 255)]
     private ?string $cover_letter = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $school_name = null;
-
     /**
      * @var Collection<int, Skill>
      */
@@ -54,7 +51,7 @@ class Application
     /**
      * @var Collection<int, Experience>
      */
-    #[ORM\ManyToMany(targetEntity: Experience::class, inversedBy: 'applications')]
+    #[ORM\ManyToMany(targetEntity: Experience::class, inversedBy: 'applications',  cascade: ["persist"])]
     private Collection $experiences;
 
     public function __construct()
@@ -112,18 +109,6 @@ class Application
     public function setCoverLetter(string $cover_letter): static
     {
         $this->cover_letter = $cover_letter;
-
-        return $this;
-    }
-
-    public function getSchoolName(): ?string
-    {
-        return $this->school_name;
-    }
-
-    public function setSchoolName(?string $school_name): static
-    {
-        $this->school_name = $school_name;
 
         return $this;
     }

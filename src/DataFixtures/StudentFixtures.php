@@ -9,6 +9,8 @@ use App\Entity\Student;
 use App\Enum\ExperienceType;
 use App\Enum\LanguageLevel;
 use App\Enum\LanguageName;
+use App\Enum\StudyLevel;
+use App\Enum\StudyYears;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -56,6 +58,9 @@ class StudentFixtures extends Fixture
             ->setHandicap(true)
             ->setDriverLicense(false)
             ->setLinkedinPage('http://linkedin.com/test')
+            ->setSchoolName('ESGI')
+            ->setPreparedDegree(StudyLevel::Level1)
+            ->setStudyYears(StudyYears::bac1)
             ;
         $this->fakeUpload(new File(__DIR__ . '/images/users/'. $avatar));
         $user->setProfileImage($avatar);

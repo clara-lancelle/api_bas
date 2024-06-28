@@ -35,7 +35,6 @@ class ApplicationFixtures extends Fixture implements DependentFixtureInterface
         $app
             ->setStudent(StudentFactory::createOne()->object())
             ->setMotivations('')
-            ->setSchoolName('ESGI')
             ->setOffer(OfferFactory::createOne()->object())
             ->setCoverLetter('Lettre-de-motivation.pdf')
             ->addExperience($exp)
@@ -51,6 +50,7 @@ class ApplicationFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             StudentFixtures::class,
+            SkillFixtures::class,
             OfferFixtures::class
         ];
     }

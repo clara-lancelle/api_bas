@@ -5,6 +5,8 @@ namespace App\Controller\Admin;
 use App\Enum\Gender;
 use App\Entity\Student;
 use App\Entity\User;
+use App\Enum\StudyLevel;
+use App\Enum\StudyYears;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -80,7 +82,29 @@ class StudentCrudController extends AbstractCrudController
             DateField::new('birthdate', 'Anniversaire'),
             Field::new('driver_license','Permis de conduire')->hideOnDetail(),
             Field::new('handicap','Handicap')->hideOnDetail(),
-            Field::new('prepared_degree','Diplome préparé')->hideOnDetail(),
+            Field::new('prepared_degree','Diplome préparé')->setFormType(EnumType::class)
+                ->setFormTypeOptions([
+                    'class'        => StudyLevel::class,
+                    'choice_label' => static function (StudyLevel $choice): string {
+                        return $choice->value;
+                    }
+                ])
+                ->formatValue(function (StudyLevel $choice): string {
+                    return $choice->value;
+                })
+            ,
+            Field::new('school_name', 'Nom de l\'établissement')->hideOnDetail(),
+            ChoiceField::new('study_years', 'Années d\'études')->setFormType(EnumType::class)
+                ->setFormTypeOptions([
+                    'class'        => StudyYears::class,
+                    'choice_label' => static function (StudyYears $choice): string {
+                        return $choice->value;
+                    }
+                ])
+                ->formatValue(function (StudyYears $choice): string {
+                    return $choice->value;
+                })
+            ,
             UrlField::new('personnal_website', 'Site personnel (portfolio, book, ..)')->hideOnDetail(),
             UrlField::new('linkedin_page', 'Page linkedin')->hideOnDetail(),
             DateTimeField::new('created_at', 'Créé le')->hideOnForm(),

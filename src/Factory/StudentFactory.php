@@ -5,6 +5,8 @@ namespace App\Factory;
 use App\Entity\Student;
 use App\Entity\User;
 use App\Enum\Gender;
+use App\Enum\StudyLevel;
+use App\Enum\StudyYears;
 use App\Repository\StudentRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Zenstruck\Foundry\ModelFactory;
@@ -67,6 +69,9 @@ final class StudentFactory extends ModelFactory
             'driver_license' => self::faker()->boolean(),
             'linkedin_page' => self::faker()->url(),
             'personnal_website' => self::faker()->url(),
+            'prepared_degree' => self::faker()->randomElement(StudyLevel::cases()),
+            'study_years' => self::faker()->randomElement(StudyYears::cases()),
+            'school_name' => self::faker()->name()
         ];
     }
 
