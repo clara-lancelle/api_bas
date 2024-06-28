@@ -13,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
@@ -107,6 +108,7 @@ class StudentCrudController extends AbstractCrudController
             ,
             UrlField::new('personnal_website', 'Site personnel (portfolio, book, ..)')->hideOnDetail(),
             UrlField::new('linkedin_page', 'Page linkedin')->hideOnDetail(),
+            AssociationField::new('skills', 'Compétences')->setFormTypeOption('choice_label', 'name'),
             DateTimeField::new('created_at', 'Créé le')->hideOnForm(),
             DateTimeField::new('updated_at', 'Mis à jour le')->hideOnForm(),
             DateTimeField::new('deleted_at', 'Supprimé le')->hideOnIndex()->hideOnForm(),

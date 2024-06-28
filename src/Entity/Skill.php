@@ -42,11 +42,18 @@ class Skill
     #[ORM\ManyToMany(targetEntity: Application::class, mappedBy: 'skills')]
     private Collection $applications;
 
+    /**
+     * @var Collection<int, Student>
+     */
+    #[ORM\ManyToMany(targetEntity: Student::class, mappedBy: 'skills')]
+    private Collection $students;
+
    
     public function __construct()
     {
         $this->offers = new ArrayCollection();
         $this->applications = new ArrayCollection();
+        $this->students = new ArrayCollection();
     }   
 
     public function __toString(): string
@@ -120,6 +127,33 @@ class Skill
     {
         if ($this->applications->removeElement($application)) {
             $application->removeSkill($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Student>
+     */
+    public function getStudents(): Collection
+    {
+        return $this->students;
+    }
+
+    public function addStudent(Student $student): static
+    {
+        if (!$this->students->contains($student)) {
+            $this->students->add($student);
+            $student->addSkill($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStudent(Student $student): static
+    {
+        if ($this->students->removeElement($student)) {
+            $student->removeSkill($this);
         }
 
         return $this;
