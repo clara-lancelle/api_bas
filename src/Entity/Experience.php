@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use App\Controller\ExperienceTypes;
 use App\Enum\ExperienceType;
 use App\Repository\ExperienceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -10,6 +13,17 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+
+#[ApiResource(
+    operations: [
+        new GetCollection(
+            uriTemplate: '/experiences/types',
+            controller: ExperienceTypes::class,
+            name: 'api_experiences_types',
+            read: false,
+        ),
+    ]
+)]
 
 #[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: ExperienceRepository::class)]
