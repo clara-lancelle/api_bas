@@ -16,7 +16,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 #[ApiResource(
     operations: [
         new Post(),
@@ -35,18 +34,6 @@ class Student extends User
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $birthdate = null;
-
-    /**
-     * @var Collection<int, Hobbie>
-     */
-    #[ORM\OneToMany(targetEntity: Hobbie::class, mappedBy: 'student', orphanRemoval: true)]
-    private Collection $hobbies;
-
-    /**
-     * @var Collection<int, Formation>
-     */
-    #[ORM\OneToMany(targetEntity: Formation::class, mappedBy: 'student', orphanRemoval: true)]
-    private Collection $formations;
 
     /**
      * @var Collection<int, Experience>
@@ -77,13 +64,21 @@ class Student extends User
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $prepared_degree = null;
 
+    /**
+     * @var Collection<int, Application>
+     */
+    #[ORM\OneToMany(targetEntity: Application::class, mappedBy: 'student', orphanRemoval: true)]
+    private Collection $applications;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $cv = null;
+
     public function __construct()
     {
         $this->setRoles(['ROLE_USER']);
-        $this->hobbies     = new ArrayCollection();
-        $this->formations  = new ArrayCollection();
         $this->experiences = new ArrayCollection();
         $this->requests = new ArrayCollection();
+        $this->applications = new ArrayCollection();
     }
 
     public function getBirthdate(): ?\DateTime
@@ -94,66 +89,6 @@ class Student extends User
     public function setBirthdate(?\DateTime $birthdate): static
     {
         $this->birthdate = $birthdate;
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Hobbie>
-     */
-    public function getHobbies(): Collection
-    {
-        return $this->hobbies;
-    }
-
-    public function addHobby(Hobbie $hobby): static
-    {
-        if (!$this->hobbies->contains($hobby)) {
-            $this->hobbies->add($hobby);
-            $hobby->setStudent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeHobby(Hobbie $hobby): static
-    {
-        if ($this->hobbies->removeElement($hobby)) {
-            // set the owning side to null (unless already changed)
-            if ($hobby->getStudent() === $this) {
-                $hobby->setStudent(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Formation>
-     */
-    public function getFormations(): Collection
-    {
-        return $this->formations;
-    }
-
-    public function addFormation(Formation $formation): static
-    {
-        if (!$this->formations->contains($formation)) {
-            $this->formations->add($formation);
-            $formation->setStudent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFormation(Formation $formation): static
-    {
-        if ($this->formations->removeElement($formation)) {
-            // set the owning side to null (unless already changed)
-            if ($formation->getStudent() === $this) {
-                $formation->setStudent(null);
-            }
-        }
-
         return $this;
     }
 
@@ -283,6 +218,48 @@ class Student extends User
     public function setPreparedDegree(?string $prepared_degree): static
     {
         $this->prepared_degree = $prepared_degree;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Application>
+     */
+    public function getApplications(): Collection
+    {
+        return $this->applications;
+    }
+
+    public function addApplication(Application $application): static
+    {
+        if (!$this->applications->contains($application)) {
+            $this->applications->add($application);
+            $application->setStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApplication(Application $application): static
+    {
+        if ($this->applications->removeElement($application)) {
+            // set the owning side to null (unless already changed)
+            if ($application->getStudent() === $this) {
+                $application->setStudent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCv(): ?string
+    {
+        return $this->cv;
+    }
+
+    public function setCv(?string $cv): static
+    {
+        $this->cv = $cv;
 
         return $this;
     }

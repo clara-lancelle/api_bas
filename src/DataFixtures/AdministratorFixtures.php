@@ -6,13 +6,12 @@ use App\Entity\Administrator;
 use App\Enum\Gender;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AdministratorFixtures extends Fixture
 {
 
-    public function __construct(private UserPasswordHasherInterface $hasher, private EntityManagerInterface $entityManager)
+    public function __construct(private UserPasswordHasherInterface $hasher)
     {
     }
 

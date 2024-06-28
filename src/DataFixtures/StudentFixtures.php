@@ -3,10 +3,12 @@
 namespace App\DataFixtures;
 
 use App\Entity\Experience;
-use App\Entity\Formation;
+use App\Entity\Language;
 use App\Enum\Gender;
-use App\Entity\Hobbie;
 use App\Entity\Student;
+use App\Enum\ExperienceType;
+use App\Enum\LanguageLevel;
+use App\Enum\LanguageName;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -38,54 +40,45 @@ class StudentFixtures extends Fixture
         //Student
         $avatar = 'avatar.png';
         $user = new Student();
-        $user->setName('student');
-        $user->setFirstname('test');
-        $user->setEmail('student@test.com');
         $password = $this->hasher->hashPassword($user, 'pass_student_1234');
-        $user->setPassword($password);
-        $user->setCellphone("0164025663");
-        $user->setCity('paris');
-        $user->setZipCode(75002);
-        $user->setBirthdate(new \DateTime('2000-04-03'));
-        $user->setRoles(['ROLE_USER']);
-        $user->setGender(Gender::Male)
-        ->setPersonnalWebsite('http://test.com')
-        ->setHandicap(true)
-        ->setDriverLicense(false)
-        ->setLinkedinPage('http://linkedin.com/test');
+        $user
+            ->setName('student')
+            ->setFirstname('test')
+            ->setEmail('student@test.com')
+            ->setPassword($password)
+            ->setCellphone("0164025663")
+            ->setCity('paris')
+            ->setZipCode(75002)
+            ->setBirthdate(new \DateTime('2000-04-03'))
+            ->setRoles(['ROLE_USER'])
+            ->setGender(Gender::Male)
+            ->setPersonnalWebsite('http://test.com')
+            ->setHandicap(true)
+            ->setDriverLicense(false)
+            ->setLinkedinPage('http://linkedin.com/test')
+            ;
         $this->fakeUpload(new File(__DIR__ . '/images/users/'. $avatar));
         $user->setProfileImage($avatar);
         $manager->persist($user);
         $manager->flush();
 
-
-        //hobbie
-        $hobbie = new Hobbie();
-        $hobbie->setName('Football');
-        $hobbie->setStartDate(new \DateTime('2010-04-03'));
-        $hobbie->setStudent($user);
-        $manager->persist($hobbie);
-        $manager->flush();
+        //Languages
+        $lang = new Language();
+        $lang
+            ->setName(LanguageName::French)
+            ->setLevel(LanguageLevel::A1)
+        ;
 
         //experience
         $exp = new Experience();
-        $exp->setCompanyName('Tesla');
-        $exp->setPosition('developpeur');
-        $exp->setDescription('lorem ipsum dolor sit..');
-        $exp->setStartDate(new \DateTime('2020-04-03'));
-        $exp->setEndDate(new \DateTime('2020-10-11'));
+        $exp
+            ->setCompany('Tesla')
+            ->setType(ExperienceType::Internship)
+            ->setYear('2023')
+        ;
+
         $exp->setStudent($user);
         $manager->persist($exp);
-        $manager->flush();
-
-        //formation
-        $form = new Formation();
-        $form->setSchoolName('St Vincent');
-        $form->setName('Licence informatique');
-        $form->setLevel('Licence');
-        $form->setStartDate(new \DateTime('2020-10-11'));
-        $form->setStudent($user);
-        $manager->persist($form);
         $manager->flush();
 
         $this->fakeUpload(new File(__DIR__ . '/images/users/usr.png'));
