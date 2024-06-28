@@ -81,12 +81,26 @@ class Student extends User
     #[ORM\Column(length: 255, enumType: StudyYears::class)]
     private StudyYears $study_years = StudyYears::bac0;
 
+    /**
+     * @var Collection<int, Language>
+     */
+    #[ORM\ManyToMany(targetEntity: Language::class, inversedBy: 'students')]
+    private Collection $languages;
+
+    /**
+     * @var Collection<int, Skill>
+     */
+    #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'students')]
+    private Collection $skills;
+
     public function __construct()
     {
         $this->setRoles(['ROLE_USER']);
         $this->experiences = new ArrayCollection();
         $this->requests = new ArrayCollection();
         $this->applications = new ArrayCollection();
+        $this->languages = new ArrayCollection();
+        $this->skills = new ArrayCollection();
     }
 
     public function getBirthdate(): ?\DateTime
@@ -293,6 +307,54 @@ class Student extends User
     public function setSchoolName(?string $school_name): static
     {
         $this->school_name = $school_name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Language>
+     */
+    public function getLanguages(): Collection
+    {
+        return $this->languages;
+    }
+
+    public function addLanguage(Language $language): static
+    {
+        if (!$this->languages->contains($language)) {
+            $this->languages->add($language);
+        }
+
+        return $this;
+    }
+
+    public function removeLanguage(Language $language): static
+    {
+        $this->languages->removeElement($language);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Skill>
+     */
+    public function getSkills(): Collection
+    {
+        return $this->skills;
+    }
+
+    public function addSkill(Skill $skill): static
+    {
+        if (!$this->skills->contains($skill)) {
+            $this->skills->add($skill);
+        }
+
+        return $this;
+    }
+
+    public function removeSkill(Skill $skill): static
+    {
+        $this->skills->removeElement($skill);
 
         return $this;
     }

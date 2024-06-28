@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Enum\LanguageLevel;
 use App\Enum\LanguageName;
 use App\Repository\LanguagesRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LanguagesRepository::class)]
@@ -20,6 +22,17 @@ class Language
 
     #[ORM\Column(length: 255, enumType: LanguageLevel::class)]
     private LanguageLevel $level = LanguageLevel::A1;
+
+    /**
+     * @var Collection<int, Student>
+     */
+    #[ORM\ManyToMany(targetEntity: Student::class, mappedBy: 'languages')]
+    private Collection $students;
+
+    public function __construct()
+    {
+        $this->students = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -46,6 +59,33 @@ class Language
     public function setLevel(LanguageLevel $level): static
     {
         $this->level = $level;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Student>
+     */
+    public function getStudents(): Collection
+    {
+        return $this->students;
+    }
+
+    public function addStudent(Student $student): static
+    {
+        if (!$this->students->contains($student)) {
+            $this->students->add($student);
+            $student->addLanguage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStudent(Student $student): static
+    {
+        if ($this->students->removeElement($student)) {
+            $student->removeLanguage($this);
+        }
 
         return $this;
     }

@@ -12,6 +12,7 @@ use App\Enum\LanguageName;
 use App\Enum\StudyLevel;
 use App\Enum\StudyYears;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -19,7 +20,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
-class StudentFixtures extends Fixture
+class StudentFixtures extends Fixture implements DependentFixtureInterface
 {
 
     public function __construct(private UserPasswordHasherInterface $hasher, private EntityManagerInterface $entityManager)
@@ -64,8 +65,10 @@ class StudentFixtures extends Fixture
             ;
         $this->fakeUpload(new File(__DIR__ . '/images/users/'. $avatar));
         $user->setProfileImage($avatar);
+        for($i = 0; $i <= 3; $i++) {
+            $user->addSkill($this->getReference(SkillFixtures::REFERENCE.rand(0,count(SkillFixtures::data())))); 
+        }
         $manager->persist($user);
-        $manager->flush();
 
         //Languages
         $lang = new Language();
@@ -73,6 +76,8 @@ class StudentFixtures extends Fixture
             ->setName(LanguageName::French)
             ->setLevel(LanguageLevel::A1)
         ;
+        $lang->addStudent($user);
+        $manager->persist($lang);
 
         //experience
         $exp = new Experience();
@@ -81,11 +86,16 @@ class StudentFixtures extends Fixture
             ->setType(ExperienceType::Internship)
             ->setYear('2023')
         ;
-
         $exp->setStudent($user);
         $manager->persist($exp);
-        $manager->flush();
 
-        $this->fakeUpload(new File(__DIR__ . '/images/users/usr.png'));
+        $manager->flush();
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            SkillFixtures::class
+        ];
     }
 }
