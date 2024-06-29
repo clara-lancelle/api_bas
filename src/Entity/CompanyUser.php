@@ -12,9 +12,11 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\CompanyUserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
+    normalizationContext: ['groups' => ['company_user']],
     operations: [
         new Post(),
         new Get(),
@@ -28,18 +30,20 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ApiFilter(SearchFilter::class, properties: ['email' => 'exact'])]
 #[ORM\Entity(repositoryClass: CompanyUserRepository::class)]
+#[Groups('company_user')]
 class CompanyUser extends User
 {
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 3)]
     #[ORM\Column(length: 255)]
+    #[Groups('company')]
     private ?string $position = null;
 
     #[ORM\Column(nullable: true)]
     private ?string $officePhone = null;
 
-    #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'companyAdministrators')]
+    #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'companyUsers')]
     private ?Company $company = null;
 
     public function getPosition(): ?string

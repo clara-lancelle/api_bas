@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             read: false,
         ),
         new GetCollection(
-            uriTemplate: '/security/users/', 
+            uriTemplate: '/security/users', 
         ),
     ]
 
@@ -51,11 +51,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('request')]
+    #[Groups(['request', 'company_user'])]
     private ?int $id = null;
 
     #[Assert\Email]
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups('company_user')]
     private ?string $email = null;
 
     /**
@@ -73,12 +74,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank]
     #[Assert\Length(min: 3)]
     #[ORM\Column(length: 255)]
+    #[Groups('company_user')]
     private ?string $name = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 3)]
     #[ORM\Column(length: 255)]
-    #[Groups('request')]
+    #[Groups(['request', 'compnay_user'])]
     private ?string $firstname = null;
 
     #[Assert\Regex('/^((0|(\+33))[1-79]){1}([\-|\.| |\][0-9]{2}){4}$/')]
