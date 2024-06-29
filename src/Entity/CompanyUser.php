@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(
              uriTemplate: '/security/company_users/'
         ),
-        new Put(
+        new Patch(
              uriTemplate: '/security/company_users/{id}',
         ),
     ]

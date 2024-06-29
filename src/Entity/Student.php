@@ -6,6 +6,7 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Enum\StudyLevel;
@@ -25,6 +26,9 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Put(
             uriTemplate: '/security/students/{id}',
             ),
+        new Patch(
+            uriTemplate: '/security/students/{id}',
+        ),
         new GetCollection(
              uriTemplate: '/security/students/', 
         )
