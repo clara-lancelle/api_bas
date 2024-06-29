@@ -3,12 +3,13 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\Controller\LanguageLevels;
 use App\Controller\LanguageNames;
 use App\Enum\LanguageLevel;
 use App\Enum\LanguageName;
-use App\Repository\LanguagesRepository;
+use App\Repository\LanguageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,23 +17,28 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 
 #[ApiResource(
+    normalizationContext: ['groups' => ['language']],
     operations: [
         new GetCollection(
             uriTemplate: '/languages/levels',
             controller: LanguageLevels::class,
             name: 'api_languages_levels',
-            
+            read: false,
         ),
         new GetCollection(
             uriTemplate: '/languages/names',
             controller: LanguageNames::class,
             name: 'api_languages_names',
-         
+            read: false,
         ),
+        new GetCollection(
+            uriTemplate: '/languages'
+        ),  
+        new Get(),
     ]
 )]
-
-#[ORM\Entity(repositoryClass: LanguagesRepository::class)]
+#[ORM\Entity(repositoryClass: LanguageRepository::class)]
+#[Groups('language')]
 class Language
 {
     #[ORM\Id]

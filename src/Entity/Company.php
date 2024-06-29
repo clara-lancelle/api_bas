@@ -69,13 +69,13 @@ class Company
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('offer')]
+    #[Groups(['offer','company_user'])]
     private ?int $id = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 3)]
     #[ORM\Column(length: 255)]
-    #[Groups('offer')]
+    #[Groups(['offer','company_user'])]
     private ?string $name = null;
 
     #[Assert\Url]
@@ -116,7 +116,7 @@ class Company
     private ?string $description = null;
 
     #[ORM\OneToMany(targetEntity: CompanyUser::class, mappedBy: 'company', orphanRemoval: true)]
-    private Collection $companyAdministrators;
+    private Collection $companyUsers;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
@@ -181,7 +181,7 @@ class Company
 
     public function __construct()
     {
-        $this->companyAdministrators = new ArrayCollection();
+        $this->companyUsers = new ArrayCollection();
         $this->created_at            = new DateTimeImmutable();
         $this->updated_at            = new DateTimeImmutable();
         $this->offers                = new ArrayCollection();
@@ -370,25 +370,25 @@ class Company
      */
     public function getAdministrators(): Collection
     {
-        return $this->companyAdministrators;
+        return $this->companyUsers;
     }
 
-    public function addAdministrator(CompanyUser $companyAdministrators): static
+    public function addAdministrator(CompanyUser $companyUsers): static
     {
-        if (!$this->companyAdministrators->contains($companyAdministrators)) {
-            $this->companyAdministrators->add($companyAdministrators);
-            $companyAdministrators->setCompany($this);
+        if (!$this->companyUsers->contains($companyUsers)) {
+            $this->companyUsers->add($companyUsers);
+            $companyUsers->setCompany($this);
         }
 
         return $this;
     }
 
-    public function removeAdministrator(CompanyUser $companyAdministrators): static
+    public function removeAdministrator(CompanyUser $companyUsers): static
     {
-        if ($this->companyAdministrators->removeElement($companyAdministrators)) {
+        if ($this->companyUsers->removeElement($companyUsers)) {
             // set the owning side to null (unless already changed)
-            if ($companyAdministrators->getCompany() === $this) {
-                $companyAdministrators->setCompany(null);
+            if ($companyUsers->getCompany() === $this) {
+                $companyUsers->setCompany(null);
             }
         }
 

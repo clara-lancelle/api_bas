@@ -6,11 +6,12 @@ use App\Entity\Company;
 use App\Entity\CompanyUser;
 use App\Enum\Gender;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class CompanyUserFixtures extends Fixture
+class CompanyUserFixtures extends Fixture implements DependentFixtureInterface
 {
 
     public function __construct(private UserPasswordHasherInterface $hasher, private EntityManagerInterface $entityManager)
@@ -37,5 +38,11 @@ class CompanyUserFixtures extends Fixture
         $user->setCompany($firstCompany);
         $manager->persist($user);
         $manager->flush();
+    }
+    public function getDependencies(): array
+    {
+        return [
+            CompanyFixtures::class,
+        ];
     }
 }
