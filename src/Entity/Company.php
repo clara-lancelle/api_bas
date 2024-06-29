@@ -11,6 +11,7 @@ use App\Controller\CompanyWithMostOffers;
 use App\Repository\CompanyRepository;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Put;
 use App\Controller\PersistingUserAndCompany;
 use App\Controller\WorkforceRanges;
@@ -53,6 +54,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
             name: 'api_companies_persisting_user_and_company',
         ),
         new Put(
+             uriTemplate: '/security/companies/{id}',
+        ),
+        new Patch(
              uriTemplate: '/security/companies/{id}',
         ),
     ]
