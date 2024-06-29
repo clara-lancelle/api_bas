@@ -66,7 +66,7 @@ class StudentFixtures extends Fixture implements DependentFixtureInterface
         $this->fakeUpload(new File(__DIR__ . '/images/users/'. $avatar));
         $user->setProfileImage($avatar);
         for($i = 0; $i <= 3; $i++) {
-            $user->addSkill($this->getReference(SkillFixtures::REFERENCE.rand(0,count(SkillFixtures::data())))); 
+            $user->addSkill($this->getReference(SkillFixtures::REFERENCE.rand(0,count(SkillFixtures::data()) -1))); 
         }
         $manager->persist($user);
 

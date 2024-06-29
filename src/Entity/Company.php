@@ -73,13 +73,13 @@ class Company
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['offer','company_user'])]
+    #[Groups(['offer','company_user', 'application'])]
     private ?int $id = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 3)]
     #[ORM\Column(length: 255)]
-    #[Groups(['offer','company_user'])]
+    #[Groups(['offer','company_user', 'application'])]
     private ?string $name = null;
 
     #[Assert\Url]

@@ -68,7 +68,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?string $password = null;
 
     #[Assert\NotBlank]
@@ -109,10 +109,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Gender $gender = Gender::Male;
 
     #[SerializedName('password')]
-    #[Assert\Regex(
-        pattern : '/^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%#*?&])[A-Za-zÀ-ż\d@$!#%*?&]{8,}$/',
-        message : 'Votre mot de passe doit contenir au minimum : 8 caractères, 1 majuscule et un caractère spécial'
-    )]
+    #[Assert\When(
+        expression: 'this.getVisitorStatus() == false',
+        constraints: [
+            new Assert\Regex(
+                    pattern : '/^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%#*?&])[A-Za-zÀ-ż\d@$!#%*?&]{8,}$/',
+                    message : 'Votre mot de passe doit contenir au minimum : 8 caractères, 1 majuscule et un caractère spécial'
+            ),
+            new Assert\NotBlank()
+        ]
+        )]
     private ?string $plainPassword = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -128,6 +134,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $address = null;
+
+    #[ORM\Column()]
+    private bool $visitor_status = false;
 
     public function __toString(): string
     {
@@ -376,6 +385,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAddress(?string $address): static
     {
         $this->address = $address;
+
+        return $this;
+    }
+    public function getVisitorStatus(): ?bool
+    {
+        return $this->visitor_status;
+    }
+
+    public function setVisitorStatus(?bool $visitor_status): static
+    {
+        $this->visitor_status = $visitor_status;
 
         return $this;
     }

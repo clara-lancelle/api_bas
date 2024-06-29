@@ -6,22 +6,30 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use App\Controller\PersistingApplication;
 use App\Repository\ApplicationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 #[ApiResource(
+    normalizationContext: ['groups' => ['application']],
     operations: [
         new Get(),
         new GetCollection(),
-        new Post()
+        new Post(
+            uriTemplate: '/applications/persistingApplication',
+            controller: PersistingApplication::class,
+            name: 'api_persisting_application',
+        ),
     ]
 )]
 
 #[ORM\Entity(repositoryClass: ApplicationRepository::class)]
+#[Groups('application')]
 class Application
 {
     #[ORM\Id]
@@ -33,6 +41,9 @@ class Application
     #[ORM\ManyToOne(inversedBy: 'applications')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Student $student = null;
+
+    #[SerializedName('student')]
+    private ?array $student_array = null;
 
     #[ORM\ManyToOne(inversedBy: 'applications')]
     #[ORM\JoinColumn(nullable: false)]
@@ -51,11 +62,14 @@ class Application
     #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'applications')]
     private Collection $skills;
 
-    /**
+     /**
      * @var Collection<int, Experience>
      */
-    #[ORM\ManyToMany(targetEntity: Experience::class, inversedBy: 'applications',  cascade: ["persist"])]
+    #[ORM\OneToMany(targetEntity: Experience::class, mappedBy: 'application', orphanRemoval: true)]
     private Collection $experiences;
+
+    #[SerializedName('experiences')]
+    private ?array $experiences_array = null;
 
     public function __construct()
     {
@@ -160,6 +174,30 @@ class Application
     public function removeExperience(Experience $experience): static
     {
         $this->experiences->removeElement($experience);
+
+        return $this;
+    }
+
+     public function getStudentArray(): ?array
+    {
+        return $this->student_array;
+    }
+
+    public function setStudentArray(?array $student_array): static
+    {
+        $this->student_array = $student_array;
+
+        return $this;
+    }
+
+     public function getExperiencesArray(): ?array
+    {
+        return $this->experiences_array;
+    }
+
+    public function setExperiencesArray(?array $experiences_array): static
+    {
+        $this->experiences_array = $experiences_array;
 
         return $this;
     }
