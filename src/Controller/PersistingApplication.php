@@ -54,7 +54,6 @@ class PersistingApplication
 
             if(!empty($studentData['id']) && $this->manager->getRepository(Student::class)->find($studentData['id'])) {
                 $student = $this->manager->getRepository(Student::class)->find($studentData['id']);
-
             } else {
                 $student = $this->manager->getRepository(Student::class)->findBy(['email' => $studentData['email']])[0] ?? new Student();
                 $student
@@ -92,7 +91,7 @@ class PersistingApplication
             $this->manager->persist($application);
 
             foreach ($data['skills'] as $skill) {
-                $application->addSkill($this->manager->getRepository(Skill::class)->find($skill) ?? '');
+                $application->addSkill($this->manager->getRepository(Skill::class)->find($this->extractIdFromIri($skill)) ?? '');
             }
             
             if(count($data['experiences_array']) > 0 ) {

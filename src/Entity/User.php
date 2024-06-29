@@ -116,7 +116,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                     pattern : '/^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%#*?&])[A-Za-zÀ-ż\d@$!#%*?&]{8,}$/',
                     message : 'Votre mot de passe doit contenir au minimum : 8 caractères, 1 majuscule et un caractère spécial'
             ),
-            new Assert\NotBlank()
         ]
         )]
     private ?string $plainPassword = null;
