@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
+    normalizationContext: ['groups' => ['social_network']],
     operations: [
         new GetCollection(),
         new Get(),
@@ -23,15 +24,16 @@ class SocialNetwork
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('company')]
+    #[Groups(['company', 'social_network'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 150)]
-    #[Groups('company')]
+    #[Groups(['company', 'social_network'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups('company')]
+    #[Groups(['company', 'social_network'])]
+
     private ?string $logo = null;
 
     /**

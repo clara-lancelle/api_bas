@@ -12,11 +12,11 @@ class SocialLink
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('company')]
+    #[Groups(['company'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups('company')]
+    #[Groups(['company'])]
     private ?string $url = null;
 
     #[ORM\ManyToOne(inversedBy: 'socialLinks')]
