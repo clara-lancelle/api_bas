@@ -110,7 +110,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[SerializedName('password')]
     #[Assert\When(
-        expression: 'this.getVisitorStatus() == true',
+        expression: 'this.getVisitorStatus() == false',
         constraints: [
             new Assert\Regex(
                     pattern : '/^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%#*?&])[A-Za-zÀ-ż\d@$!#%*?&]{8,}$/',

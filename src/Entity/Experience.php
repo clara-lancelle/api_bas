@@ -32,35 +32,34 @@ class Experience
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('student')]
+    #[Groups(['student', 'application'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'experiences')]
     #[ORM\JoinColumn(nullable: true)]
     private ?Student $student = null;
 
-    /**
-     * @var Collection<int, Application>
-     */
-    #[ORM\ManyToMany(targetEntity: Application::class, mappedBy: 'experiences')]
-    private Collection $applications;
+    #[ORM\ManyToOne(inversedBy: 'experiences')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Application $application;
 
     #[ORM\Column(length: 255)]
-    #[Groups('student')]
+    #[Groups(['student', 'application'])]
+
     private ?string $company = null;
 
     #[ORM\Column(length: 255,  enumType: ExperienceType::class)]
-    #[Groups('student')]
+    #[Groups(['student', 'application'])]
+
     private ExperienceType $type = ExperienceType::Internship;
 
-    #[Assert\Regex('/^((19[0-9]{2})||(201[0-9]{1})||(202[0-4]{1}))$')]
+    #[Assert\Regex('/^((19[0-9]{2})||(201[0-9]{1})||(202[0-4]{1}))$/')]
     #[ORM\Column(length: 4)]
-    #[Groups('student')]
+    #[Groups(['student', 'application'])]
     private ?string $year = null;
 
     public function __construct()
     {
-        $this->applications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -80,32 +79,18 @@ class Experience
         return $this;
     }
 
-    /**
-     * @return Collection<int, Application>
-     */
-    public function getApplications(): Collection
+    public function getApplication(): ?Application
     {
-        return $this->applications;
+        return $this->application;
     }
 
-    public function addApplication(Application $application): static
+     public function setApplication(?Application $application): static
     {
-        if (!$this->applications->contains($application)) {
-            $this->applications->add($application);
-            $application->addExperience($this);
-        }
+        $this->application = $application;
 
         return $this;
     }
 
-    public function removeApplication(Application $application): static
-    {
-        if ($this->applications->removeElement($application)) {
-            $application->removeExperience($this);
-        }
-
-        return $this;
-    }
 
     public function getCompany(): ?string
     {

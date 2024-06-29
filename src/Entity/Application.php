@@ -16,11 +16,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
 #[ApiResource(
+    normalizationContext: ['groups' => ['application']],
     operations: [
         new Get(),
         new GetCollection(),
         new Post(
-            uriTemplate: '/companies/persistingApplication',
+            uriTemplate: '/applications/persistingApplication',
             controller: PersistingApplication::class,
             name: 'api_persisting_application',
         ),
@@ -28,6 +29,7 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 )]
 
 #[ORM\Entity(repositoryClass: ApplicationRepository::class)]
+#[Groups('application')]
 class Application
 {
     #[ORM\Id]
@@ -40,8 +42,8 @@ class Application
     #[ORM\JoinColumn(nullable: false)]
     private ?Student $student = null;
 
-    // #[SerializedName('student')]
-    // private ?array $student_array = null;
+    #[SerializedName('student')]
+    private ?array $student_array = null;
 
     #[ORM\ManyToOne(inversedBy: 'applications')]
     #[ORM\JoinColumn(nullable: false)]
@@ -60,14 +62,14 @@ class Application
     #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'applications')]
     private Collection $skills;
 
-    /**
+     /**
      * @var Collection<int, Experience>
      */
-    #[ORM\ManyToMany(targetEntity: Experience::class, inversedBy: 'applications',  cascade: ["persist"])]
+    #[ORM\OneToMany(targetEntity: Experience::class, mappedBy: 'application', orphanRemoval: true)]
     private Collection $experiences;
 
-    // #[SerializedName('experiences')]
-    // private ?array $experiences_array = null;
+    #[SerializedName('experiences')]
+    private ?array $experiences_array = null;
 
     public function __construct()
     {
@@ -176,27 +178,27 @@ class Application
         return $this;
     }
 
-    //  public function getStudentArray(): ?array
-    // {
-    //     return $this->student_array;
-    // }
+     public function getStudentArray(): ?array
+    {
+        return $this->student_array;
+    }
 
-    // public function setStudentArray(?array $student_array): static
-    // {
-    //     $this->student_array = $student_array;
+    public function setStudentArray(?array $student_array): static
+    {
+        $this->student_array = $student_array;
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
-    //  public function getExperiencesArray(): ?array
-    // {
-    //     return $this->experiences_array;
-    // }
+     public function getExperiencesArray(): ?array
+    {
+        return $this->experiences_array;
+    }
 
-    // public function setExperiencesArray(?array $experiences_array): static
-    // {
-    //     $this->experiences_array = $experiences_array;
+    public function setExperiencesArray(?array $experiences_array): static
+    {
+        $this->experiences_array = $experiences_array;
 
-    //     return $this;
-    // }
+        return $this;
+    }
 }

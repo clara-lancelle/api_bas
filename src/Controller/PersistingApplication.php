@@ -36,22 +36,27 @@ class PersistingApplication
         $data = json_decode($request->getContent(), true);
         return $this->createApplication($data);
     }
+
+    private function extractIdFromIri(string $iri): ?int
+    {
+        return (preg_match('/([0-9]+)$/', $iri, $matches)) ? (int) $matches[1] : null;
+    }
     
     public function createApplication(array $data)
     {
         $this->manager->beginTransaction();
-            
+         
         try {
-
             $application = new Application();
 
             // -- START -- student
-            $studentData = $data['student'];
+            $studentData = $data['student_array'];
 
             if(!empty($studentData['id']) && $this->manager->getRepository(Student::class)->find($studentData['id'])) {
                 $student = $this->manager->getRepository(Student::class)->find($studentData['id']);
+
             } else {
-                $student = new Student();
+                $student = $this->manager->getRepository(Student::class)->findBy(['email' => $studentData['email']])[0] ?? new Student();
                 $student
                 ->setFirstname($studentData['firstname'] ?? null)
                 ->setName($studentData['name'] ?? null)
@@ -80,34 +85,37 @@ class PersistingApplication
 
             $application
                 ->setStudent($student)
-                ->setOffer($this->manager->getRepository(Offer::class)->find($data['offer']))
+                ->setOffer($this->manager->getRepository(Offer::class)->find($this->extractIdFromIri($data['offer'])))
                 ->setMotivations($data['motivations'] ?? '')
                 ->setCoverLetter($data['cover_letter']);
+            
+            $this->manager->persist($application);
 
             foreach ($data['skills'] as $skill) {
                 $application->addSkill($this->manager->getRepository(Skill::class)->find($skill) ?? '');
             }
             
-            if(count($data['experiences']) > 0 ) {
-                foreach($data['experiences'] as $item) {
+            if(count($data['experiences_array']) > 0 ) {
+                foreach($data['experiences_array'] as $item) {
                     $exp = new Experience();
                     $exp
                     ->setCompany($item['company'])
                     ->setType(ExperienceType::tryFrom($item['type']))
                     ->setYear($item['year'])
+                    ->setApplication($application)
                     ;
                     $errors = $this->validator->validate($exp);
                     if ($errors && count($errors) > 0) {
                         throw new Exception((string) $errors, 404);
                     }
                     $this->manager->persist($exp);
-                    $application->addExperience($exp);
                 }
             }
-        
         $this->manager->flush();
 
         $this->manager->commit();
+
+        return new JsonResponse(Response::HTTP_CREATED);   
 
         } catch (Exception $e) {
             $this->manager->rollback();
