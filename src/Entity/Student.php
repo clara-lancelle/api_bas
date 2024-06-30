@@ -5,12 +5,14 @@ namespace App\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\StudyYears;
 use App\Enum\StudyLevel;
-use App\Enum\StudyYears;
+use App\Enum\StudyYear;
 use App\Repository\StudentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -23,6 +25,12 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => ['student']],
     operations: [
         new Post(),
+        new GetCollection(
+            uriTemplate: '/students/StudyYears',
+            controller: StudyYears::class,
+            name: 'api_students_study_years',
+            read: false,
+        ),
         new Put(
             uriTemplate: '/security/students/{id}',
             ),
@@ -31,7 +39,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new GetCollection(
              uriTemplate: '/security/students/', 
-        )
+        ),
+        new Get(),
     ]
 )]
 #[ApiFilter(SearchFilter::class, properties: ['email' => 'exact'])]
@@ -84,8 +93,8 @@ class Student extends User
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $cv = null;
 
-    #[ORM\Column(length: 255, enumType: StudyYears::class)]
-    private StudyYears $study_years = StudyYears::bac0;
+    #[ORM\Column(length: 255, enumType: StudyYear::class)]
+    private StudyYear $study_years = StudyYear::bac0;
 
     /**
      * @var Collection<int, Language>
@@ -292,12 +301,12 @@ class Student extends User
         return $this;
     }
 
-    public function getStudyYears(): StudyYears
+    public function getStudyYears(): StudyYear
     {
         return $this->study_years;
     }
 
-    public function setStudyYears(StudyYears $study_years): static
+    public function setStudyYears(StudyYear $study_years): static
     {
         $this->study_years = $study_years;
 

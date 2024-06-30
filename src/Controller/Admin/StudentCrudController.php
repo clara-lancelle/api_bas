@@ -6,7 +6,7 @@ use App\Enum\Gender;
 use App\Entity\Student;
 use App\Entity\User;
 use App\Enum\StudyLevel;
-use App\Enum\StudyYears;
+use App\Enum\StudyYear;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -97,12 +97,12 @@ class StudentCrudController extends AbstractCrudController
             Field::new('school_name', 'Nom de l\'établissement')->hideOnDetail(),
             ChoiceField::new('study_years', 'Années d\'études')->setFormType(EnumType::class)
                 ->setFormTypeOptions([
-                    'class'        => StudyYears::class,
-                    'choice_label' => static function (StudyYears $choice): string {
+                    'class'        => StudyYear::class,
+                    'choice_label' => static function (StudyYear $choice): string {
                         return $choice->value;
                     }
                 ])
-                ->formatValue(function (StudyYears $choice): string {
+                ->formatValue(function (StudyYear $choice): string {
                     return $choice->value;
                 })
             ,

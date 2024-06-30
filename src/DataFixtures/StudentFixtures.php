@@ -10,7 +10,7 @@ use App\Enum\ExperienceType;
 use App\Enum\LanguageLevel;
 use App\Enum\LanguageName;
 use App\Enum\StudyLevel;
-use App\Enum\StudyYears;
+use App\Enum\StudyYear;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -61,7 +61,7 @@ class StudentFixtures extends Fixture implements DependentFixtureInterface
             ->setLinkedinPage('http://linkedin.com/test')
             ->setSchoolName('ESGI')
             ->setPreparedDegree(StudyLevel::Level1)
-            ->setStudyYears(StudyYears::bac1)
+            ->setStudyYears(StudyYear::bac1)
             ;
         $this->fakeUpload(new File(__DIR__ . '/images/users/'. $avatar));
         $user->setProfileImage($avatar);

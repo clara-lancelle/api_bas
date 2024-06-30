@@ -13,7 +13,7 @@ use App\Entity\Student;
 use App\Enum\ExperienceType;
 use App\Enum\Gender;
 use App\Enum\StudyLevel;
-use App\Enum\StudyYears;
+use App\Enum\StudyYear;
 use App\Service\Base64UploaderService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -68,7 +68,7 @@ class PersistingApplication
                 ->setPersonnalWebsite($studentData['personnal_website'] ?? null)
                 ->setDriverLicense($studentData['driver_license'] ?? null)
                 ->setPreparedDegree(StudyLevel::tryFrom($studentData['prepared_degree']) ?? null)
-                ->setStudyYears(StudyYears::tryFrom($studentData['study_years']) ?? null)
+                ->setStudyYear(StudyYear::tryFrom($studentData['study_years']) ?? null)
                 ->setSchoolName($studentData['school_name'] ?? null)
                 ->setVisitorStatus($studentData['visitor_status'] ?? null)
                 ;

@@ -10,8 +10,6 @@ use App\Factory\StudentFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class ApplicationFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -40,7 +38,7 @@ class ApplicationFixtures extends Fixture implements DependentFixtureInterface
             ->addExperience($exp)
         ;
         for($i = 0; $i <= 3; $i++) {
-            $app->addSkill($this->getReference(SkillFixtures::REFERENCE.rand(0,count(SkillFixtures::data())))); 
+            $app->addSkill($this->getReference(SkillFixtures::REFERENCE.rand(0,count(SkillFixtures::data()) -1))); 
         }
         $manager->persist($app);
         $manager->flush();
