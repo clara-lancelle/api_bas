@@ -55,7 +55,7 @@ class Student extends User
     /**
      * @var Collection<int, Experience>
      */
-    #[ORM\OneToMany(targetEntity: Experience::class, mappedBy: 'student', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Experience::class, mappedBy: 'student', orphanRemoval: true,  cascade: ["persist"])]
     private Collection $experiences;
 
     /**
@@ -99,7 +99,7 @@ class Student extends User
     /**
      * @var Collection<int, Language>
      */
-    #[ORM\ManyToMany(targetEntity: Language::class, inversedBy: 'students')]
+    #[ORM\ManyToMany(targetEntity: Language::class, inversedBy: 'students',  cascade: ["persist"])]
     private Collection $languages;
 
     /**

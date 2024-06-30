@@ -26,6 +26,9 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Patch(
             uriTemplate: '/security/experiences/{id}',
         ),
+        new GetCollection(
+            uriTemplate: '/security/experiences/',
+        ),
     ]
 )]
 
