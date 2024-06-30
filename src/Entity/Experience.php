@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use App\Controller\ExperienceTypes;
 use App\Enum\ExperienceType;
 use App\Repository\ExperienceRepository;
@@ -21,6 +22,9 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller: ExperienceTypes::class,
             name: 'api_experiences_types',
             read: false,
+        ),
+        new Patch(
+            uriTemplate: '/security/experiences/{id}',
         ),
     ]
 )]

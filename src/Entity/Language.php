@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use App\Controller\LanguageLevels;
 use App\Controller\LanguageNames;
 use App\Enum\LanguageLevel;
@@ -35,6 +36,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
             uriTemplate: '/languages'
         ),  
         new Get(),
+        new Patch(
+            uriTemplate: '/security/languages/{id}',
+        ),
     ]
 )]
 #[ORM\Entity(repositoryClass: LanguageRepository::class)]
