@@ -114,6 +114,7 @@ class PersistingApplication
 
         $this->manager->commit();
 
+        // if($data['new_account']) { logic to send email and token new password}
         return new JsonResponse(Response::HTTP_CREATED);   
 
         } catch (Exception $e) {
