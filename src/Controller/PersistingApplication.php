@@ -5,10 +5,7 @@ namespace App\Controller;
 use App\Entity\Application;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\Response;
-use App\Entity\Company;
-use App\Entity\CompanyActivity;
-use App\Entity\CompanyCategory;
-use App\Entity\CompanyUser;
+use Symfony\Component\Serializer\Normalizer\DataUriNormalizer;
 use App\Entity\Experience;
 use App\Entity\Offer;
 use App\Entity\Skill;
@@ -17,6 +14,7 @@ use App\Enum\ExperienceType;
 use App\Enum\Gender;
 use App\Enum\StudyLevel;
 use App\Enum\StudyYears;
+use App\Service\Base64UploaderService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,11 +39,12 @@ class PersistingApplication
     {
         return (preg_match('/([0-9]+)$/', $iri, $matches)) ? (int) $matches[1] : null;
     }
+
+    
     
     public function createApplication(array $data)
     {
         $this->manager->beginTransaction();
-         
         try {
             $application = new Application();
 
@@ -72,7 +71,13 @@ class PersistingApplication
                 ->setStudyYears(StudyYears::tryFrom($studentData['study_years']) ?? null)
                 ->setSchoolName($studentData['school_name'] ?? null)
                 ->setVisitorStatus($studentData['visitor_status'] ?? null)
-                ;   
+                ;
+                if (!empty($studentData['profile_image'])) {
+                    $profileImageData = $studentData['profile_image'];
+                    $profileImagePath = Base64UploaderService::handle($profileImageData, '/images/users/');
+                    $student->setProfileImage($profileImagePath);
+                }
+
                 $errors = $this->validator->validate($student);
                 if ($errors && count($errors) > 0) {
                     throw new Exception((string) $errors, 404);
