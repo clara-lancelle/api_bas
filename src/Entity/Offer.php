@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\ExistsFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Metadata\ApiFilter;
-use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
@@ -58,9 +59,10 @@ use Symfony\Component\Validator\Constraints as Assert;
     ]
 )]
 
-#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'publication_date', 'type' => 'exact', 'job_profiles' => 'exact','company' => 'exact', 'duration' => 'exact', 'study_level' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'publication_date','type' => 'exact', 'job_profiles' => 'exact','company' => 'exact', 'duration' => 'exact', 'study_level' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['created_at' => 'ASC', 'name', 'application_limit_date' ], arguments: ['orderParameterName' => 'order'])]
 #[ApiFilter(DateFilter::class, properties: ['application_limit_date', 'publication_date'])]
+#[ApiFilter(ExistsFilter::class, properties: ['deleted_at'])]
 #[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: OfferRepository::class)]
 #[Groups('offer')]
