@@ -17,6 +17,7 @@ use App\Enum\StudyYear;
 use App\Service\Base64UploaderService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -25,7 +26,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 #[AsController]
 class PersistingApplication
 {
-    public function __construct(private EntityManagerInterface $manager, private UserPasswordHasherInterface $hasher, private ValidatorInterface $validator)
+    public function __construct(private JWTTokenManagerInterface $jwtManager, private EntityManagerInterface $manager, private UserPasswordHasherInterface $hasher, private ValidatorInterface $validator)
     {   
     }
 
@@ -40,7 +41,12 @@ class PersistingApplication
         return (preg_match('/([0-9]+)$/', $iri, $matches)) ? (int) $matches[1] : null;
     }
 
-    
+    private function decodeToken(string $token)
+    {
+        $tokenParts = explode(".", $token);  
+        $tokenPayload = base64_decode($tokenParts[1]);
+        return json_decode($tokenPayload)->username;
+    }
     
     public function createApplication(array $data)
     {
@@ -51,8 +57,9 @@ class PersistingApplication
             // -- START -- student
             $studentData = $data['student_array'];
 
-            if(!empty($studentData['id']) && $this->manager->getRepository(Student::class)->find($studentData['id'])) {
-                $student = $this->manager->getRepository(Student::class)->find($studentData['id']);
+            if(!empty($studentData['token'])) {
+                $email = $this->decodeToken($studentData['token']);
+                $student = $this->manager->getRepository(Student::class)->findBy(['email' => $email])[0];
             } else {
                 $student = $this->manager->getRepository(Student::class)->findBy(['email' => $studentData['email']])[0] ?? new Student();
                 $student
@@ -68,9 +75,9 @@ class PersistingApplication
                 ->setPersonnalWebsite($studentData['personnal_website'] ?? null)
                 ->setDriverLicense($studentData['driver_license'] ?? null)
                 ->setPreparedDegree(StudyLevel::tryFrom($studentData['prepared_degree']) ?? null)
-                ->setStudyYear(StudyYear::tryFrom($studentData['study_years']) ?? null)
+                ->setStudyYears(StudyYear::tryFrom($studentData['study_years']) ?? null)
                 ->setSchoolName($studentData['school_name'] ?? null)
-                ->setVisitorStatus($studentData['visitor_status'] ?? null)
+                ->setVisitorStatus($studentData['visitor_status'] ?? null)  
                 ;
                 if (!empty($studentData['profile_image'])) {
                     $profileImageData = $studentData['profile_image'];
@@ -107,6 +114,7 @@ class PersistingApplication
                     ->setType(ExperienceType::tryFrom($item['type']))
                     ->setYear($item['year'])
                     ->setApplication($application)
+                    ->setStudent($student)
                     ;
                     $errors = $this->validator->validate($exp);
                     if ($errors && count($errors) > 0) {
