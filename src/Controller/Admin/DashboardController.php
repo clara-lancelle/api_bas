@@ -46,12 +46,7 @@ class DashboardController extends AbstractDashboardController
             // you can return an URL with the avatar image
             // ->setAvatarUrl('https://...')
             ->setAvatarUrl($user->getProfileImage())
-            ->displayUserAvatar()
-            ->addMenuItems([
-                MenuItem::linkToCrud('Mon profil', 'fa fa-id-card', Administrator::class)
-                    ->setAction('detail')
-                    ->setEntityId($user->getUserIdentifier()),
-            ]);
+            ->displayUserAvatar();
     }
     public function configureMenuItems(): iterable
     {

@@ -42,7 +42,7 @@ class CompanyCrudController extends AbstractCrudController
                 fn(?Company $company, ?string $pageName) => $company ? $company->getName() : 'Entreprise'
             )
             ->setEntityLabelInPlural('Entreprises')
-            ->setSearchFields(['name', 'description']);
+            ->setSearchFields(['description']);
     }
 
 
