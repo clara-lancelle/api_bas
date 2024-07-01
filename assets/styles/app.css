@@ -1,3 +1,34 @@
 body {
-    background-color: skyblue;
+    background-color: white;
+}
+
+form {
+        display: flex;
+        flex-flow: column;
+        width: 30%;
+        margin: 3em auto;
+        gap: 10px;
+        align-items: center;
+        box-shadow: 5px 3px 5px rgb(228, 228, 228), -5px -3px 3px rgb(235, 235, 235);
+        border-radius: 10px;
+        padding: 1em;
+}
+
+input {
+    line-height: 1.5em;
+    border-radius: 5px;
+    border: #d1d1d1 solid 1px;
+}
+
+button {
+    width: 8em;
+    margin-top: 3em;
+    line-height: 2.2em;
+    border-radius: 10px;
+    background-color: rgb(152, 208, 230);
+    border: none;
+}
+
+button:hover {
+    cursor: pointer;
 }
