@@ -83,7 +83,7 @@ class StudentCrudController extends AbstractCrudController
             DateField::new('birthdate', 'Anniversaire'),
             Field::new('driver_license','Permis de conduire')->hideOnDetail(),
             Field::new('handicap','Handicap')->hideOnDetail(),
-            Field::new('prepared_degree','Diplome préparé')->setFormType(EnumType::class)
+            ChoiceField::new('prepared_degree','Diplome préparé')->setFormType(EnumType::class)
                 ->setFormTypeOptions([
                     'class'        => StudyLevel::class,
                     'choice_label' => static function (StudyLevel $choice): string {
