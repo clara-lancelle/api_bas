@@ -46,18 +46,13 @@ class Skill
     #[ORM\ManyToMany(targetEntity: Application::class, mappedBy: 'skills')]
     private Collection $applications;
 
-    /**
-     * @var Collection<int, Student>
-     */
-    #[ORM\ManyToMany(targetEntity: Student::class, mappedBy: 'skills')]
-    private Collection $students;
-
+    #[ORM\ManyToOne(inversedBy: 'skills')]
+    private ?Student $student = null;
    
     public function __construct()
     {
         $this->offers = new ArrayCollection();
         $this->applications = new ArrayCollection();
-        $this->students = new ArrayCollection();
     }   
 
     public function __toString(): string
@@ -136,31 +131,15 @@ class Skill
         return $this;
     }
 
-    /**
-     * @return Collection<int, Student>
-     */
-    public function getStudents(): Collection
+    public function getStudent(): ?Student
     {
-        return $this->students;
+        return $this->student;
     }
 
-    public function addStudent(Student $student): static
+    public function setStudent(?Student $student): static
     {
-        if (!$this->students->contains($student)) {
-            $this->students->add($student);
-            $student->addSkill($this);
-        }
+        $this->student = $student;
 
         return $this;
-    }
-
-    public function removeStudent(Student $student): static
-    {
-        if ($this->students->removeElement($student)) {
-            $student->removeSkill($this);
-        }
-
-        return $this;
-    }
-
+    }    
 }

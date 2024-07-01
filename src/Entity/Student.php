@@ -97,16 +97,16 @@ class Student extends User
     private StudyYear $study_years = StudyYear::bac0;
 
     /**
-     * @var Collection<int, Language>
-     */
-    #[ORM\ManyToMany(targetEntity: Language::class, inversedBy: 'students',  cascade: ["persist"])]
-    private Collection $languages;
-
-    /**
      * @var Collection<int, Skill>
      */
-    #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'students')]
+    #[ORM\OneToMany(targetEntity: Skill::class, mappedBy: 'student', orphanRemoval: true,  cascade: ["persist"])]
     private Collection $skills;
+
+    /**
+     * @var Collection<int, Language>
+     */
+    #[ORM\OneToMany(targetEntity: Language::class, mappedBy: 'student', orphanRemoval: true,  cascade: ["persist"])]
+    private Collection $languages;
 
     public function __construct()
     {
@@ -114,8 +114,8 @@ class Student extends User
         $this->experiences = new ArrayCollection();
         $this->requests = new ArrayCollection();
         $this->applications = new ArrayCollection();
-        $this->languages = new ArrayCollection();
         $this->skills = new ArrayCollection();
+        $this->languages = new ArrayCollection();
     }
 
     public function getBirthdate(): ?\DateTime
@@ -327,30 +327,6 @@ class Student extends User
     }
 
     /**
-     * @return Collection<int, Language>
-     */
-    public function getLanguages(): Collection
-    {
-        return $this->languages;
-    }
-
-    public function addLanguage(Language $language): static
-    {
-        if (!$this->languages->contains($language)) {
-            $this->languages->add($language);
-        }
-
-        return $this;
-    }
-
-    public function removeLanguage(Language $language): static
-    {
-        $this->languages->removeElement($language);
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Skill>
      */
     public function getSkills(): Collection
@@ -362,6 +338,7 @@ class Student extends User
     {
         if (!$this->skills->contains($skill)) {
             $this->skills->add($skill);
+            $skill->setStudent($this);
         }
 
         return $this;
@@ -369,9 +346,43 @@ class Student extends User
 
     public function removeSkill(Skill $skill): static
     {
-        $this->skills->removeElement($skill);
+        if ($this->skills->removeElement($skill)) {
+            // set the owning side to null (unless already changed)
+            if ($skill->getStudent() === $this) {
+                $skill->setStudent(null);
+            }
+        }
 
         return $this;
     }
 
+    /**
+     * @return Collection<int, Language>
+     */
+    public function getLanguages(): Collection
+    {
+        return $this->languages;
+    }
+
+    public function addLanguage(Language $language): static
+    {
+        if (!$this->languages->contains($language)) {
+            $this->languages->add($language);
+            $language->setStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLanguage(Language $language): static
+    {
+        if ($this->languages->removeElement($language)) {
+            // set the owning side to null (unless already changed)
+            if ($language->getStudent() === $this) {
+                $language->setStudent(null);
+            }
+        }
+
+        return $this;
+    }
 }

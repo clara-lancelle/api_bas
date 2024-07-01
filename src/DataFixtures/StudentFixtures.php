@@ -76,7 +76,7 @@ class StudentFixtures extends Fixture implements DependentFixtureInterface
             ->setName(LanguageName::French)
             ->setLevel(LanguageLevel::A1)
         ;
-        $lang->addStudent($user);
+        $lang->setStudent($user);
         $manager->persist($lang);
 
         //experience

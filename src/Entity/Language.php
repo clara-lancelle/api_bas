@@ -59,16 +59,8 @@ class Language
     #[Groups('student')]
     private LanguageLevel $level = LanguageLevel::A1;
 
-    /**
-     * @var Collection<int, Student>
-     */
-    #[ORM\ManyToMany(targetEntity: Student::class, mappedBy: 'languages')]
-    private Collection $students;
-
-    public function __construct()
-    {
-        $this->students = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'languages')]
+    private ?Student $student = null;
 
     public function getId(): ?int
     {
@@ -99,29 +91,14 @@ class Language
         return $this;
     }
 
-    /**
-     * @return Collection<int, Student>
-     */
-    public function getStudents(): Collection
+    public function getStudent(): ?Student
     {
-        return $this->students;
+        return $this->student;
     }
 
-    public function addStudent(Student $student): static
+    public function setStudent(?Student $student): static
     {
-        if (!$this->students->contains($student)) {
-            $this->students->add($student);
-            $student->addLanguage($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStudent(Student $student): static
-    {
-        if ($this->students->removeElement($student)) {
-            $student->removeLanguage($this);
-        }
+        $this->student = $student;
 
         return $this;
     }
