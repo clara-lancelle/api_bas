@@ -13,6 +13,7 @@ use ApiPlatform\Metadata\Get;
 use App\Controller\LastRequest;
 use App\Enum\StudyLevel;
 use App\Repository\RequestRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -100,7 +101,8 @@ class Request
 
     public function __construct()
     {
-
+        $this->created_at  = new DateTimeImmutable();
+        $this->updated_at  = new DateTimeImmutable();
         $this->study_level = StudyLevel::Level1;
         $this->type        = OfferType::Internship;
         $this->duration    = Duration::between2and6months;
@@ -112,7 +114,7 @@ class Request
     #[ORM\PrePersist]
     public function setCreatedAtValue(): static
     {
-        $this->created_at = new \DateTimeImmutable();
+        $this->created_at = new DateTimeImmutable();
         $this->setUpdatedAtValue();
         return $this;
     }
@@ -120,7 +122,7 @@ class Request
     #[ORM\PreUpdate]
     public function setUpdatedAtValue(): static
     {
-        $this->updated_at = new \DateTimeImmutable();
+        $this->updated_at = new DateTimeImmutable();
         return $this;
     }
 
@@ -129,19 +131,19 @@ class Request
         return $this->deleted_at === null ? 'Actif' : 'Inactif';
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    public function setCreatedAt(DateTimeImmutable $created_at): static
     {
         $this->created_at = $created_at;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updated_at;
     }
