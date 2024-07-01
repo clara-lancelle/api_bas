@@ -29,9 +29,9 @@ class SocialNetworkCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
+            IdField::new('id')->hideOnForm(),
             TextField::new('name'),
-            ImageField::new('picto_image', 'Pictogramme')
+            ImageField::new('logo', 'Pictogramme')
             ->setUploadedFileNamePattern(
                 fn(UploadedFile $file): string => sprintf('upload_%d_%s.%s', random_int(1, 999), $file->getFilename(), $file->guessExtension())
             )
